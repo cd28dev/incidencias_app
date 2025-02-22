@@ -1,0 +1,37 @@
+# Archivos de NetBeans
+nbproject/private/
+nbbuild/
+build/
+dist/
+nbdist/
+nbactions.xml
+nb-configuration.xml
+
+# Archivos de compilación
+target/
+*.class
+
+# Configuraciones del sistema
+*.log
+*.tmp
+*.bak
+
+# Archivos de Maven
+.mvn/
+mvnw
+mvnw.cmd
+
+# Dependencias descargadas (opcional, si usas repositorio remoto como Maven Central)
+**/lib/
+**/lib/*.jar
+!.mvn/wrapper/maven-wrapper.jar
+
+# Configuraciones específicas del usuario
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Archivos de sistema de Mac y Windows
+.DS_Store
+Thumbs.db
