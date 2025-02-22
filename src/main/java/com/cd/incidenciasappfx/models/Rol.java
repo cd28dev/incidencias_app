@@ -3,6 +3,10 @@ package com.cd.incidenciasappfx.models;
 import jakarta.persistence.*;
 import java.util.List;
 
+/**
+ *
+ * @author CDAA
+ */
 @Entity
 @Table(name = "roles")
 public class Rol {

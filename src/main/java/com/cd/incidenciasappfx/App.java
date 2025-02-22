@@ -9,7 +9,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 /**
- * JavaFX App
+ *
+ * @author CDAA
  */
 public class App extends Application {
 

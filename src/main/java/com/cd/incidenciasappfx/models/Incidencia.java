@@ -16,6 +16,10 @@ import jakarta.persistence.TemporalType;
 import java.util.Date;
 import java.util.List;
 
+/**
+ *
+ * @author CDAA
+ */
 
 @Entity
 @Table(name = "incidencias")

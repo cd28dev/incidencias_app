@@ -10,7 +10,10 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import java.util.List;
 
-
+/**
+ *
+ * @author CDAA
+ */
 @Entity
 @Table(name = "tipos_ocurrencia")
 public class TipoOcurrencia {

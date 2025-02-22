@@ -10,7 +10,11 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import java.util.List;
 
-
+/**
+ * ${name}.java
+ * 
+ * @author ${user}
+ */
 @Entity
 @Table(name = "delitos")
 public class Delito {

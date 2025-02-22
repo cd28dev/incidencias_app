@@ -11,7 +11,10 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.List;
 
-
+/**
+ *
+ * @author CDAA
+ */
 @Entity
 @Table(name = "unidades_apoyo")
 public class UnidadApoyo {
