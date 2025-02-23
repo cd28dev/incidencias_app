@@ -125,4 +125,76 @@ END $$
 
 DELIMITER ;
 
+DELIMITER $$
+
+DELIMITER $$
+
+CREATE PROCEDURE buscar_usuario_por_dni(
+    IN p_dni VARCHAR(20)
+)
+BEGIN
+    SELECT u.id, u.nombre, u.apellido, u.dni, u.email, u.telefono, r.nombre AS rol
+    FROM usuarios u
+    JOIN roles r ON u.id_rol = r.id_rol
+    WHERE u.dni = p_dni;
+END $$
+
+DELIMITER ;
+
+
+DELIMITER $$
+
+CREATE PROCEDURE eliminar_usuario_por_dni(
+    IN p_dni VARCHAR(10),
+    OUT p_resultado INT
+)
+BEGIN
+    DECLARE v_existe INT DEFAULT 0;
+
+    -- Iniciar la transacción
+    START TRANSACTION;
+
+    -- Verificar si el usuario existe
+    SELECT COUNT(*) INTO v_existe FROM usuarios WHERE dni = p_dni;
+
+    IF v_existe > 0 THEN
+        -- Eliminar usuario
+        DELETE FROM usuarios WHERE dni = p_dni;
+        
+        -- Confirmar la eliminación
+        COMMIT;
+        SET p_resultado = 1; -- Usuario eliminado correctamente
+    ELSE
+        -- Si no existe, revertir la transacción
+        ROLLBACK;
+        SET p_resultado = 0; -- Usuario no encontrado
+    END IF;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE sp_listar_usuarios()
+BEGIN
+    DECLARE total INT DEFAULT 0;
+
+    -- Contar la cantidad de usuarios
+    SELECT COUNT(*) INTO total FROM usuarios;
+
+    -- Si no hay usuarios, lanzar un error
+    IF total = 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'No hay usuarios registrados';
+    END IF;
+
+    -- Retornar la lista de usuarios con el nombre del rol
+    SELECT u.id, u.nombre, u.apellido, u.dni, u.correo, u.usuario, r.nombre AS rol
+    FROM usuarios u
+    JOIN roles r ON u.id_rol = r.id_rol;
+END $$
+
+DELIMITER ;
+select*from roles;
+
 
