@@ -11,14 +11,23 @@ import jakarta.persistence.Persistence;
  */
 public class JpaUtil {
 
-    private static final EntityManagerFactory ENTITY_MANAGER_FACTORY
-            = Persistence.createEntityManagerFactory("incidenciasAppPU");
-
+    private static EntityManagerFactory emf;
+    
+    static {
+    try {
+        emf = Persistence.createEntityManagerFactory("incidenciasAppPU");
+    } catch (Exception e) {
+        e.printStackTrace();
+        throw new ExceptionInInitializerError(e);
+    }
+}
+    
+    
     public static EntityManager getEntityManager() {
-        return ENTITY_MANAGER_FACTORY.createEntityManager();
+        return emf.createEntityManager();
     }
 
     public static void close() {
-        ENTITY_MANAGER_FACTORY.close();
+        emf.close();
     }
 }

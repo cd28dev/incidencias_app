@@ -1,10 +1,10 @@
 package com.cd.incidenciasappfx.repository;
 
+import com.cd.incidenciasappfx.models.Rol;
 import com.cd.incidenciasappfx.models.Usuario;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
 import jakarta.persistence.StoredProcedureQuery;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -64,7 +64,44 @@ public class UsuarioRepositoryImpl implements IUsuarioRepository {
 
     @Override
     public List<Usuario> findAll() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        EntityManager em = JpaUtil.getEntityManager();
+        List<Usuario> usuarios = new ArrayList<>();
+
+        try {
+            StoredProcedureQuery query = em.createStoredProcedureQuery("sp_listar_usuarios");
+            List<Object[]> resultados = query.getResultList();
+
+            for (Object[] row : resultados) {
+                Usuario usuario = new Usuario();
+//                usuario.setIdUsuario((Integer) row[0]);
+                usuario.setNombre((String) row[1]);
+                usuario.setApellido((String) row[2]);
+                usuario.setDni((String) row[3]);
+                usuario.setCorreo((String) row[4]);
+                usuario.setUsuario((String) row[5]);
+
+                Rol rol = new Rol();
+                rol.setIdRol((Integer) row[6]);
+                rol.setNombre((String) row[7]);
+                usuario.setRol(rol);
+
+                usuarios.add(usuario);
+            }
+
+        } catch (jakarta.persistence.PersistenceException e) {
+            Throwable cause = e.getCause();
+            if (cause instanceof java.sql.SQLException sqlEx) {
+                String sqlState = sqlEx.getSQLState();
+                if ("45000".equals(sqlState)) {
+                    System.out.println("Error: " + sqlEx.getMessage());
+                }
+            }
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+
+        return usuarios;
     }
 
     @Override

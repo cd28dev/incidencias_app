@@ -19,6 +19,7 @@ import java.util.List;
 public class TipoOcurrencia {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id_ocurrencia")
     private int idOcurrencia;
 
     @Column(unique = true, nullable = false)

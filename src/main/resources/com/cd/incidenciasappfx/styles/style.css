@@ -1,11 +1,11 @@
 /* Estilos Generales */
 .root {
-    -fx-font-family: "Poppins", sans-serif;
+    -fx-font-family: "Poppins", Roboto;
 }
 
 /* Estilos del Navbar */
 .navbar {
-    -fx-background-color: #1d2630; /* Igual que el sidebar */
+    -fx-background-color: #162A45; /* Igual que el sidebar */
     -fx-padding: 10;
 }
 .logo-style {
@@ -31,7 +31,7 @@
 
 /* Estilos del Sidebar */
 .sidebar {
-    -fx-background-color: #1d2630;
+    -fx-background-color: #162A45;
     -fx-padding: 15;
     -fx-pref-width: 220px;
 }
@@ -85,6 +85,7 @@
 
 /* Área de Contenido */
 #contentArea {
-    -fx-background-color: #F8FAFC;
+    -fx-background-color: #F5F5F5;
     -fx-padding: 20;
 }
+

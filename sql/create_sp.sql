@@ -198,3 +198,14 @@ DELIMITER ;
 select*from roles;
 
 
+CALL sp_insertar_usuario(
+    'Juan', 
+    'Pérez', 
+    '12345678', 
+    'juan.perez@email.com', 
+    'juanperez', 
+    'secreto123', 
+    1
+);
+
+

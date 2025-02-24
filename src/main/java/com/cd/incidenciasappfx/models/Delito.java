@@ -20,9 +20,10 @@ import java.util.List;
 public class Delito {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_delito")
     private int idDelito;
 
-    @Column(unique = true, nullable = false)
+    @Column(name="nombre",unique = true, nullable = false)
     private String nombre;
 
     @ManyToMany(mappedBy = "delitos")

@@ -20,6 +20,7 @@ import java.util.List;
 public class UnidadApoyo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id_unidad")
     private int idUnidad;
 
     @Column(unique = true, nullable = false)

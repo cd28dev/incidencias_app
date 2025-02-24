@@ -34,7 +34,7 @@
     <!-- Sidebar -->
     <left>
         <VBox fx:id="sidebar" styleClass="sidebar" spacing="10">
-            <Label fx:id="lblIndex" text="Inicio" styleClass="sidebar-item">
+            <Label fx:id="lblIndex" text="Inicio" styleClass="sidebar-item" onMouseClicked="#handleInicio" >
                 <graphic>
                     <ImageView fx:id="iconIndex" styleClass="icon-style">
                         <Image url="@/com/cd/incidenciasappfx/images/hogar.png" />
@@ -59,7 +59,7 @@
             <!-- Gestión de Personas -->
             <Label fx:id="lblGestionPersonas" text="Gestión de Personas" styleClass="section-label" onMouseClicked="#toggleGestionPersonas"/>
             <VBox fx:id="personasBox" managed="false" spacing="5" visible="false">
-                <Label fx:id="lblUsuarios" text="Usuarios" styleClass="sidebar-subitem">
+                <Label fx:id="lblUsuarios" text="Usuarios" styleClass="sidebar-subitem" onMouseClicked="#handleUsuarios">
                     <graphic>
                         <ImageView fx:id="iconUsuarios" styleClass="icon-style">
                             <Image url="@/com/cd/incidenciasappfx/images/usuario.png" />
@@ -122,5 +122,8 @@
         <StackPane fx:id="contentArea" styleClass="content-area">
             <!-- Aquí se cargarán las vistas dinámicamente -->
         </StackPane>
+        
     </center>
+    
+    
 </BorderPane>

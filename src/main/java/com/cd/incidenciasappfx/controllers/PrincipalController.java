@@ -1,37 +1,21 @@
 package com.cd.incidenciasappfx.controllers;
 
+import com.cd.incidenciasappfx.App;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
-import javafx.scene.control.Label;
+import javafx.scene.Parent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.util.Duration;
 
 public class PrincipalController implements Initializable {
 
-//    @FXML
-//    private FontAwesomeIconView iconDashboard;
-//    @FXML
-//    private FontAwesomeIconView iconIncidencias;
-//    @FXML
-//    private FontAwesomeIconView iconRoles;
-//    @FXML
-//    private FontAwesomeIconView iconDelitos;
-//    @FXML
-//    private FontAwesomeIconView iconTipoIntervencion;
-//    @FXML
-//    private FontAwesomeIconView iconTipoOcurrencia;
-//    @FXML
-//    private FontAwesomeIconView iconUnidadesApoyo;
-//    @FXML
-//    private FontAwesomeIconView iconServiciosSerenazgo;
-//    @FXML
-//    private FontAwesomeIconView iconEstadisticas;
+    @FXML
+    private StackPane contentArea;
 
     @FXML
     private VBox personasBox;
@@ -40,16 +24,20 @@ public class PrincipalController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-//        // Asignación manual de íconos para evitar problemas de carga en FXML
-//        iconDashboard.setGlyphName("TACHOMETER");
-//        iconIncidencias.setGlyphName("EXCLAMATION_CIRCLE");
-//        iconRoles.setGlyphName("ID_BADGE");
-//        iconDelitos.setGlyphName("BALANCE_SCALE");
-//        iconTipoIntervencion.setGlyphName("EXCLAMATION_TRIANGLE");
-//        iconTipoOcurrencia.setGlyphName("BOOK");
-//        iconUnidadesApoyo.setGlyphName("TRUCK");
-//        iconServiciosSerenazgo.setGlyphName("SHIELD");
-//        iconEstadisticas.setGlyphName("FILE");
+    }
+
+    @FXML
+    public void loadView(String fxmlFile) {
+        try {
+            FXMLLoader loader = new FXMLLoader(App.class.getResource("/com/cd/incidenciasappfx/views/" + fxmlFile + ".fxml"));
+            Parent view = loader.load();
+
+            contentArea.getChildren().clear(); // Limpia el contenido anterior
+            contentArea.getChildren().add(view); // Agrega la nueva vista
+
+        } catch (IOException e) {
+            e.printStackTrace(); // Manejo de errores en caso de que no cargue el archivo
+        }
     }
 
     @FXML
@@ -73,6 +61,21 @@ public class PrincipalController implements Initializable {
         datosBox.setManaged(true);
         datosBox.setVisible(!datosBox.isVisible());
 
+    }
+
+    @FXML
+    private void handleInicio(MouseEvent event) {
+        loadView("InicioView"); // Archivo FXML de la vista de inicio
+    }
+
+    @FXML
+    private void handleUsuarios(MouseEvent event) {
+        loadView("UsuariosView"); // Archivo FXML de la vista de usuarios
+    }
+
+    @FXML
+    private void handleRoles() {
+        loadView("RolesView"); // Archivo FXML de la vista de roles
     }
 
 }

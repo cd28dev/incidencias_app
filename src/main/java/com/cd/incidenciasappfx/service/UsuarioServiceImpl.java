@@ -1,15 +1,14 @@
-
 package com.cd.incidenciasappfx.service;
 
 import com.cd.incidenciasappfx.models.Usuario;
 import com.cd.incidenciasappfx.repository.IUsuarioRepository;
+import com.cd.incidenciasappfx.repository.UsuarioRepositoryImpl;
 import java.util.List;
 import java.util.Optional;
 
-
 /**
  * UsuarioServiceImpl.java
- * 
+ *
  * @author CDAA
  */
 public class UsuarioServiceImpl implements IUsuarioService {
@@ -17,14 +16,13 @@ public class UsuarioServiceImpl implements IUsuarioService {
     private final IUsuarioRepository usuarioRepository;
 
     // Inyección manual del repositorio en el constructor
-    public UsuarioServiceImpl(IUsuarioRepository usuarioRepository) {
-        this.usuarioRepository = usuarioRepository;
+    public UsuarioServiceImpl() {
+        this.usuarioRepository = new UsuarioRepositoryImpl();
     }
-    
-    
+
     @Override
     public Optional<Usuario> save(Usuario user) {
-        
+
         return usuarioRepository.save(user);
     }
 
@@ -35,7 +33,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
 
     @Override
     public List<Usuario> findAll() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return usuarioRepository.findAll();
     }
 
     @Override
