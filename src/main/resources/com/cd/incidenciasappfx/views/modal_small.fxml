@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:id="modalPane" prefWidth="320" prefHeight="180"
+            stylesheets="@/com/cd/incidenciasappfx/styles/modal.css"
+            styleClass="modal-root"
+            fx:controller="com.cd.incidenciasappfx.controllers.ModalSmallController">
+    
+    <VBox spacing="15" alignment="CENTER">
+        <ImageView fx:id="iconMessage" fitWidth="50" fitHeight="50"/>
+        <Label fx:id="lblMessage" text="Operación exitosa"
+               styleClass="message-label"/>
+        <Button fx:id="btnAceptar" text="Aceptar" styleClass="btn-primary"/>
+    </VBox>
+</AnchorPane>
+

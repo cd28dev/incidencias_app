@@ -24,11 +24,6 @@ public class App extends Application {
         stage.show();
     }
 
-    /**
-     * Cambia la vista principal de la aplicación.
-     * @param fxml Nombre del archivo FXML (sin extensión).
-     * @throws IOException Si hay un error al cargar el archivo.
-     */
     static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
     }
@@ -40,7 +35,6 @@ public class App extends Application {
      * @throws IOException Si el archivo no se encuentra.
      */
     private static Parent loadFXML(String fxml) throws IOException {
-        System.out.println("Cargando FXML: " + fxml); // Verificación en consola
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("/com/cd/incidenciasappfx/views/" + fxml + ".fxml"));
         return fxmlLoader.load();
     }

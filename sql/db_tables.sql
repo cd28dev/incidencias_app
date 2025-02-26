@@ -18,6 +18,8 @@ CREATE TABLE usuarios (
     FOREIGN KEY (id_rol) REFERENCES roles(id_rol) ON DELETE CASCADE
 );
 
+ALTER TABLE usuarios ADD COLUMN foto VARCHAR(255) NOT NULL;
+
 CREATE TABLE unidades_apoyo (
     id_unidad INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) UNIQUE NOT NULL

@@ -11,7 +11,7 @@ import java.util.Optional;
  */
 public interface IUsuarioRepository {
     Optional<Usuario> save(Usuario user);
-    Optional<Usuario> findById(int userId);
+    Optional<Usuario> findById(String userId);
     List<Usuario> findAll();
     Optional<Usuario> update(Usuario user);
     void delete(int userId);

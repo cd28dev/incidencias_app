@@ -55,6 +55,25 @@
     -fx-margin: 20px 0 0 0; /* Agrega margen arriba (10px) */
 }
 
+.btn-azul {
+    -fx-background-color: #0d6efd;
+    -fx-text-fill: white;
+    -fx-padding: 8px 16px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+
+/* Efecto hover para el botón guardar */
+.btn-azul:hover {
+    -fx-background-color: #0b5ed7;
+}
+
+
+
 /* Efecto hover para el botón guardar */
 .btn-primary:hover {
     -fx-background-color: #388E3C;

@@ -3,6 +3,7 @@ package com.cd.incidenciasappfx.repository;
 import com.cd.incidenciasappfx.models.Rol;
 import com.cd.incidenciasappfx.models.Usuario;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.ParameterMode;
 import jakarta.persistence.StoredProcedureQuery;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,15 +31,17 @@ public class UsuarioRepositoryImpl implements IUsuarioRepository {
             query.registerStoredProcedureParameter("p_correo", String.class, jakarta.persistence.ParameterMode.IN);
             query.registerStoredProcedureParameter("p_usuario", String.class, jakarta.persistence.ParameterMode.IN);
             query.registerStoredProcedureParameter("p_password", String.class, jakarta.persistence.ParameterMode.IN);
-            query.registerStoredProcedureParameter("p_id_rol", Integer.class, jakarta.persistence.ParameterMode.IN);
-
+            query.registerStoredProcedureParameter("p_nombre_rol", String.class, jakarta.persistence.ParameterMode.IN);
+            query.registerStoredProcedureParameter("p_foto", String.class, jakarta.persistence.ParameterMode.IN);
+            
             query.setParameter("p_nombre", user.getNombre());
             query.setParameter("p_apellido", user.getApellido());
             query.setParameter("p_dni", user.getDni());
             query.setParameter("p_correo", user.getCorreo());
             query.setParameter("p_usuario", user.getUsuario());
             query.setParameter("p_password", user.getPassword());
-            query.setParameter("p_id_rol", user.getRol().getIdRol());
+            query.setParameter("p_nombre_rol", user.getRol().getNombre());
+            query.setParameter("p_foto", user.getFoto());
 
             query.execute();
             return Optional.of(user);
@@ -58,8 +61,46 @@ public class UsuarioRepositoryImpl implements IUsuarioRepository {
     }
 
     @Override
-    public Optional<Usuario> findById(int userId) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Optional<Usuario> findById(String dni) {
+        EntityManager em = JpaUtil.getEntityManager();
+        Usuario usuario = null;
+
+        try {
+            StoredProcedureQuery query = em.createStoredProcedureQuery("buscar_usuario_por_dni");
+            query.registerStoredProcedureParameter(1, String.class, ParameterMode.IN);
+            query.setParameter(1, dni);
+
+            List<Object[]> resultados = query.getResultList();
+
+            if (!resultados.isEmpty()) {
+                Object[] row = resultados.get(0);
+                usuario = new Usuario();
+                usuario.setIdUsuario((Integer) row[0]);
+                usuario.setUsuario((String) row[1]);
+                usuario.setNombre((String) row[2]);
+                usuario.setApellido((String) row[3]);
+                usuario.setDni((String) row[4]);
+                usuario.setCorreo((String) row[5]);
+                Rol rol = new Rol();
+                rol.setIdRol((Integer) row[6]);
+                rol.setNombre((String) row[7]);
+                usuario.setRol(rol);
+            }
+
+        } catch (jakarta.persistence.PersistenceException e) {
+            Throwable cause = e.getCause();
+            if (cause instanceof java.sql.SQLException sqlEx) {
+                String sqlState = sqlEx.getSQLState();
+                if ("45000".equals(sqlState)) {
+                    System.out.println("Error: " + sqlEx.getMessage());
+                }
+            }
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+
+        return Optional.ofNullable(usuario);
     }
 
     @Override

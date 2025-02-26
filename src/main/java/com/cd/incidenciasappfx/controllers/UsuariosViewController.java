@@ -14,7 +14,6 @@ import com.cd.incidenciasappfx.service.IUsuarioService;
 import com.cd.incidenciasappfx.service.UsuarioServiceImpl;
 import java.io.IOException;
 import java.util.List;
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,7 +22,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.image.Image;
@@ -69,8 +67,7 @@ public class UsuariosViewController implements Initializable {
         tablaUsuarios.setFocusTraversable(false);
 
     }
-    
-    
+
     @FXML
     private void abrirModal() {
         try {
@@ -83,7 +80,6 @@ public class UsuariosViewController implements Initializable {
             modalStage.setScene(new Scene(root));
             modalStage.setResizable(false);
 
-            // Mostrar el modal
             modalStage.showAndWait();
         } catch (IOException e) {
             e.printStackTrace();
@@ -107,45 +103,12 @@ public class UsuariosViewController implements Initializable {
 
     private void configurarColumnaAccion() {
         colAccion.setCellFactory(param -> new TableCell<>() {
-            private final Button btnActualizar = new Button();
-            private final Button btnEliminar = new Button();
+            private final Button btnActualizar = crearBotonActualizar(this);
+            private final Button btnEliminar = crearBotonEliminar(this);
             private final HBox contenedorBotones = new HBox(10, btnActualizar, btnEliminar);
 
             {
-                // Ícono Actualizar
-                ImageView iconActualizar = new ImageView(new Image(getClass().getResourceAsStream("/com/cd/incidenciasappfx/images/update.png")));
-                iconActualizar.setFitWidth(20);
-                iconActualizar.setFitHeight(20);
-                btnActualizar.setGraphic(iconActualizar);
-                btnActualizar.setStyle("-fx-background-color: transparent;");
-
-                // Ícono Eliminar
-                ImageView iconEliminar = new ImageView(new Image(getClass().getResourceAsStream("/com/cd/incidenciasappfx/images/delete.png")));
-                iconEliminar.setFitWidth(20);
-                iconEliminar.setFitHeight(20);
-                btnEliminar.setGraphic(iconEliminar);
-                btnEliminar.setStyle("-fx-background-color: transparent;");
-
-                // Acción al hacer clic
-                btnActualizar.setOnAction(event -> {
-                    Usuario usuario = getTableView().getItems().get(getIndex());
-                    System.out.println("Actualizar: " + usuario.getDni());
-                });
-
-                btnEliminar.setOnAction(event -> {
-                    Usuario usuario = getTableView().getItems().get(getIndex());
-                    System.out.println("Eliminar: " + usuario.getDni());
-                });
-
-                // Efecto Hover para btnActualizar
-                btnActualizar.setOnMouseEntered(event -> btnActualizar.setStyle("-fx-background-color: rgba(0, 0, 0, 0.1); -fx-border-radius: 5px; -fx-background-radius: 5px;"));
-                btnActualizar.setOnMouseExited(event -> btnActualizar.setStyle("-fx-background-color: transparent;"));
-
-                // Efecto Hover para btnEliminar
-                btnEliminar.setOnMouseEntered(event -> btnEliminar.setStyle("-fx-background-color: rgba(255, 0, 0, 0.2); -fx-border-radius: 5px; -fx-background-radius: 5px;"));
-                btnEliminar.setOnMouseExited(event -> btnEliminar.setStyle("-fx-background-color: transparent;"));
-
-                contenedorBotones.setAlignment(Pos.CENTER);
+                configurarContenedorBotones(contenedorBotones);
             }
 
             @Override
@@ -160,7 +123,86 @@ public class UsuariosViewController implements Initializable {
         });
     }
 
-    private void cargarUsuarios() {
+    /**
+     * Crea y configura el botón de actualizar.
+     */
+    private Button crearBotonActualizar(TableCell<Usuario, Void> cell) {
+        Button btn = new Button();
+        ImageView iconActualizar = new ImageView(new Image(getClass().getResourceAsStream("/com/cd/incidenciasappfx/images/update.png")));
+        iconActualizar.setFitWidth(20);
+        iconActualizar.setFitHeight(20);
+        btn.setGraphic(iconActualizar);
+        btn.setStyle("-fx-background-color: transparent;");
+
+        // Acción al hacer clic
+        btn.setOnAction(event -> {
+            Usuario usuario = cell.getTableView().getItems().get(cell.getIndex());
+            abrirModalActualizar(usuario);
+        });
+
+        // Efecto Hover
+        btn.setOnMouseEntered(event -> btn.setStyle("-fx-background-color: rgba(0, 0, 0, 0.1); -fx-border-radius: 5px; -fx-background-radius: 5px;"));
+        btn.setOnMouseExited(event -> btn.setStyle("-fx-background-color: transparent;"));
+
+        return btn;
+    }
+
+    private Button crearBotonEliminar(TableCell<Usuario, Void> cell) {
+        Button btn = new Button();
+        ImageView iconEliminar = new ImageView(new Image(getClass().getResourceAsStream("/com/cd/incidenciasappfx/images/delete.png")));
+        iconEliminar.setFitWidth(20);
+        iconEliminar.setFitHeight(20);
+        btn.setGraphic(iconEliminar);
+        btn.setStyle("-fx-background-color: transparent;");
+
+        // Acción al hacer clic
+        btn.setOnAction(event -> eliminarUsuario());
+
+        // Efecto Hover
+        btn.setOnMouseEntered(event -> btn.setStyle("-fx-background-color: rgba(255, 0, 0, 0.2); -fx-border-radius: 5px; -fx-background-radius: 5px;"));
+        btn.setOnMouseExited(event -> btn.setStyle("-fx-background-color: transparent;"));
+
+        return btn;
+    }
+
+    private void configurarContenedorBotones(HBox contenedor) {
+        contenedor.setAlignment(Pos.CENTER);
+    }
+
+    private void abrirModalActualizar(Usuario usuario) {
+        try {
+            // Cargar el archivo FXML del modal
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/cd/incidenciasappfx/views/NuevoUsuario.fxml"));
+            Parent root = loader.load();
+
+            // Obtener el controlador del modal
+            NuevoUsuarioController controller = loader.getController();
+            controller.cargarDatosUsuario(usuario);
+            controller.setUsuariosViewController(this);
+            controller.changeTitle();
+            // Crear la nueva ventana (Stage)
+            Stage stage = new Stage();
+            stage.setTitle("Actualizar Usuario");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.initOwner(tablaUsuarios.getScene().getWindow());
+            stage.showAndWait();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void eliminarUsuario() {
+        Usuario usuario = tablaUsuarios.getSelectionModel().getSelectedItem();
+        if (usuario != null) {
+            System.out.println("Eliminar: " + usuario.getDni());
+        } else {
+            System.out.println("No hay usuario seleccionado.");
+        }
+    }
+
+    public void cargarUsuarios() {
         List<Usuario> users = userService.findAll();
         ObservableList<Usuario> usuariosList = FXCollections.observableArrayList(users);
         tablaUsuarios.setItems(usuariosList);

@@ -3,6 +3,8 @@ SELECT*FROM roles;
 INSERT INTO roles(nombre)
 VALUES("ROLE_ADMIN"),("ROLE_OPERADOR");
 
+select * from Usuarios;
+
 DELIMITER $$
 
 CREATE PROCEDURE sp_insertar_usuario(
@@ -198,14 +200,20 @@ DELIMITER ;
 select*from roles;
 
 
-CALL sp_insertar_usuario(
-    'Juan', 
-    'Pérez', 
-    '12345678', 
-    'juan.perez@email.com', 
-    'juanperez', 
-    'secreto123', 
-    1
-);
+DELIMITER $$
+
+CREATE PROCEDURE `sp_listar_roles`()
+BEGIN
+    -- Retornar una lista vacía si no hay roles
+    IF (SELECT COUNT(*) FROM roles) = 0 THEN
+        SELECT NULL AS id_rol, NULL AS nombre
+        FROM DUAL WHERE FALSE; -- Retorna 0 filas sin lanzar error
+    ELSE
+        -- Retornar la lista de roles
+        SELECT id_rol, nombre FROM roles;
+    END IF;
+END 
+
+DELIMITER ;
 
 

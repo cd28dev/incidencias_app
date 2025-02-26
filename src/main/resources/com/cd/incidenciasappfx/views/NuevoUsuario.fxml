@@ -13,7 +13,9 @@
 <AnchorPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
             fx:id="modalPane" prefWidth="400" prefHeight="350"
             stylesheets="@/com/cd/incidenciasappfx/styles/nuevousuario.css"
-            styleClass="modal">
+            styleClass="modal"
+            fx:controller="com.cd.incidenciasappfx.controllers.NuevoUsuarioController">
+
 
     <VBox spacing="10" alignment="CENTER" layoutX="20" layoutY="20">
         <Label fx:id="lblNewUser" text="Nuevo Usuario" styleClass="modal-title">
@@ -44,21 +46,19 @@
             <ComboBox fx:id="cbRol" GridPane.columnIndex="1" GridPane.rowIndex="5" styleClass="form-field">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
-                        <String fx:value="ROLE_ADMIN" />
-                        <String fx:value="ROLE_USER" />
                     </FXCollections>
                 </items>
             </ComboBox>
         </GridPane>
-        <Region VBox.vgrow="ALWAYS"/>
-        <HBox spacing="10" alignment="CENTER">
+        <Region prefHeight="10"/>
+        <VBox spacing="5" alignment="CENTER">
             <ImageView fx:id="imgPreview" fitWidth="100" fitHeight="100" styleClass="image-preview"/>
-            <Button text="Subir Foto" fx:id="btnSubirFoto" styleClass="btn-primary"/>
-        </HBox>
-        <Region VBox.vgrow="ALWAYS"/>
-        <HBox spacing="10" alignment="CENTER">
-            <Button text="Guardar" fx:id="btnGuardar" styleClass="btn-primary"/>
-            <Button text="Cancelar" fx:id="btnCancelar" styleClass="btn-danger"/>
+            <Button text="Subir Foto" fx:id="btnSubirFoto" styleClass="btn-azul" onAction="#subirFoto"/>
+        </VBox>
+        <Region prefHeight="10"/>
+        <HBox spacing="15" alignment="CENTER">
+            <Button text="Guardar" fx:id="btnGuardar" styleClass="btn-primary" prefWidth="100" onAction="#saveUser"/>
+            <Button text="Cancelar" fx:id="btnCancelar" styleClass="btn-danger" prefWidth="100"/>
         </HBox>
     </VBox>
 </AnchorPane>
