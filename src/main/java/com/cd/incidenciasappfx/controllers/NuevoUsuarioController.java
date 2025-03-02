@@ -12,11 +12,11 @@ import com.cd.incidenciasappfx.service.RolesServiceImpl;
 import com.cd.incidenciasappfx.service.UsuarioServiceImpl;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -47,6 +47,10 @@ public class NuevoUsuarioController {
     private TextField txtEmail;
     @FXML
     private TextField txtUsername;
+
+    @FXML
+    private TextField idUser;
+
     @FXML
     private ComboBox<String> cbRol;
     @FXML
@@ -59,6 +63,8 @@ public class NuevoUsuarioController {
 
     private String fotoPath;
 
+    private int numero;
+
     @FXML
     public void initialize() {
         userService = new UsuarioServiceImpl();
@@ -66,6 +72,17 @@ public class NuevoUsuarioController {
         deshabilitarButtons();
         addListeners();
         cargarRoles();
+    }
+
+    public void setNumero(int numero) {
+        this.numero = numero;
+        procesarNumero();
+    }
+
+    private void procesarNumero() {
+        if (numero == 1) {
+            changeTitle();
+        }
     }
 
     private void deshabilitarButtons() {
@@ -94,18 +111,28 @@ public class NuevoUsuarioController {
         btnGuardar.setDisable(!camposLlenos);
     }
 
-    public void cargarDatosUsuario(Usuario user) {
-        Optional<Usuario> usuario = userService.findById(user.getDni());
+    public void cargarDatosUsuario(Usuario u) {
+        idUser.setText(String.valueOf(u.getIdUsuario()));
+        txtDocumento.setText(u.getDni());
+        txtNombres.setText(u.getNombre());
+        txtApellidos.setText(u.getApellido());
+        txtEmail.setText(u.getCorreo());
+        txtUsername.setText(u.getUsuario());
+        cbRol.setValue(u.getRol().getNombre());
 
-        if (usuario.isPresent()) {
-            Usuario u = usuario.get();
+        if (u.getFoto() != null && !u.getFoto().isEmpty()) {
+            System.out.println("Cargando imagen desde: " + u.getFoto());
+            fotoPath = u.getFoto();
 
-            txtDocumento.setText(u.getDni());
-            txtNombres.setText(u.getNombre());
-            txtApellidos.setText(u.getApellido());
-            txtEmail.setText(u.getCorreo());
-            txtUsername.setText(u.getUsuario());
-            cbRol.setValue(u.getRol().getNombre());
+            File file = new File(fotoPath);
+
+            if (file.exists()) {
+                String imageUrl = file.toURI().toString();
+                imgPreview.setImage(new Image(imageUrl, false));
+            } else {
+                System.out.println("Advertencia: La imagen no existe en la ruta especificada: " + file.getAbsolutePath());
+                imgPreview.setImage(null);
+            }
         }
     }
 
@@ -127,6 +154,119 @@ public class NuevoUsuarioController {
 
     @FXML
     public void saveUser() {
+        if (numero == 0) {
+            registrarUser();
+        } else if (numero == 1) {
+            updateUser();
+        }
+
+    }
+
+    @FXML
+    private String subirFoto() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Imágenes", "*.png", "*.jpg", "*.jpeg"));
+
+        File file = fileChooser.showOpenDialog(btnSubirFoto.getScene().getWindow());
+        if (file != null) {
+            Image image = new Image(file.toURI().toString());
+            imgPreview.setImage(image);
+            fotoPath = copiarImagen(file);
+        }
+
+        return fotoPath;
+    }
+
+    private String copiarImagen(File file) {
+        String username = txtUsername.getText();
+
+        try {
+            File directorio = new File("fotos");
+            if (!directorio.exists()) {
+                directorio.mkdirs();
+            }
+
+            String extension = file.getName().substring(file.getName().lastIndexOf("."));
+            String nuevoNombre = username + "_profile" + extension;
+
+            File destino = new File(directorio, nuevoNombre);
+
+            Files.copy(file.toPath(), destino.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+            return "fotos/" + nuevoNombre;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private void closeModal(Button btn) {
+        Stage stage = (Stage) btn.getScene().getWindow();
+        stage.close();
+    }
+
+    public void setUsuariosViewController(UsuariosViewController controller) {
+        this.usuariosViewController = controller;
+    }
+
+    private void mostrarModal(String mensaje, String icono) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/cd/incidenciasappfx/views/modal_small.fxml"));
+            Parent root = loader.load();
+
+            ModalSmallController controller = loader.getController();
+            controller.setMessage(mensaje, icono);
+
+            Stage stage = new Stage();
+            stage.setTitle("Aviso");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setResizable(false);
+            stage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateUser() {
+        String id = idUser.getText();
+        String documento = txtDocumento.getText();
+        String nombres = txtNombres.getText();
+        String apellidos = txtApellidos.getText();
+        String email = txtEmail.getText();
+        String username = txtUsername.getText();
+        String rolSeleccionado = cbRol.getValue();
+        String foto = fotoPath;
+
+        if (documento.isEmpty() || nombres.isEmpty() || apellidos.isEmpty()
+                || email.isEmpty() || username.isEmpty() || rolSeleccionado == null) {
+            return;
+        }
+
+        Usuario usuario = new Usuario();
+        Rol rol = new Rol();
+        usuario.setIdUsuario(Integer.parseInt(id));
+        usuario.setDni(documento);
+        usuario.setNombre(nombres);
+        usuario.setApellido(apellidos);
+        usuario.setCorreo(email);
+        usuario.setUsuario(username);
+        rol.setNombre(rolSeleccionado);
+        usuario.setRol(rol);
+        usuario.setFoto(foto);
+
+        if (userService.update(usuario).isPresent()) {
+            mostrarModal("Usuario actualizado", "/com/cd/incidenciasappfx/images/success.png");
+            closeModal(btnGuardar);
+            usuariosViewController.cargarUsuarios();
+        } else {
+            mostrarModal("Hubo algún problema", "/com/cd/incidenciasappfx/images/triangulo.png");
+
+        }
+
+    }
+
+    public void registrarUser() {
         String documento = txtDocumento.getText();
         String nombres = txtNombres.getText();
         String apellidos = txtApellidos.getText();
@@ -152,7 +292,7 @@ public class NuevoUsuarioController {
         usuario.setFoto(foto);
 
         if (userService.save(usuario).isPresent()) {
-            mostrarModal("Usuario guardado correctamente", "/com/cd/incidenciasappfx/images/success.png");
+            mostrarModal("Usuario registrado", "/com/cd/incidenciasappfx/images/success.png");
             closeModal(btnGuardar);
             usuariosViewController.cargarUsuarios();
         } else {
@@ -161,67 +301,5 @@ public class NuevoUsuarioController {
         }
 
     }
-
-    @FXML
-    private String subirFoto() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Imágenes", "*.png", "*.jpg", "*.jpeg"));
-
-        File file = fileChooser.showOpenDialog(btnSubirFoto.getScene().getWindow());
-        if (file != null) {
-            Image image = new Image(file.toURI().toString());
-            imgPreview.setImage(image);
-            fotoPath = copiarImagen(file);
-        }
-
-        return fotoPath;
-    }
-
-    private String copiarImagen(File file) {
-        try {
-            File directorio = new File("src/main/resources/com/cd/incidenciasappfx/fotos/");
-            if (!directorio.exists()) {
-                directorio.mkdirs();
-            }
-
-            String nuevoNombre = UUID.randomUUID().toString() + "_" + file.getName();
-            File destino = new File(directorio, nuevoNombre);
-
-            Files.copy(file.toPath(), destino.toPath(), StandardCopyOption.REPLACE_EXISTING);
-
-            return "com/cd/incidenciasappfx/fotos/" + nuevoNombre;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    private void closeModal(Button btn) {
-        Stage stage = (Stage) btn.getScene().getWindow();
-        stage.close();
-    }
-
-    public void setUsuariosViewController(UsuariosViewController controller) {
-        this.usuariosViewController = controller;
-    }
-    
-    private void mostrarModal(String mensaje, String icono) {
-    try {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/cd/incidenciasappfx/views/modal_small.fxml"));
-        Parent root = loader.load();
-
-        ModalSmallController controller = loader.getController();
-        controller.setMessage(mensaje, icono);
-
-        Stage stage = new Stage();
-        stage.setTitle("Aviso");
-        stage.setScene(new Scene(root));
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setResizable(false);
-        stage.showAndWait();
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
-}
 
 }

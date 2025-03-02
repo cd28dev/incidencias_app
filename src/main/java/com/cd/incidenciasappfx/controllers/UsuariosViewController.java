@@ -4,6 +4,9 @@
  */
 package com.cd.incidenciasappfx.controllers;
 
+import com.cd.incidenciasappfx.helper.ExcelReportExporter;
+import com.cd.incidenciasappfx.helper.JasperReportHelper;
+import com.cd.incidenciasappfx.helper.PdfReportExporter;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -13,7 +16,12 @@ import com.cd.incidenciasappfx.models.Usuario;
 import com.cd.incidenciasappfx.service.IUsuarioService;
 import com.cd.incidenciasappfx.service.UsuarioServiceImpl;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -57,6 +65,12 @@ public class UsuariosViewController implements Initializable {
     @FXML
     private TableColumn<Usuario, Void> colAccion;
 
+    @FXML
+    private Button btnExportExcel;
+
+    @FXML
+    private Button btnExportPdf;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         userService = new UsuarioServiceImpl();
@@ -65,15 +79,26 @@ public class UsuariosViewController implements Initializable {
         tablaUsuarios.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         tablaUsuarios.getColumns().removeIf(col -> col.getText() == null || col.getText().trim().isEmpty());
         tablaUsuarios.setFocusTraversable(false);
-
     }
 
     @FXML
-    private void abrirModal() {
+    private void abrirModal0() {
+        abrirModal(0);
+    }
+    
+
+    private void abrirModal(int numero) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/cd/incidenciasappfx/views/NuevoUsuario.fxml"));
             Parent root = loader.load();
 
+            // Obtener el controlador del modal
+            NuevoUsuarioController modalController = loader.getController();
+
+            // Pasar el número al controlador del modal
+            modalController.setNumero(numero);
+            modalController.setUsuariosViewController(this);
+            
             Stage modalStage = new Stage();
             modalStage.initModality(Modality.APPLICATION_MODAL); // Bloquear la ventana principal
             modalStage.setTitle("Nuevo Usuario");
@@ -137,7 +162,11 @@ public class UsuariosViewController implements Initializable {
         // Acción al hacer clic
         btn.setOnAction(event -> {
             Usuario usuario = cell.getTableView().getItems().get(cell.getIndex());
-            abrirModalActualizar(usuario);
+            Optional<Usuario> userOptional = userService.findById(usuario.getDni());
+            if(userOptional.isPresent()){
+                abrirModalActualizar(userOptional.get(),1);
+            }
+            
         });
 
         // Efecto Hover
@@ -169,7 +198,7 @@ public class UsuariosViewController implements Initializable {
         contenedor.setAlignment(Pos.CENTER);
     }
 
-    private void abrirModalActualizar(Usuario usuario) {
+    private void abrirModalActualizar(Usuario usuario, int number) {
         try {
             // Cargar el archivo FXML del modal
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/cd/incidenciasappfx/views/NuevoUsuario.fxml"));
@@ -177,6 +206,9 @@ public class UsuariosViewController implements Initializable {
 
             // Obtener el controlador del modal
             NuevoUsuarioController controller = loader.getController();
+            
+            controller.setNumero(number);
+            
             controller.cargarDatosUsuario(usuario);
             controller.setUsuariosViewController(this);
             controller.changeTitle();
@@ -206,6 +238,41 @@ public class UsuariosViewController implements Initializable {
         List<Usuario> users = userService.findAll();
         ObservableList<Usuario> usuariosList = FXCollections.observableArrayList(users);
         tablaUsuarios.setItems(usuariosList);
+    }
+
+    @FXML
+    private void exportarExcel() {
+        Path documentsDir = Paths.get(System.getProperty("user.home"), "Documents");
+        String outputPath = documentsDir.resolve("UsuarioReport.xlsx").toString();
+
+        List<Usuario> listaUsuarios = userService.findAll();
+        Map<String, Object> params = new HashMap<>();
+        params.put("ReportTitle", "Reporte de Usuarios");
+
+        JasperReportHelper.generateReport(
+                "/com/cd/incidenciasappfx/report/UsuarioReportExcel.jrxml", outputPath,
+                params,
+                listaUsuarios,
+                new ExcelReportExporter()
+        );
+    }
+
+    @FXML
+    private void exportarPDF() {
+        Path documentsDir = Paths.get(System.getProperty("user.home"), "Documents");
+        String outputPath = documentsDir.resolve("UsuarioReport.xlsx").toString();
+
+        List<Usuario> listaUsuarios = userService.findAll();
+        Map<String, Object> params = new HashMap<>();
+        params.put("ReportTitle", "Reporte de Usuarios");
+
+        JasperReportHelper.generateReport(
+                "/com/cd/incidenciasappfx/report/UsuarioReportPdf.jrxml",
+                outputPath,
+                params,
+                listaUsuarios,
+                new PdfReportExporter()
+        );
     }
 
 }

@@ -15,4 +15,5 @@ public interface IUsuarioRepository {
     List<Usuario> findAll();
     Optional<Usuario> update(Usuario user);
     void delete(int userId);
+    Integer getNextUserId();
 }

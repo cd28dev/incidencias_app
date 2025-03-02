@@ -30,7 +30,7 @@ public class EmailHelper {
 
     public static boolean sendEmail(String destinatario, String asunto, String mensaje) {
         final String remitente = "carlos.informatico.28@gmail.com";
-        final String password = "waaxnffygmygkitz";
+        final String password = "nfvqcmbpmltlhpdc";
 
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");

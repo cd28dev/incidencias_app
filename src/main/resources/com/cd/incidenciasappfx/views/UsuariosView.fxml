@@ -14,7 +14,7 @@
         <Region HBox.hgrow="ALWAYS"/>
 
         <!-- Botones de Exportación -->
-        <Button fx:id="btnExportExcel" styleClass="btn-export">
+        <Button fx:id="btnExportExcel" styleClass="btn-export" onAction="#exportarExcel">
             <graphic>
                 <ImageView fitHeight="20" fitWidth="20">
                     <image>
@@ -23,7 +23,7 @@
                 </ImageView>
             </graphic>
         </Button>
-        <Button fx:id="btnExportPdf" styleClass="btn-export">
+        <Button fx:id="btnExportPdf" styleClass="btn-export" onAction="#exportarPDF">
             <graphic>
                 <ImageView fitHeight="20" fitWidth="20">
                     <image>
@@ -36,7 +36,7 @@
 
     <!-- Botón Nuevo y Campo de Búsqueda -->
     <HBox spacing="10" styleClass="toolbar">
-        <Button text="Nuevo" fx:id="btnNuevo" styleClass="btn-nuevo" onAction="#abrirModal" />
+        <Button text="Nuevo" fx:id="btnNuevo" styleClass="btn-nuevo" onAction="#abrirModal0" />
         <Region HBox.hgrow="ALWAYS"/>
         
         <!-- Campo de Búsqueda con Icono de Lupa -->

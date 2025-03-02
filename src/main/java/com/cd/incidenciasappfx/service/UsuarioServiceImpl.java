@@ -4,8 +4,10 @@ import com.cd.incidenciasappfx.helper.EmailHelper;
 import com.cd.incidenciasappfx.models.Usuario;
 import com.cd.incidenciasappfx.repository.IUsuarioRepository;
 import com.cd.incidenciasappfx.repository.UsuarioRepositoryImpl;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+
 
 /**
  * UsuarioServiceImpl.java
@@ -26,7 +28,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
         String pass = EmailHelper.genPassword();
 
         String asunto = "Creación de cuenta IncidenciasAPP";
-        String mensaje = "<h3>Su cuenta fue creada con éxito.</h3></br><p>Su contraseña para acceder es: " + pass + "</p>";
+        String mensaje = "Su cuenta fue creada con éxito.Su contraseña para acceder es: " + pass + "";
 
         boolean isSendEmail = EmailHelper.sendEmail(user.getCorreo(), asunto, mensaje);
 
@@ -50,7 +52,14 @@ public class UsuarioServiceImpl implements IUsuarioService {
 
     @Override
     public Optional<Usuario> update(Usuario user) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        
+        if("ROLE_ADMIN".equals(user.getRol().getNombre())){
+            user.getRol().setIdRol(1);  
+        }else if("ROLE_OPERADOR".equals(user.getRol().getNombre())){
+            user.getRol().setIdRol(2); 
+        }
+        
+        return usuarioRepository.update(user);
     }
 
     @Override
@@ -58,4 +67,10 @@ public class UsuarioServiceImpl implements IUsuarioService {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
+    @Override
+    public int getNextUserId() {
+        return usuarioRepository.getNextUserId();
+    }
+
+    
 }

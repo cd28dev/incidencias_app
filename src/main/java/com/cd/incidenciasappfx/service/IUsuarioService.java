@@ -14,4 +14,5 @@ public interface IUsuarioService {
     List<Usuario> findAll();
     Optional<Usuario> update(Usuario user);
     void delete(int userId);
+    int getNextUserId();
 }

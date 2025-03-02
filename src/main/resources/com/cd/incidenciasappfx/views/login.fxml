@@ -28,21 +28,26 @@
 
             <!-- Campo Usuario -->
             <HBox spacing="10" styleClass="input-container">
-                <ImageView fitWidth="20" fitHeight="20">
-                    <image>
-                        <Image url="@../icons/user.png"/>
-                    </image>
-                </ImageView>
-                <TextField fx:id="txtUsername" promptText="Usuario"/>
+                <graphic>
+                    <ImageView fitWidth="20" fitHeight="20">
+                        <image>
+                            <Image url="@/com/cd/incidenciasappfx/images/usuario.png"/>
+                        </image>
+                </graphic>
+                
+            </ImageView>
+            <TextField fx:id="txtUsername" promptText="Usuario"/>
             </HBox>
 
             <!-- Campo Contraseña -->
             <HBox spacing="10" styleClass="input-container">
-                <ImageView fitWidth="20" fitHeight="20">
-                    <image>
-                        <Image url="@../icons/password.png"/>
-                    </image>
-                </ImageView>
+                <graphic>
+                    <ImageView fitWidth="20" fitHeight="20">
+                        <image>
+                            <Image url="@/com/cd/incidenciasappfx/images/password.png"/>
+                        </image>
+                    </ImageView>
+                </graphic>
                 <PasswordField fx:id="txtPassword" promptText="Contraseña"/>
             </HBox>
 
