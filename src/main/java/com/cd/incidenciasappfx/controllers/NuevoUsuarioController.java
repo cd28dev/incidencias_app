@@ -1,5 +1,6 @@
 package com.cd.incidenciasappfx.controllers;
 
+import com.cd.incidenciasappfx.helper.ImageHelper;
 import com.cd.incidenciasappfx.models.Rol;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -124,14 +125,13 @@ public class NuevoUsuarioController {
             System.out.println("Cargando imagen desde: " + u.getFoto());
             fotoPath = u.getFoto();
 
-            File file = new File(fotoPath);
+            Image image = ImageHelper.cargarImagen(fotoPath);
 
-            if (file.exists()) {
-                String imageUrl = file.toURI().toString();
-                imgPreview.setImage(new Image(imageUrl, false));
+            if (image != null) {
+                imgPreview.setImage(image);
             } else {
-                System.out.println("Advertencia: La imagen no existe en la ruta especificada: " + file.getAbsolutePath());
-                imgPreview.setImage(null);
+                System.out.println("Advertencia: La imagen no existe en la ruta especificada.");
+                imgPreview.setImage(null); // Puedes establecer una imagen por defecto aquí
             }
         }
     }
@@ -164,14 +164,11 @@ public class NuevoUsuarioController {
 
     @FXML
     private String subirFoto() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Imágenes", "*.png", "*.jpg", "*.jpeg"));
+        String username = txtUsername.getText();
+        fotoPath = ImageHelper.subirFoto(username);
 
-        File file = fileChooser.showOpenDialog(btnSubirFoto.getScene().getWindow());
-        if (file != null) {
-            Image image = new Image(file.toURI().toString());
-            imgPreview.setImage(image);
-            fotoPath = copiarImagen(file);
+        if (fotoPath != null) {
+            imgPreview.setImage(ImageHelper.cargarImagen(fotoPath));
         }
 
         return fotoPath;
