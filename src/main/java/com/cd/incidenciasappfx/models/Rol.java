@@ -3,11 +3,16 @@ package com.cd.incidenciasappfx.models;
 import jakarta.persistence.*;
 import java.util.List;
 
+/**
+ *
+ * @author CDAA
+ */
 @Entity
 @Table(name = "roles")
 public class Rol {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id_rol")
     private int idRol;
 
     @Column(unique = true, nullable = false)

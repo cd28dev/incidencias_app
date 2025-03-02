@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
+            fx:id="modalPane" prefWidth="400" prefHeight="350"
+            stylesheets="@/com/cd/incidenciasappfx/styles/nuevousuario.css"
+            styleClass="modal"
+            fx:controller="com.cd.incidenciasappfx.controllers.NuevoUsuarioController">
+
+
+    <VBox spacing="10" alignment="CENTER" layoutX="20" layoutY="20">
+        <Label fx:id="lblNewUser" text="Nuevo Usuario" styleClass="modal-title">
+            <graphic>
+                <ImageView fx:id="iconIndex" styleClass="icon-style">
+                    <Image url="@/com/cd/incidenciasappfx/images/newUser.png" />
+                </ImageView>
+            </graphic>
+        </Label>
+        
+        <GridPane hgap="10" vgap="10">
+            <TextField fx:id="idUser" visible="false" managed="false"/>
+            <Label text="N° Documento:" styleClass="form-label"/>
+            <TextField fx:id="txtDocumento" GridPane.columnIndex="1" styleClass="form-field"/>
+            
+            <Label text="Nombres:" GridPane.rowIndex="1" styleClass="form-label"/>
+            <TextField fx:id="txtNombres" GridPane.columnIndex="1" GridPane.rowIndex="1" styleClass="form-field"/>
+            
+            <Label text="Apellidos:" GridPane.rowIndex="2" styleClass="form-label"/>
+            <TextField fx:id="txtApellidos" GridPane.columnIndex="1" GridPane.rowIndex="2" styleClass="form-field"/>
+            
+            <Label text="Email:" GridPane.rowIndex="3" styleClass="form-label"/>
+            <TextField fx:id="txtEmail" GridPane.columnIndex="1" GridPane.rowIndex="3" styleClass="form-field"/>
+            
+            <Label text="Username:" GridPane.rowIndex="4" styleClass="form-label"/>
+            <TextField fx:id="txtUsername" GridPane.columnIndex="1" GridPane.rowIndex="4" styleClass="form-field"/>
+            
+            <Label text="Rol:" GridPane.rowIndex="5" styleClass="form-label"/>
+            <ComboBox fx:id="cbRol" GridPane.columnIndex="1" GridPane.rowIndex="5" styleClass="form-field">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                    </FXCollections>
+                </items>
+            </ComboBox>
+        </GridPane>
+        <Region prefHeight="10"/>
+        <VBox spacing="5" alignment="CENTER">
+            <ImageView fx:id="imgPreview" fitWidth="100" fitHeight="100" styleClass="image-preview"/>
+            <Button text="Subir Foto" fx:id="btnSubirFoto" styleClass="btn-azul" onAction="#subirFoto"/>
+        </VBox>
+        <Region prefHeight="10"/>
+        <HBox spacing="15" alignment="CENTER">
+            <Button text="Guardar" fx:id="btnGuardar" styleClass="btn-primary" prefWidth="100" onAction="#saveUser"/>
+            <Button text="Cancelar" fx:id="btnCancelar" styleClass="btn-danger" prefWidth="100"/>
+        </HBox>
+    </VBox>
+</AnchorPane>

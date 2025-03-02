@@ -8,12 +8,16 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 
 @Entity
 @Table(name = "usuarios")
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id_usuario")
     private int idUsuario;
 
     @Column(nullable = false)
@@ -38,6 +42,9 @@ public class Usuario {
     @JoinColumn(name = "id_rol", nullable = false)
     private Rol rol;
 
+    @Column(name="foto")
+    private String foto;
+    
     public Usuario() {
     }
 
@@ -52,7 +59,14 @@ public class Usuario {
         this.rol = rol;
     }
 
-    
+    public String getFoto() {
+        return foto;
+    }
+
+    public void setFoto(String foto) {
+        this.foto = foto;
+    }
+
     
     public int getIdUsuario() {
         return idUsuario;
@@ -106,10 +120,6 @@ public class Usuario {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public Rol getRol() {
         return rol;
     }
@@ -118,5 +128,17 @@ public class Usuario {
         this.rol = rol;
     }
 
-    
+    public void setPassword(String password) {
+        this.password = encryptPassword(password);
+    }
+
+    public static String encryptPassword(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hash = md.digest(password.getBytes());
+            return Base64.getEncoder().encodeToString(hash);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("Error al encriptar la contraseña", e);
+        }
+    }
 }

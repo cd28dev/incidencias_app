@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cd.incidenciasappfx.controllers.InicioViewController">
+    
+    <VBox alignment="CENTER" spacing="10" layoutX="200" layoutY="150">
+        <Label text="¡Bienvenido a la página de Inicio!" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+    </VBox>
+
+</AnchorPane>

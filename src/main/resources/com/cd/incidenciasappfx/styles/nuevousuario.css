@@ -1,0 +1,119 @@
+/* Estilo del modal */
+.modal {
+    -fx-background-color: white;
+    -fx-padding: 20px;
+    -fx-border-radius: 12px;
+    -fx-background-radius: 12px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.15), 10, 0, 0, 4);
+}
+
+/* Título del modal */
+.modal-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #162A45;
+    -fx-padding: 10px 0;
+}
+
+/* Estilos de etiquetas */
+.form-label {
+    -fx-text-fill: #444;
+    -fx-font-size: 14px;
+    -fx-font-weight: 500;
+}
+
+/* Campos de entrada */
+.form-field {
+    -fx-pref-width: 220px;
+    -fx-padding: 8px;
+    -fx-border-color: #d1d5db;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-background-color: #f8f9fa;
+    -fx-font-size: 14px;
+    -fx-transition: 0.3s;
+}
+
+/* Efecto al hacer clic en el campo */
+.form-field:focused {
+    -fx-border-color: #4A90E2;
+    -fx-background-color: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(74, 144, 226, 0.2), 8, 0, 0, 3);
+}
+
+/* Botón verde moderno */
+.btn-primary {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-padding: 10px 20px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-transition: 0.3s;
+    -fx-margin: 20px 0 0 0; /* Agrega margen arriba (10px) */
+}
+
+.btn-azul {
+    -fx-background-color: #0d6efd;
+    -fx-text-fill: white;
+    -fx-padding: 8px 16px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+
+/* Efecto hover para el botón guardar */
+.btn-azul:hover {
+    -fx-background-color: #0b5ed7;
+}
+
+
+
+/* Efecto hover para el botón guardar */
+.btn-primary:hover {
+    -fx-background-color: #388E3C;
+    -fx-effect: dropshadow(three-pass-box, rgba(56, 142, 60, 0.3), 8, 0, 0, 3);
+}
+
+/* Botón rojo moderno */
+.btn-danger {
+    -fx-background-color: #E53935;
+    -fx-text-fill: white;
+    -fx-padding: 10px 20px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-transition: 0.3s;
+}
+
+/* Efecto hover para el botón cancelar */
+.btn-danger:hover {
+    -fx-background-color: #C62828;
+    -fx-effect: dropshadow(three-pass-box, rgba(198, 40, 40, 0.3), 8, 0, 0, 3);
+}
+
+/* Efecto en los botones al hacer clic */
+.btn-primary:pressed, .btn-danger:pressed {
+    -fx-scale-x: 0.97;
+    -fx-scale-y: 0.97;
+}
+
+.icon-style {
+    -fx-fit-width: 25px;  /* Establece el ancho de la imagen */
+    -fx-fit-height: 25px; /* Establece la altura de la imagen */
+    -fx-preserve-ratio: true;  /* Mantiene las proporciones de la imagen */
+}
+
+.image-preview {
+    -fx-border-radius: 50%;
+    -fx-background-radius: 50%;
+    -fx-border-color: #ccc;
+    -fx-border-width: 2px;
+}

@@ -16,27 +16,32 @@ import jakarta.persistence.TemporalType;
 import java.util.Date;
 import java.util.List;
 
+/**
+ *
+ * @author CDAA
+ */
 
 @Entity
 @Table(name = "incidencias")
 public class Incidencia {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id_incidencia")
     private int idIncidencia;
 
-    @Column(nullable = false)
+    @Column(name="direccion",nullable = false)
     private String direccion;
 
-    @Column(nullable = false)
+    @Column(name="sector",nullable = false)
     private String sector;
 
     private String urbanizacion;
 
-    @Column(nullable = false)
+    @Column(name="fecha",nullable = false)
     @Temporal(TemporalType.DATE)
     private Date fecha;
 
-    @Column(nullable = false)
+    @Column(name="hora",nullable = false)
     @Temporal(TemporalType.TIME)
     private Date hora;
 

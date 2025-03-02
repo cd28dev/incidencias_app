@@ -11,12 +11,16 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.List;
 
-
+/**
+ *
+ * @author CDAA
+ */
 @Entity
 @Table(name = "unidades_apoyo")
 public class UnidadApoyo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id_unidad")
     private int idUnidad;
 
     @Column(unique = true, nullable = false)

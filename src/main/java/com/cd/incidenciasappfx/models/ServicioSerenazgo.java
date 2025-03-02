@@ -10,12 +10,17 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import java.util.List;
 
+/**
+ *
+ * @author CDAA
+ */
 
 @Entity
 @Table(name = "servicios_serenazgo")
 public class ServicioSerenazgo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id_servicio")
     private int idServicio;
 
     @Column(unique = true, nullable = false)

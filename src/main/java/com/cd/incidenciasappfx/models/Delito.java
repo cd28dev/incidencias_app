@@ -10,15 +10,20 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import java.util.List;
 
-
+/**
+ * ${name}.java
+ * 
+ * @author ${user}
+ */
 @Entity
 @Table(name = "delitos")
 public class Delito {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_delito")
     private int idDelito;
 
-    @Column(unique = true, nullable = false)
+    @Column(name="nombre",unique = true, nullable = false)
     private String nombre;
 
     @ManyToMany(mappedBy = "delitos")
