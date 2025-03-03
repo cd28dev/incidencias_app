@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<VBox spacing="10.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="com.cd.incidenciasappfx.controllers.RolesViewController"
+      stylesheets="@/com/cd/incidenciasappfx/styles/page.css">
+    
+    <!-- Encabezado -->
+    <HBox spacing="10" styleClass="header">
+        <Label text="Lista de Usuarios" styleClass="header-title" />
+        <Region HBox.hgrow="ALWAYS"/>
+
+        <!-- Botones de Exportación -->
+        <Button fx:id="btnExportExcel" styleClass="btn-export" onAction="#exportarExcel">
+            <graphic>
+                <ImageView fitHeight="20" fitWidth="20">
+                    <image>
+                        <Image url="@/com/cd/incidenciasappfx/images/excel.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button fx:id="btnExportPdf" styleClass="btn-export" onAction="#exportarPDF">
+            <graphic>
+                <ImageView fitHeight="20" fitWidth="20">
+                    <image>
+                        <Image url="@/com/cd/incidenciasappfx/images/pdf.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
+    </HBox>
+
+    <!-- Botón Nuevo y Campo de Búsqueda -->
+    <HBox spacing="10" styleClass="toolbar">
+        <Button text="Nuevo" fx:id="btnNuevo" styleClass="btn-nuevo" onAction="#abrirModal0" />
+        <Region HBox.hgrow="ALWAYS"/>
+        
+        <!-- Campo de Búsqueda con Icono de Lupa -->
+        <HBox spacing="5" styleClass="search-box">
+            <TextField fx:id="txtBuscarDoc" promptText="Buscar por N° Doc" styleClass="search-field"/>
+            <Button fx:id="btnBuscar" styleClass="search-button">
+                <graphic>
+                    <ImageView fitHeight="16" fitWidth="16">
+                        <image>
+                            <Image url="@/com/cd/incidenciasappfx/images/lupa.png" />
+                        </image>
+                    </ImageView>
+                </graphic>
+            </Button>
+        </HBox>
+    </HBox>
+    
+    <!-- Tabla de Usuarios -->
+    <TableView fx:id="tablaUsuarios" styleClass="table-view"  VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn text="N° Doc" fx:id="colDoc" />
+            <TableColumn text="Nombres" fx:id="colNombres" />
+            <TableColumn text="Apellidos" fx:id="colApellidos" />
+            <TableColumn text="Email" fx:id="colEmail" />
+            <TableColumn text="Username" fx:id="colUsername" />
+            <TableColumn text="Rol" fx:id="colRol" />
+            <TableColumn text="Acción" fx:id="colAccion" />
+        </columns>
+    </TableView>
+    
+    <HBox spacing="10" alignment="CENTER" styleClass="footer">
+        <Label text="© 2025 Mi Aplicación - Todos los derechos reservados" />
+    </HBox>
+</VBox>
+

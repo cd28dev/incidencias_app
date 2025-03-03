@@ -15,9 +15,10 @@ import java.util.Base64;
 @Entity
 @Table(name = "usuarios")
 public class Usuario {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id_usuario")
+    @Column(name = "id_usuario")
     private int idUsuario;
 
     @Column(nullable = false)
@@ -42,9 +43,9 @@ public class Usuario {
     @JoinColumn(name = "id_rol", nullable = false)
     private Rol rol;
 
-    @Column(name="foto")
+    @Column(name = "foto")
     private String foto;
-    
+
     public Usuario() {
     }
 
@@ -67,7 +68,6 @@ public class Usuario {
         this.foto = foto;
     }
 
-    
     public int getIdUsuario() {
         return idUsuario;
     }
@@ -136,9 +136,17 @@ public class Usuario {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             byte[] hash = md.digest(password.getBytes());
-            return Base64.getEncoder().encodeToString(hash);
+
+            // Convertir a hexadecimal
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hash) {
+                hexString.append(String.format("%02x", b));
+            }
+            return hexString.toString();
+
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("Error al encriptar la contraseña", e);
         }
     }
+
 }

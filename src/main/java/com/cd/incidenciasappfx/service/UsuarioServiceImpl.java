@@ -4,7 +4,6 @@ import com.cd.incidenciasappfx.helper.EmailHelper;
 import com.cd.incidenciasappfx.models.Usuario;
 import com.cd.incidenciasappfx.repository.IUsuarioRepository;
 import com.cd.incidenciasappfx.repository.UsuarioRepositoryImpl;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -70,6 +69,11 @@ public class UsuarioServiceImpl implements IUsuarioService {
     @Override
     public int getNextUserId() {
         return usuarioRepository.getNextUserId();
+    }
+
+    @Override
+    public Optional<Usuario> validarUsuario(String username, String password) {
+        return usuarioRepository.validarUsuario(username, password);
     }
 
     

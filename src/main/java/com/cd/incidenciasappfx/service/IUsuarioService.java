@@ -15,4 +15,5 @@ public interface IUsuarioService {
     Optional<Usuario> update(Usuario user);
     void delete(int userId);
     int getNextUserId();
+    Optional<Usuario> validarUsuario(String username, String password);
 }

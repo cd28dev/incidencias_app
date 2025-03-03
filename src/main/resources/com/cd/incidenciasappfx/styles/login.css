@@ -1,46 +1,68 @@
-/*
-Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
-*/
-/* 
-    Created on : 25 feb. 2025, 01:41:00
-    Author     : CDAA
-*/
-
+/* Fondo con degradado oscuro elegante */
 .root {
-    -fx-background-color: linear-gradient(to bottom, #2c3e50, #4ca1af);
+    -fx-background-color: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
 }
 
+/* Estilo del título */
 .title-label {
-    -fx-font-size: 24px;
-    -fx-text-fill: white;
+    -fx-font-size: 28px;
+    -fx-text-fill: #f1c40f; /* Dorado */
     -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 10, 0, 0, 2);
 }
 
+/* Contenedor de los inputs */
 .input-container {
-    -fx-background-color: white;
-    -fx-background-radius: 10;
-    -fx-padding: 10;
-    -fx-spacing: 5;
-    -fx-alignment: center;
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-background-radius: 15;
+    -fx-padding: 12;
+    -fx-spacing: 8;
+    -fx-alignment: center-left;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0, 0, 2);
 }
 
+/* Iconos dentro de los inputs */
+.input-container ImageView {
+    -fx-opacity: 0.85;
+}
+
+/* Campos de texto */
 .text-field, .password-field {
     -fx-background-color: transparent;
     -fx-border-width: 0;
-    -fx-font-size: 14px;
+    -fx-text-fill: #ffffff; /* Texto blanco puro */
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 4, 0, 0, 1); /* Sombra en el texto */
+    -fx-prompt-text-fill: #e0c97a; /* Placeholder en dorado tenue */
 }
 
+/* Animación cuando los inputs están en foco */
+.text-field:focused, .password-field:focused {
+    -fx-effect: dropshadow(gaussian, rgba(255, 215, 0, 0.4), 10, 0, 0, 3);
+}
+
+/* Botón de login */
 .login-button {
-    -fx-background-color: #2980b9;
-    -fx-text-fill: white;
+    -fx-background-color: linear-gradient(to right, #f1c40f, #d4ac0d);
+    -fx-text-fill: black;
     -fx-font-size: 16px;
-    -fx-padding: 10 20;
-    -fx-background-radius: 20;
+    -fx-font-weight: bold;
+    -fx-padding: 12 24;
+    -fx-background-radius: 25;
     -fx-cursor: hand;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0, 0, 3);
+    -fx-transition: all 0.3s ease-in-out;
 }
 
+/* Efecto hover en el botón */
 .login-button:hover {
-    -fx-background-color: #3498db;
+    -fx-background-color: linear-gradient(to right, #d4ac0d, #b7950b);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 12, 0, 0, 4);
+}
+
+/* Efecto cuando se presiona el botón */
+.login-button:pressed {
+    -fx-background-color: linear-gradient(to right, #b7950b, #9a7d0a);
+    -fx-translate-y: 2px;
 }

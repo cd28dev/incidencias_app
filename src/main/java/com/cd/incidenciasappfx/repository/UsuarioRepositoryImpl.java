@@ -219,4 +219,55 @@ public class UsuarioRepositoryImpl implements IUsuarioRepository {
         return nextId;
     }
 
+    @Override
+    public Optional<Usuario> validarUsuario(String username, String password) {
+        EntityManager em = JpaUtil.getEntityManager();
+        Usuario usuario = null;
+
+        try {
+            StoredProcedureQuery query = em.createStoredProcedureQuery("sp_validar_usuario");
+
+            // Registrar los parámetros del procedimiento almacenado
+            query.registerStoredProcedureParameter("p_username", String.class, ParameterMode.IN);
+            query.registerStoredProcedureParameter("p_password", String.class, ParameterMode.IN);
+            query.registerStoredProcedureParameter("p_existe", Boolean.class, ParameterMode.OUT);
+            query.registerStoredProcedureParameter("p_rol", String.class, ParameterMode.OUT);
+
+            // Asignar valores a los parámetros de entrada
+            query.setParameter("p_username", username);
+            query.setParameter("p_password", password);
+
+            // Ejecutar el procedimiento almacenado
+            query.execute();
+
+            // Obtener valores de salida
+            Boolean existe = (Boolean) query.getOutputParameterValue("p_existe");
+            String rolNombre = (String) query.getOutputParameterValue("p_rol");
+
+            if (Boolean.TRUE.equals(existe)) {
+                usuario = new Usuario();
+                usuario.setUsuario(username);
+
+                // Crear y asignar el rol
+                Rol rol = new Rol();
+                rol.setNombre(rolNombre);
+                usuario.setRol(rol);
+            }
+
+        } catch (jakarta.persistence.PersistenceException e) {
+            Throwable cause = e.getCause();
+            if (cause instanceof java.sql.SQLException sqlEx) {
+                String sqlState = sqlEx.getSQLState();
+                if ("45000".equals(sqlState)) {
+                    System.out.println("Error: " + sqlEx.getMessage());
+                }
+            }
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+
+        return Optional.ofNullable(usuario);
+    }
+
 }

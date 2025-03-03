@@ -16,15 +16,15 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("Principal"), 1200, 700);
-        scene.getStylesheets().add(getClass().getResource("/com/cd/incidenciasappfx/styles/style.css").toExternalForm());
+        scene = new Scene(loadFXML("login"));
+        scene.getStylesheets().add(getClass().getResource("/com/cd/incidenciasappfx/styles/login.css").toExternalForm());
         stage.setScene(scene); // Asignamos la escena al stage
         stage.setTitle("Sistema de Registro de Incidencias");
         stage.setResizable(false); 
         stage.show();
     }
 
-    static void setRoot(String fxml) throws IOException {
+    public static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
     }
 

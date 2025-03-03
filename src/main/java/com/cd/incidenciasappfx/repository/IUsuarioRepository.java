@@ -16,4 +16,5 @@ public interface IUsuarioRepository {
     Optional<Usuario> update(Usuario user);
     void delete(int userId);
     Integer getNextUserId();
+    Optional<Usuario> validarUsuario(String username,String password);
 }
