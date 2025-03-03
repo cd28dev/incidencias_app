@@ -13,7 +13,6 @@ import com.cd.incidenciasappfx.service.RolesServiceImpl;
 import com.cd.incidenciasappfx.service.UsuarioServiceImpl;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
@@ -26,7 +25,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 

@@ -14,7 +14,7 @@ public interface IUsuarioRepository {
     Optional<Usuario> findById(String userId);
     List<Usuario> findAll();
     Optional<Usuario> update(Usuario user);
-    void delete(int userId);
+    boolean delete(String dni);
     Integer getNextUserId();
     Optional<Usuario> validarUsuario(String username,String password);
 }

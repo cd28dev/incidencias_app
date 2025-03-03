@@ -13,7 +13,7 @@ public interface IUsuarioService {
     Optional<Usuario> findById(String dni);
     List<Usuario> findAll();
     Optional<Usuario> update(Usuario user);
-    void delete(int userId);
+    boolean delete(String dni);
     int getNextUserId();
     Optional<Usuario> validarUsuario(String username, String password);
 }

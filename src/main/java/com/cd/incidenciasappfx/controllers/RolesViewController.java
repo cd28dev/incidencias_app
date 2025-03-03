@@ -1,37 +1,34 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
 package com.cd.incidenciasappfx.controllers;
 
 import com.cd.incidenciasappfx.helper.ExcelReportExporter;
 import com.cd.incidenciasappfx.helper.JasperReportHelper;
 import com.cd.incidenciasappfx.helper.PdfReportExporter;
-import java.net.URL;
-import java.util.ResourceBundle;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.TableView;
-import com.cd.incidenciasappfx.models.Usuario;
-import com.cd.incidenciasappfx.service.IUsuarioService;
-import com.cd.incidenciasappfx.service.UsuarioServiceImpl;
+import com.cd.incidenciasappfx.models.Rol;
+import com.cd.incidenciasappfx.service.IRolesService;
+import com.cd.incidenciasappfx.service.RolesServiceImpl;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.ResourceBundle;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -39,31 +36,23 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
- * FXML Controller class
+ * RolesViewController.java
  *
  * @author CDAA
  */
-public class UsuariosViewController implements Initializable {
+public class RolesViewController implements Initializable {
 
-    private IUsuarioService userService;
-
-    @FXML
-    private TableView<Usuario> tablaUsuarios;
+    private IRolesService rolService;
 
     @FXML
-    private TableColumn<Usuario, String> colDoc;
+    private TableView<Rol> tablaRol;
+
     @FXML
-    private TableColumn<Usuario, String> colNombres;
+    private TableColumn<Rol, Integer> colIdRol;
     @FXML
-    private TableColumn<Usuario, String> colApellidos;
+    private TableColumn<Rol, String> colRol;
     @FXML
-    private TableColumn<Usuario, String> colEmail;
-    @FXML
-    private TableColumn<Usuario, String> colUsername;
-    @FXML
-    private TableColumn<Usuario, String> colRol;
-    @FXML
-    private TableColumn<Usuario, Void> colAccion;
+    private TableColumn<Rol, Void> colAccion;
 
     @FXML
     private Button btnExportExcel;
@@ -73,35 +62,32 @@ public class UsuariosViewController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        userService = new UsuarioServiceImpl();
+        rolService = new RolesServiceImpl();
         configColumns();
-        cargarUsuarios();
-        tablaUsuarios.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        tablaUsuarios.getColumns().removeIf(col -> col.getText() == null || col.getText().trim().isEmpty());
-        tablaUsuarios.setFocusTraversable(false);
+        cargarRoles();
+        tablaRol.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
 
     @FXML
     private void abrirModal0() {
         abrirModal(0);
     }
-    
 
     private void abrirModal(int numero) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/cd/incidenciasappfx/views/NuevoUsuario.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/cd/incidenciasappfx/views/NuevoRol.fxml"));
             Parent root = loader.load();
 
             // Obtener el controlador del modal
-            NuevoUsuarioController modalController = loader.getController();
+            NuevoRolController modalController = loader.getController();
 
             // Pasar el número al controlador del modal
             modalController.setNumero(numero);
-            modalController.setUsuariosViewController(this);
-            
+            modalController.setRolViewController(this);
+
             Stage modalStage = new Stage();
-            modalStage.initModality(Modality.APPLICATION_MODAL); // Bloquear la ventana principal
-            modalStage.setTitle("Nuevo Usuario");
+            modalStage.initModality(Modality.APPLICATION_MODAL);
+            modalStage.setTitle("Nuevo Rol");
             modalStage.setScene(new Scene(root));
             modalStage.setResizable(false);
 
@@ -112,18 +98,14 @@ public class UsuariosViewController implements Initializable {
     }
 
     private void configColumns() {
-        tablaUsuarios.getColumns().clear();
-        tablaUsuarios.getColumns().addAll(colDoc, colNombres, colApellidos, colEmail, colUsername, colRol, colAccion);
+        tablaRol.getColumns().clear();
+        tablaRol.getColumns().addAll(colIdRol, colRol, colAccion);
 
-        colDoc.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDni()));
-        colNombres.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNombre()));
-        colApellidos.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getApellido()));
-        colEmail.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCorreo()));
-        colUsername.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getUsuario()));
-        colRol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getRol().getNombre()));
-
+        colIdRol.setCellValueFactory(data
+                -> new ReadOnlyObjectWrapper<>(data.getValue().getIdRol())
+        );
+        colRol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNombre()));
         configurarColumnaAccion();
-
     }
 
     private void configurarColumnaAccion() {
@@ -151,7 +133,7 @@ public class UsuariosViewController implements Initializable {
     /**
      * Crea y configura el botón de actualizar.
      */
-    private Button crearBotonActualizar(TableCell<Usuario, Void> cell) {
+    private Button crearBotonActualizar(TableCell<Rol, Void> cell) {
         Button btn = new Button();
         ImageView iconActualizar = new ImageView(new Image(getClass().getResourceAsStream("/com/cd/incidenciasappfx/images/update.png")));
         iconActualizar.setFitWidth(20);
@@ -161,12 +143,12 @@ public class UsuariosViewController implements Initializable {
 
         // Acción al hacer clic
         btn.setOnAction(event -> {
-            Usuario usuario = cell.getTableView().getItems().get(cell.getIndex());
-            Optional<Usuario> userOptional = userService.findById(usuario.getDni());
-            if(userOptional.isPresent()){
-                abrirModalActualizar(userOptional.get(),1);
+            Rol rol = cell.getTableView().getItems().get(cell.getIndex());
+            Optional<Rol> rolOptional = rolService.findById(rol.getIdRol());
+            if (rolOptional.isPresent()) {
+                abrirModalActualizar(rolOptional.get(), 1);
             }
-            
+
         });
 
         // Efecto Hover
@@ -176,7 +158,7 @@ public class UsuariosViewController implements Initializable {
         return btn;
     }
 
-    private Button crearBotonEliminar(TableCell<Usuario, Void> cell) {
+    private Button crearBotonEliminar(TableCell<Rol, Void> cell) {
         Button btn = new Button();
         ImageView iconEliminar = new ImageView(new Image(getClass().getResourceAsStream("/com/cd/incidenciasappfx/images/delete.png")));
         iconEliminar.setFitWidth(20);
@@ -186,14 +168,13 @@ public class UsuariosViewController implements Initializable {
 
         // Acción al hacer clic
         btn.setOnAction(event -> {
-            Usuario usuario = cell.getTableView().getItems().get(cell.getIndex());
-            Optional<Usuario> userOptional = userService.findById(usuario.getDni());
-            if(userOptional.isPresent()){
-                eliminarUsuario(userOptional.get());
+            Rol rol = cell.getTableView().getItems().get(cell.getIndex());
+            Optional<Rol> rolOptional = rolService.findById(rol.getIdRol());
+            if (rolOptional.isPresent()) {
+                eliminarRol(rolOptional.get());
             }
-            
-        });
 
+        });
         // Efecto Hover
         btn.setOnMouseEntered(event -> btn.setStyle("-fx-background-color: rgba(255, 0, 0, 0.2); -fx-border-radius: 5px; -fx-background-radius: 5px;"));
         btn.setOnMouseExited(event -> btn.setStyle("-fx-background-color: transparent;"));
@@ -205,26 +186,25 @@ public class UsuariosViewController implements Initializable {
         contenedor.setAlignment(Pos.CENTER);
     }
 
-    private void abrirModalActualizar(Usuario usuario, int number) {
+    private void abrirModalActualizar(Rol rol, int number) {
         try {
             // Cargar el archivo FXML del modal
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/cd/incidenciasappfx/views/NuevoUsuario.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/cd/incidenciasappfx/views/NuevoRol.fxml"));
             Parent root = loader.load();
 
             // Obtener el controlador del modal
-            NuevoUsuarioController controller = loader.getController();
-            
+            NuevoRolController controller = loader.getController();
+
             controller.setNumero(number);
-            
-            controller.cargarDatosUsuario(usuario);
-            controller.setUsuariosViewController(this);
-            controller.changeTitle();
+
+            controller.cargarDatosRol(rol);
+            controller.setRolViewController(this);
             // Crear la nueva ventana (Stage)
             Stage stage = new Stage();
-            stage.setTitle("Actualizar Usuario");
+            stage.setTitle("Actualizar Rol");
             stage.setScene(new Scene(root));
             stage.initModality(Modality.WINDOW_MODAL);
-            stage.initOwner(tablaUsuarios.getScene().getWindow());
+            stage.initOwner(tablaRol.getScene().getWindow());
             stage.showAndWait();
 
         } catch (IOException e) {
@@ -232,36 +212,35 @@ public class UsuariosViewController implements Initializable {
         }
     }
 
-    private void eliminarUsuario(Usuario u) {
-        boolean eliminado = userService.delete(u.getDni());
+    private void eliminarRol(Rol r) {
+        boolean eliminado = rolService.delete(r.getIdRol());
         if(eliminado){
-            aviso("Usuario eliminado", "/com/cd/incidenciasappfx/images/success.png");
-            cargarUsuarios();
+            aviso("Rol eliminado", "/com/cd/incidenciasappfx/images/success.png");
+            cargarRoles();
         }else{
             aviso("Error", "/com/cd/incidenciasappfx/images/triangulo.png");
         }
-        
     }
 
-    public void cargarUsuarios() {
-        List<Usuario> users = userService.findAll();
-        ObservableList<Usuario> usuariosList = FXCollections.observableArrayList(users);
-        tablaUsuarios.setItems(usuariosList);
+    public void cargarRoles() {
+        List<Rol> roles = rolService.findAll();
+        ObservableList<Rol> rolesList = FXCollections.observableArrayList(roles);
+        tablaRol.setItems(rolesList);
     }
 
     @FXML
     private void exportarExcel() {
         Path documentsDir = Paths.get(System.getProperty("user.home"), "Documents");
-        String outputPath = documentsDir.resolve("UsuarioReport.xlsx").toString();
+        String outputPath = documentsDir.resolve("RolReport.xlsx").toString();
 
-        List<Usuario> listaUsuarios = userService.findAll();
+        List<Rol> listaRoles = rolService.findAll();
         Map<String, Object> params = new HashMap<>();
-        params.put("ReportTitle", "Reporte de Usuarios");
+        params.put("ReportTitle", "Reporte de Roles");
 
         JasperReportHelper.generateReport(
                 "/com/cd/incidenciasappfx/report/UsuarioReportExcel.jrxml", outputPath,
                 params,
-                listaUsuarios,
+                listaRoles,
                 new ExcelReportExporter()
         );
     }
@@ -271,7 +250,7 @@ public class UsuariosViewController implements Initializable {
         Path documentsDir = Paths.get(System.getProperty("user.home"), "Documents");
         String outputPath = documentsDir.resolve("UsuarioReport.xlsx").toString();
 
-        List<Usuario> listaUsuarios = userService.findAll();
+        List<Rol> listaRoles = rolService.findAll();
         Map<String, Object> params = new HashMap<>();
         params.put("ReportTitle", "Reporte de Usuarios");
 
@@ -279,12 +258,12 @@ public class UsuariosViewController implements Initializable {
                 "/com/cd/incidenciasappfx/report/UsuarioReportPdf.jrxml",
                 outputPath,
                 params,
-                listaUsuarios,
+                listaRoles,
                 new PdfReportExporter()
         );
     }
     
-    private void aviso(String mensaje, String icono) {
+     private void aviso(String mensaje, String icono) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/cd/incidenciasappfx/views/modal_small.fxml"));
             Parent root = loader.load();
@@ -302,5 +281,4 @@ public class UsuariosViewController implements Initializable {
             e.printStackTrace();
         }
     }
-
 }

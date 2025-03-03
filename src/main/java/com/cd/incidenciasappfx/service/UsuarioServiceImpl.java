@@ -62,8 +62,8 @@ public class UsuarioServiceImpl implements IUsuarioService {
     }
 
     @Override
-    public void delete(int userId) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public boolean delete(String dni) {
+        return usuarioRepository.delete(dni);
     }
 
     @Override

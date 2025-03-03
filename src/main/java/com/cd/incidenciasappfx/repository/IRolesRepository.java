@@ -5,14 +5,18 @@
 package com.cd.incidenciasappfx.repository;
 
 import com.cd.incidenciasappfx.models.Rol;
-import com.cd.incidenciasappfx.models.Usuario;
 import java.util.List;
+import java.util.Optional;
 
 /**
  *
  * @author CDAA
  */
 public interface IRolesRepository {
-
+    Optional<Rol> save(Rol r);
+    Optional<Rol> findById(Integer idRol);
     List<Rol> findAll();
+    Optional<Rol> update(Rol r);
+    boolean delete(int id);
+
 }

@@ -191,8 +191,33 @@ public class UsuarioRepositoryImpl implements IUsuarioRepository {
     }
 
     @Override
-    public void delete(int userId) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public boolean delete(String dni) {
+        try {
+            StoredProcedureQuery query = entityManager.createStoredProcedureQuery("eliminar_usuario_por_dni");
+
+            query.registerStoredProcedureParameter("p_dni", String.class, jakarta.persistence.ParameterMode.IN);
+            query.registerStoredProcedureParameter("p_resultado", Integer.class, jakarta.persistence.ParameterMode.OUT);
+
+            query.setParameter("p_dni", dni);
+
+            query.execute();
+
+            Integer resultado = (Integer) query.getOutputParameterValue("p_resultado");
+
+            return resultado != null && resultado == 1; 
+
+        } catch (jakarta.persistence.PersistenceException e) {
+            Throwable cause = e.getCause();
+            if (cause instanceof java.sql.SQLException sqlEx) {
+                String sqlState = sqlEx.getSQLState();
+                if ("45000".equals(sqlState)) {
+                    System.out.println("Error: " + sqlEx.getMessage());
+                }
+            }
+
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
