@@ -1,3 +1,4 @@
+
 package com.cd.incidenciasappfx.controllers;
 
 import com.cd.incidenciasappfx.models.Rol;
@@ -16,13 +17,13 @@ import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+
 /**
- * NuevoRolController.java
- *
+ * NuevoSectorController.java
+ * 
  * @author CDAA
  */
-public class NuevoRolController {
-
+public class NuevoSectorController {
     private IRolesService rolService;
     private RolesViewController rolViewController;
 

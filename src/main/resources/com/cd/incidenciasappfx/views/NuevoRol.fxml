@@ -11,13 +11,12 @@
 <?import javafx.scene.image.ImageView?>
 
 <AnchorPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
-            fx:id="modalPane" prefWidth="400" prefHeight="350"
+            fx:id="modalPane" prefWidth="330" prefHeight="250"
             stylesheets="@/com/cd/incidenciasappfx/styles/nuevousuario.css"
             styleClass="modal"
             fx:controller="com.cd.incidenciasappfx.controllers.NuevoRolController">
 
-
-    <VBox spacing="10" alignment="CENTER" layoutX="20" layoutY="20">
+     <VBox spacing="10" alignment="CENTER" layoutX="20" layoutY="20">
         <Label fx:id="lblNewRol" text="Nuevo Rol" styleClass="modal-title">
             <graphic>
                 <ImageView fx:id="iconIndex" styleClass="icon-style">
@@ -25,16 +24,16 @@
                 </ImageView>
             </graphic>
         </Label>
-        
-        <GridPane hgap="10" vgap="10">
+
+        <GridPane hgap="10" vgap="10" alignment="CENTER">
             <TextField fx:id="idRol" visible="false" managed="false"/>
             
             <Label text="Rol:" GridPane.rowIndex="1" styleClass="form-label"/>
             <TextField fx:id="txtRol" GridPane.columnIndex="1" GridPane.rowIndex="1" styleClass="form-field"/>
-            
         </GridPane>
-        <Region prefHeight="10"/>
-        
+
+        <Region prefHeight="20"/>
+
         <HBox spacing="15" alignment="CENTER">
             <Button text="Guardar" fx:id="btnGuardar" styleClass="btn-primary" prefWidth="100" onAction="#saveRol"/>
             <Button text="Cancelar" fx:id="btnCancelar" styleClass="btn-danger" prefWidth="100"/>

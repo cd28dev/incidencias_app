@@ -217,3 +217,302 @@ END
 DELIMITER ;
 
 
+DELIMITER $$
+
+CREATE PROCEDURE GetNextUserId()
+BEGIN
+    DECLARE next_id INT;
+
+    SELECT AUTO_INCREMENT 
+    INTO next_id 
+    FROM information_schema.TABLES 
+    WHERE TABLE_SCHEMA = 'incidenciasappbd' 
+    AND TABLE_NAME = 'usuarios';
+
+    SELECT next_id;
+END $$
+
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE sp_validar_usuario(
+    IN p_username VARCHAR(50),
+    IN p_password VARCHAR(255),
+    OUT p_existe BOOLEAN
+)
+BEGIN
+    DECLARE v_count INT;
+    
+    SELECT COUNT(*) INTO v_count 
+    FROM usuarios 
+    WHERE username = p_username AND password = SHA2(p_password, 256);
+    
+    SET p_existe = (v_count > 0);
+END //
+DELIMITER ;
+
+
+DELIMITER $$
+
+CREATE PROCEDURE sp_insertar_rol(
+    IN p_nombre VARCHAR(50)
+)
+BEGIN
+    DECLARE rol_existe INT;
+    
+    -- Verificar si ya existe un rol con el mismo nombre
+    SELECT COUNT(*) INTO rol_existe FROM roles WHERE nombre = p_nombre;
+    
+    IF rol_existe > 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'El rol ya existe';
+    ELSE
+        -- Insertar el nuevo rol
+        INSERT INTO roles (nombre) VALUES (p_nombre);
+    END IF;
+END $$
+
+DELIMITER ;
+
+
+DELIMITER $$
+
+CREATE PROCEDURE sp_buscar_rol_por_id(
+    IN p_idRol INT
+)
+BEGIN
+    SELECT idRol, nombre
+    FROM roles
+    WHERE idRol = p_idRol;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_actualizar_rol`(
+    IN p_idRol INT,
+    IN p_nombre VARCHAR(50)
+)
+BEGIN
+    DECLARE rol_existe INT;
+    DECLARE nombre_duplicado INT;
+
+    START TRANSACTION;
+
+    -- Verificar si el rol a actualizar existe
+    SELECT COUNT(*) INTO rol_existe FROM roles WHERE idRol = p_idRol;
+
+    -- Verificar si el nuevo nombre ya está en uso por otro rol
+    SELECT COUNT(*) INTO nombre_duplicado FROM roles WHERE nombre = p_nombre AND idRol != p_idRol;
+
+    -- Validaciones
+    IF rol_existe = 0 THEN
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Error: El rol especificado no existe';
+
+    ELSEIF nombre_duplicado > 0 THEN
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Error: El nombre del rol ya está en uso';
+
+    ELSE
+        -- Actualizar rol
+        UPDATE roles
+        SET nombre = p_nombre
+        WHERE idRol = p_idRol;
+
+        COMMIT;
+
+        -- Retornar los datos actualizados del rol
+        SELECT idRol, nombre FROM roles WHERE idRol = p_idRol;
+    END IF;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE sp_eliminar_rol(
+    IN p_id_rol INT,
+    OUT p_resultado INT
+)
+BEGIN
+    DECLARE v_existe INT DEFAULT 0;
+
+    -- Manejar errores de SQL
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION 
+    BEGIN
+        ROLLBACK;
+        SET p_resultado = -1; -- Error al eliminar
+    END;
+
+    -- Iniciar la transacción
+    START TRANSACTION;
+
+    -- Verificar si el rol existe
+    SELECT COUNT(*) INTO v_existe FROM roles WHERE id_rol = p_id_rol;
+
+    IF v_existe > 0 THEN
+        -- Eliminar el rol
+        DELETE FROM roles WHERE id_rol = p_id_rol;
+        
+        -- Confirmar eliminación
+        COMMIT;
+        SET p_resultado = 1; -- Eliminado correctamente
+    ELSE
+        -- Si no existe, deshacer la transacción
+        ROLLBACK;
+        SET p_resultado = 0; -- No encontrado
+    END IF;
+
+END $$
+
+DELIMITER ;
+
+
+DELIMITER $$
+-- Listar todos los sectores
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_listar_sectores`()
+BEGIN
+    -- Retornar una lista vacía si no hay sectores
+    IF (SELECT COUNT(*) FROM sectores) = 0 THEN
+        SELECT NULL AS id_sector, NULL AS nombre
+        FROM DUAL WHERE FALSE; -- Retorna 0 filas sin lanzar error
+    ELSE
+        -- Retornar la lista de sectores
+        SELECT id_sector, nombre FROM sectores;
+    END IF;
+END $$
+
+DELIMITER ;
+DELIMITER $$
+-- Insertar un nuevo sector
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_insertar_sector`(
+    IN p_nombre VARCHAR(50)
+)
+BEGIN
+    DECLARE sector_existe INT;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        -- Si ocurre un error, se revierte la transacción
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Error al insertar el sector';
+    END;
+
+    START TRANSACTION;
+    
+    -- Verificar si ya existe un sector con el mismo nombre
+    SELECT COUNT(*) INTO sector_existe FROM sectores WHERE nombre = p_nombre FOR UPDATE;
+    
+    IF sector_existe > 0 THEN
+        -- Si el sector ya existe, se revierte la transacción
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'El sector ya existe';
+    ELSE
+        -- Insertar el nuevo sector
+        INSERT INTO sectores (nombre) VALUES (p_nombre);
+        COMMIT;
+    END IF;
+END $$
+
+DELIMITER ;
+DELIMITER $$
+-- Eliminar un sector por ID
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_eliminar_sector`(
+    IN p_id_sector INT,
+    OUT p_resultado INT
+)
+BEGIN
+    DECLARE v_existe INT DEFAULT 0;
+
+    -- Manejar errores de SQL
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION 
+    BEGIN
+        ROLLBACK;
+        SET p_resultado = -1; -- Error al eliminar
+    END;
+
+    -- Iniciar la transacción
+    START TRANSACTION;
+
+    -- Verificar si el sector existe
+    SELECT COUNT(*) INTO v_existe FROM sectores WHERE id_sector = p_id_sector;
+
+    IF v_existe > 0 THEN
+        -- Eliminar el sector
+        DELETE FROM sectores WHERE id_sector = p_id_sector;
+        
+        -- Confirmar eliminación
+        COMMIT;
+        SET p_resultado = 1; -- Eliminado correctamente
+    ELSE
+        -- Si no existe, deshacer la transacción
+        ROLLBACK;
+        SET p_resultado = 0; -- No encontrado
+    END IF;
+
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+-- Actualizar un sector por ID
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_actualizar_sector`(
+    IN p_idSector INT,
+    IN p_nombre VARCHAR(50)
+)
+BEGIN
+    DECLARE sector_existe INT;
+    DECLARE nombre_duplicado INT;
+
+    START TRANSACTION;
+
+    -- Verificar si el sector a actualizar existe
+    SELECT COUNT(*) INTO sector_existe FROM sectores WHERE id_sector = p_idSector;
+
+    -- Verificar si el nuevo nombre ya está en uso por otro sector
+    SELECT COUNT(*) INTO nombre_duplicado FROM sectores WHERE nombre = p_nombre AND id_sector != p_idSector;
+
+    -- Validaciones
+    IF sector_existe = 0 THEN
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Error: El sector especificado no existe';
+
+    ELSEIF nombre_duplicado > 0 THEN
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Error: El nombre del sector ya está en uso';
+
+    ELSE
+        -- Actualizar sector
+        UPDATE sectores
+        SET nombre = p_nombre
+        WHERE id_sector = p_idSector;
+
+        COMMIT;
+
+        -- Retornar los datos actualizados del sector
+        SELECT id_sector, nombre FROM sectores WHERE id_sector = p_idSector;
+    END IF;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+-- Buscar un sector por ID
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_buscar_sector_por_id`(
+    IN p_idSector INT
+)
+BEGIN
+    SELECT id_sector, nombre
+    FROM sectores
+    WHERE id_sector = p_idSector;
+END $$
+
+DELIMITER ;
+

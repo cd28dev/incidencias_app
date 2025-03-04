@@ -19,6 +19,7 @@ import java.util.List;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -135,13 +136,24 @@ public class NuevoUsuarioController {
     }
 
     private void cargarRoles() {
-        List<Rol> roles = rolService.findAll();
+        Task<List<Rol>> task = new Task<>() {
+            @Override
+            protected List<Rol> call() throws Exception {
+                return rolService.findAll();
+            }
+        };
 
-        ObservableList<String> listaRoles = FXCollections.observableArrayList(
-                roles.stream().map(Rol::getNombre).toList()
-        );
+        task.setOnSucceeded(event -> {
+            List<Rol> roles = task.getValue();
+            if (roles != null) {
+                ObservableList<String> listaRoles = FXCollections.observableArrayList(
+                        roles.stream().map(Rol::getNombre).toList()
+                );
+                cbRol.setItems(listaRoles);
+            }
+        });
 
-        cbRol.setItems(listaRoles);
+        new Thread(task).start();
     }
 
     public void changeTitle() {
@@ -235,29 +247,53 @@ public class NuevoUsuarioController {
 
         if (documento.isEmpty() || nombres.isEmpty() || apellidos.isEmpty()
                 || email.isEmpty() || username.isEmpty() || rolSeleccionado == null) {
+            mostrarModal("Todos los campos son obligatorios", "/com/cd/incidenciasappfx/images/triangulo.png");
             return;
         }
 
-        Usuario usuario = new Usuario();
-        Rol rol = new Rol();
-        usuario.setIdUsuario(Integer.parseInt(id));
-        usuario.setDni(documento);
-        usuario.setNombre(nombres);
-        usuario.setApellido(apellidos);
-        usuario.setCorreo(email);
-        usuario.setUsuario(username);
-        rol.setNombre(rolSeleccionado);
-        usuario.setRol(rol);
-        usuario.setFoto(foto);
-
-        if (userService.update(usuario).isPresent()) {
-            mostrarModal("Usuario actualizado", "/com/cd/incidenciasappfx/images/success.png");
-            closeModal(btnGuardar);
-            usuariosViewController.cargarUsuarios();
-        } else {
-            mostrarModal("Hubo algún problema", "/com/cd/incidenciasappfx/images/triangulo.png");
-
+        if (!email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+            mostrarModal("Correo inválido", "/com/cd/incidenciasappfx/images/triangulo.png");
+            return;
         }
+
+        // Crear un `Task` para ejecutar en segundo plano
+        Task<Boolean> task = new Task<>() {
+            @Override
+            protected Boolean call() throws Exception {
+
+                Usuario usuario = new Usuario();
+                Rol rol = new Rol();
+                usuario.setIdUsuario(Integer.parseInt(id));
+                usuario.setDni(documento);
+                usuario.setNombre(nombres);
+                usuario.setApellido(apellidos);
+                usuario.setCorreo(email);
+                usuario.setUsuario(username);
+                rol.setNombre(rolSeleccionado);
+                usuario.setRol(rol);
+                usuario.setFoto(foto);
+
+                return userService.update(usuario).isPresent();
+            }
+
+            @Override
+            protected void succeeded() {
+                if (getValue()) {
+                    mostrarModal("Usuario actualizado", "/com/cd/incidenciasappfx/images/success.png");
+                    closeModal(btnGuardar);
+                    usuariosViewController.cargarUsuarios();
+                } else {
+                    mostrarModal("No se pudo actualizar el usuario", "/com/cd/incidenciasappfx/images/triangulo.png");
+                }
+            }
+
+            @Override
+            protected void failed() {
+                mostrarModal("Error inesperado", "/com/cd/incidenciasappfx/images/triangulo.png");
+            }
+        };
+
+        new Thread(task).start(); // Ejecutar en segundo plano
 
     }
 
@@ -270,31 +306,47 @@ public class NuevoUsuarioController {
         String rolSeleccionado = cbRol.getValue();
         String foto = fotoPath;
 
-        if (documento.isEmpty() || nombres.isEmpty() || apellidos.isEmpty()
-                || email.isEmpty() || username.isEmpty() || rolSeleccionado == null) {
+        if (!email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+            mostrarModal("Correo inválido", "/com/cd/incidenciasappfx/images/triangulo.png");
             return;
         }
 
-        Usuario usuario = new Usuario();
-        Rol rol = new Rol();
-        usuario.setDni(documento);
-        usuario.setNombre(nombres);
-        usuario.setApellido(apellidos);
-        usuario.setCorreo(email);
-        usuario.setUsuario(username);
-        rol.setNombre(rolSeleccionado);
-        usuario.setRol(rol);
-        usuario.setFoto(foto);
+        Task<Boolean> task = new Task<>() {
+            @Override
+            protected Boolean call() throws Exception {
 
-        if (userService.save(usuario).isPresent()) {
-            mostrarModal("Usuario registrado", "/com/cd/incidenciasappfx/images/success.png");
-            closeModal(btnGuardar);
-            usuariosViewController.cargarUsuarios();
-        } else {
-            mostrarModal("Hubo algún problema", "/com/cd/incidenciasappfx/images/triangulo.png");
+                Usuario usuario = new Usuario();
+                Rol rol = new Rol();
+                usuario.setDni(documento);
+                usuario.setNombre(nombres);
+                usuario.setApellido(apellidos);
+                usuario.setCorreo(email);
+                usuario.setUsuario(username);
+                rol.setNombre(rolSeleccionado);
+                usuario.setRol(rol);
+                usuario.setFoto(foto);
 
-        }
+                return userService.save(usuario).isPresent();
+            }
 
+            @Override
+            protected void succeeded() {
+                if (getValue()) {
+                    mostrarModal("Usuario registrado", "/com/cd/incidenciasappfx/images/success.png");
+                    closeModal(btnGuardar);
+                    usuariosViewController.cargarUsuarios();
+                } else {
+                    mostrarModal("Error al registrar usuario", "/com/cd/incidenciasappfx/images/triangulo.png");
+                }
+            }
+
+            @Override
+            protected void failed() {
+                mostrarModal("Error inesperado al registrar usuario", "/com/cd/incidenciasappfx/images/triangulo.png");
+            }
+        };
+
+        new Thread(task).start();
     }
 
 }

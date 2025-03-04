@@ -3,9 +3,9 @@ package com.cd.incidenciasappfx.controllers;
 import com.cd.incidenciasappfx.helper.ExcelReportExporter;
 import com.cd.incidenciasappfx.helper.JasperReportHelper;
 import com.cd.incidenciasappfx.helper.PdfReportExporter;
-import com.cd.incidenciasappfx.models.Rol;
-import com.cd.incidenciasappfx.service.IRolesService;
-import com.cd.incidenciasappfx.service.RolesServiceImpl;
+import com.cd.incidenciasappfx.models.Sector;
+import com.cd.incidenciasappfx.service.ISectorService;
+import com.cd.incidenciasappfx.service.SectorServiceImpl;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
@@ -36,23 +36,23 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
- * RolesViewController.java
+ * SectorViewController.java
  *
  * @author CDAA
  */
-public class RolesViewController implements Initializable {
+public class SectorViewController implements Initializable {
 
-    private IRolesService rolService;
-
-    @FXML
-    private TableView<Rol> tablaRol;
+    private ISectorService sectorService;
 
     @FXML
-    private TableColumn<Rol, Integer> colIdRol;
+    private TableView<Sector> tablaSector;
+
     @FXML
-    private TableColumn<Rol, String> colRol;
+    private TableColumn<Sector, Integer> colIdSector;
     @FXML
-    private TableColumn<Rol, Void> colAccion;
+    private TableColumn<Sector, String> colSector;
+    @FXML
+    private TableColumn<Sector, Void> colAccion;
 
     @FXML
     private Button btnExportExcel;
@@ -62,10 +62,10 @@ public class RolesViewController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        rolService = new RolesServiceImpl();
+        sectorService = new SectorServiceImpl();
         configColumns();
-        cargarRoles();
-        tablaRol.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        cargarSectores();
+        tablaSector.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
 
     @FXML
@@ -75,15 +75,15 @@ public class RolesViewController implements Initializable {
 
     private void abrirModal(int numero) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/cd/incidenciasappfx/views/NuevoRol.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/cd/incidenciasappfx/views/NuevoSector.fxml"));
             Parent root = loader.load();
 
             // Obtener el controlador del modal
-            NuevoRolController modalController = loader.getController();
+            NuevoSectorController modalController = loader.getController();
 
             // Pasar el número al controlador del modal
             modalController.setNumero(numero);
-            modalController.setRolViewController(this);
+            modalController.setSectorViewController(this);
 
             Stage modalStage = new Stage();
             modalStage.initModality(Modality.APPLICATION_MODAL);

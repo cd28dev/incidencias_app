@@ -32,11 +32,6 @@ public class Incidencia {
     @Column(name="direccion",nullable = false)
     private String direccion;
 
-    @Column(name="sector",nullable = false)
-    private String sector;
-
-    private String urbanizacion;
-
     @Column(name="fecha",nullable = false)
     @Temporal(TemporalType.DATE)
     private Date fecha;
@@ -93,15 +88,23 @@ public class Incidencia {
         inverseJoinColumns = @JoinColumn(name = "id_servicio")
     )
     private List<ServicioSerenazgo> servicios;
+    
+    
+    @ManyToMany
+    @JoinTable(
+        name = "incidencias_urbanizaciones",
+        joinColumns = @JoinColumn(name = "id_incidencia"),
+        inverseJoinColumns = @JoinColumn(name = "id_urbanizacion")
+    )
+    private List<Urbanizacion> urbanizaciones;
+    
 
     public Incidencia() {
     }
 
-    public Incidencia(int idIncidencia, String direccion, String sector, String urbanizacion, Date fecha, Date hora, String manifestacion, String descripcion, String resultadoFinal, UnidadApoyo unidadApoyo, Usuario usuario) {
+    public Incidencia(int idIncidencia, String direccion, Date fecha, Date hora, String manifestacion, String descripcion, String resultadoFinal, UnidadApoyo unidadApoyo, Usuario usuario) {
         this.idIncidencia = idIncidencia;
         this.direccion = direccion;
-        this.sector = sector;
-        this.urbanizacion = urbanizacion;
         this.fecha = fecha;
         this.hora = hora;
         this.manifestacion = manifestacion;
@@ -125,22 +128,6 @@ public class Incidencia {
 
     public void setDireccion(String direccion) {
         this.direccion = direccion;
-    }
-
-    public String getSector() {
-        return sector;
-    }
-
-    public void setSector(String sector) {
-        this.sector = sector;
-    }
-
-    public String getUrbanizacion() {
-        return urbanizacion;
-    }
-
-    public void setUrbanizacion(String urbanizacion) {
-        this.urbanizacion = urbanizacion;
     }
 
     public Date getFecha() {

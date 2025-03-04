@@ -1,6 +1,6 @@
 package com.cd.incidenciasappfx.repository;
 
-import com.cd.incidenciasappfx.models.Rol;
+import com.cd.incidenciasappfx.models.Sector;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.ParameterMode;
 import jakarta.persistence.StoredProcedureQuery;
@@ -9,105 +9,93 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * RolesRepositoryImpl.java
+ * SectorRepositoryImpl.java
  *
  * @author CDAA
  */
-public class RolesRepositoryImpl implements IRolesRepository {
+public class SectorRepositoryImpl implements ISectorRepository {
 
     @Override
-    public List<Rol> findAll() {
+    public List<Sector> findAll() {
         EntityManager em = JpaUtil.getEntityManager();
-        List<Rol> roles = new ArrayList<>();
+        List<Sector> sectores = new ArrayList<>();
 
         try {
-            // Llamar al procedimiento almacenado
-            StoredProcedureQuery query = em.createStoredProcedureQuery("sp_listar_roles");
+            StoredProcedureQuery query = em.createStoredProcedureQuery("sp_listar_sectores");
             List<Object[]> resultados = query.getResultList();
 
             for (Object[] row : resultados) {
-                Rol rol = new Rol();
-                rol.setIdRol((Integer) row[0]);
-                rol.setNombre((String) row[1]);
-
-                roles.add(rol);
+                Sector sector = new Sector();
+                sector.setId((Integer) row[0]);
+                sector.setNombre((String) row[1]);
+                sectores.add(sector);
             }
-
         } catch (jakarta.persistence.PersistenceException e) {
             handleSQLException(e);
         } finally {
-            em.close();
+            em.close(); // 🔥 Cerramos el EntityManager después de cada operación
         }
 
-        return roles;
+        return sectores;
     }
 
     @Override
-    public Optional<Rol> save(Rol rol) {
+    public Optional<Sector> save(Sector sector) {
         EntityManager em = JpaUtil.getEntityManager();
         try {
-            StoredProcedureQuery query = em.createStoredProcedureQuery("sp_insertar_rol");
-
-            query.registerStoredProcedureParameter("p_nombre", String.class, jakarta.persistence.ParameterMode.IN);
-            query.setParameter("p_nombre", rol.getNombre());
-
+            StoredProcedureQuery query = em.createStoredProcedureQuery("sp_insertar_sector");
+            query.registerStoredProcedureParameter("p_nombre", String.class, ParameterMode.IN);
+            query.setParameter("p_nombre", sector.getNombre());
             query.execute();
-            return Optional.of(rol);
-
+            return Optional.of(sector);
         } catch (jakarta.persistence.PersistenceException e) {
             handleSQLException(e);
             return Optional.empty();
-        }finally {
-            em.close();
+        } finally {
+            em.close(); // 🔥 Importante cerrar
         }
     }
 
     @Override
-    public Optional<Rol> findById(Integer idRol) {
+    public Optional<Sector> findById(Integer idSector) {
         EntityManager em = JpaUtil.getEntityManager();
-        Rol rol = null;
+        Sector sector = null;
 
         try {
-            StoredProcedureQuery query = em.createStoredProcedureQuery("sp_buscar_rol_por_id");
+            StoredProcedureQuery query = em.createStoredProcedureQuery("sp_buscar_sector_por_id");
             query.registerStoredProcedureParameter(1, Integer.class, ParameterMode.IN);
-            query.setParameter(1, idRol);
-
+            query.setParameter(1, idSector);
             List<Object[]> resultados = query.getResultList();
 
             if (!resultados.isEmpty()) {
                 Object[] row = resultados.get(0);
-                rol = new Rol();
-                rol.setIdRol((Integer) row[0]);
-                rol.setNombre((String) row[1]);
+                sector = new Sector();
+                sector.setId((Integer) row[0]);
+                sector.setNombre((String) row[1]);
             }
-
         } catch (jakarta.persistence.PersistenceException e) {
             handleSQLException(e);
         } finally {
             em.close();
         }
 
-        return Optional.ofNullable(rol);
+        return Optional.ofNullable(sector);
     }
 
     @Override
-    public Optional<Rol> update(Rol r) {
+    public Optional<Sector> update(Sector sector) {
         EntityManager em = JpaUtil.getEntityManager();
 
         try {
-            StoredProcedureQuery query = em.createStoredProcedureQuery("sp_actualizar_rol");
-            query.registerStoredProcedureParameter("p_idRol", Integer.class, ParameterMode.IN);
+            StoredProcedureQuery query = em.createStoredProcedureQuery("sp_actualizar_sector");
+            query.registerStoredProcedureParameter("p_idSector", Integer.class, ParameterMode.IN);
             query.registerStoredProcedureParameter("p_nombre", String.class, ParameterMode.IN);
-
-            query.setParameter("p_idRol", r.getIdRol());
-            query.setParameter("p_nombre", r.getNombre());
-
+            query.setParameter("p_idSector", sector.getId());
+            query.setParameter("p_nombre", sector.getNombre());
             query.execute();
-
-            return Optional.of(r);
-
+            return Optional.of(sector);
         } catch (jakarta.persistence.PersistenceException e) {
-           handleSQLException(e);
+            handleSQLException(e);
             return Optional.empty();
         } finally {
             em.close();
@@ -115,35 +103,25 @@ public class RolesRepositoryImpl implements IRolesRepository {
     }
 
     @Override
-    public boolean delete(int idRol) {
+    public boolean delete(int idSector) {
         EntityManager em = JpaUtil.getEntityManager();
+
         try {
-            StoredProcedureQuery query = em.createStoredProcedureQuery("sp_eliminar_rol");
-
-            // Registrar parámetros de entrada y salida
-            query.registerStoredProcedureParameter("p_id_rol", Integer.class, jakarta.persistence.ParameterMode.IN);
-            query.registerStoredProcedureParameter("p_resultado", Integer.class, jakarta.persistence.ParameterMode.OUT);
-
-            // Establecer valor del parámetro de entrada
-            query.setParameter("p_id_rol", idRol);
-
-            // Ejecutar el procedimiento almacenado
+            StoredProcedureQuery query = em.createStoredProcedureQuery("sp_eliminar_sector");
+            query.registerStoredProcedureParameter("p_id_sector", Integer.class, ParameterMode.IN);
+            query.registerStoredProcedureParameter("p_resultado", Integer.class, ParameterMode.OUT);
+            query.setParameter("p_id_sector", idSector);
             query.execute();
-
-            // Obtener el valor del parámetro de salida
             Integer resultado = (Integer) query.getOutputParameterValue("p_resultado");
-
-            // Retornar true si se eliminó correctamente, false en caso contrario
             return resultado != null && resultado == 1;
-
         } catch (jakarta.persistence.PersistenceException e) {
             handleSQLException(e);
             return false;
-        }finally {
+        } finally {
             em.close();
         }
     }
-    
+
     private void handleSQLException(jakarta.persistence.PersistenceException e) {
         Throwable cause = e.getCause();
         if (cause instanceof java.sql.SQLException sqlEx) {
@@ -154,5 +132,4 @@ public class RolesRepositoryImpl implements IRolesRepository {
         }
         e.printStackTrace();
     }
-
 }

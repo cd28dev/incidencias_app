@@ -4,9 +4,11 @@ import com.cd.incidenciasappfx.helper.EmailHelper;
 import com.cd.incidenciasappfx.models.Usuario;
 import com.cd.incidenciasappfx.repository.IUsuarioRepository;
 import com.cd.incidenciasappfx.repository.UsuarioRepositoryImpl;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
-
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 /**
  * UsuarioServiceImpl.java
@@ -17,26 +19,34 @@ public class UsuarioServiceImpl implements IUsuarioService {
 
     private final IUsuarioRepository usuarioRepository;
 
-    // Inyección manual del repositorio en el constructor
     public UsuarioServiceImpl() {
         this.usuarioRepository = new UsuarioRepositoryImpl();
     }
 
     @Override
+    @Transactional
     public Optional<Usuario> save(Usuario user) {
         String pass = EmailHelper.genPassword();
-
         String asunto = "Creación de cuenta IncidenciasAPP";
-        String mensaje = "Su cuenta fue creada con éxito.Su contraseña para acceder es: " + pass + "";
+        String mensaje = "Su cuenta fue creada con éxito. Su contraseña para acceder es: " + pass;
 
-        boolean isSendEmail = EmailHelper.sendEmail(user.getCorreo(), asunto, mensaje);
+        CompletableFuture<Boolean> emailFuture = CompletableFuture.supplyAsync(()
+                -> EmailHelper.sendEmail(user.getCorreo(), asunto, mensaje)
+        );
 
-        if (isSendEmail) {
+        try {
+            boolean isSendEmail = emailFuture.get();
+
+            if (!isSendEmail) {
+                throw new RuntimeException("Error al enviar el correo. No se guardará el usuario.");
+            }
+
             user.setPassword(pass);
             return usuarioRepository.save(user);
+
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException("Error en la ejecución del envío de correo.", e);
         }
-        
-        return usuarioRepository.save(user);
     }
 
     @Override
@@ -50,14 +60,15 @@ public class UsuarioServiceImpl implements IUsuarioService {
     }
 
     @Override
+    @Transactional
     public Optional<Usuario> update(Usuario user) {
-        
-        if("ROLE_ADMIN".equals(user.getRol().getNombre())){
-            user.getRol().setIdRol(1);  
-        }else if("ROLE_OPERADOR".equals(user.getRol().getNombre())){
-            user.getRol().setIdRol(2); 
+
+        if ("ROLE_ADMIN".equals(user.getRol().getNombre())) {
+            user.getRol().setIdRol(1);
+        } else if ("ROLE_OPERADOR".equals(user.getRol().getNombre())) {
+            user.getRol().setIdRol(2);
         }
-        
+
         return usuarioRepository.update(user);
     }
 
@@ -76,5 +87,4 @@ public class UsuarioServiceImpl implements IUsuarioService {
         return usuarioRepository.validarUsuario(username, password);
     }
 
-    
 }

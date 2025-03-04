@@ -21,10 +21,10 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -85,7 +85,6 @@ public class UsuariosViewController implements Initializable {
     private void abrirModal0() {
         abrirModal(0);
     }
-    
 
     private void abrirModal(int numero) {
         try {
@@ -98,7 +97,7 @@ public class UsuariosViewController implements Initializable {
             // Pasar el número al controlador del modal
             modalController.setNumero(numero);
             modalController.setUsuariosViewController(this);
-            
+
             Stage modalStage = new Stage();
             modalStage.initModality(Modality.APPLICATION_MODAL); // Bloquear la ventana principal
             modalStage.setTitle("Nuevo Usuario");
@@ -162,11 +161,8 @@ public class UsuariosViewController implements Initializable {
         // Acción al hacer clic
         btn.setOnAction(event -> {
             Usuario usuario = cell.getTableView().getItems().get(cell.getIndex());
-            Optional<Usuario> userOptional = userService.findById(usuario.getDni());
-            if(userOptional.isPresent()){
-                abrirModalActualizar(userOptional.get(),1);
-            }
-            
+            abrirModalActualizar(usuario, 1);
+
         });
 
         // Efecto Hover
@@ -187,11 +183,8 @@ public class UsuariosViewController implements Initializable {
         // Acción al hacer clic
         btn.setOnAction(event -> {
             Usuario usuario = cell.getTableView().getItems().get(cell.getIndex());
-            Optional<Usuario> userOptional = userService.findById(usuario.getDni());
-            if(userOptional.isPresent()){
-                eliminarUsuario(userOptional.get());
-            }
-            
+            eliminarUsuario(usuario);
+
         });
 
         // Efecto Hover
@@ -213,9 +206,9 @@ public class UsuariosViewController implements Initializable {
 
             // Obtener el controlador del modal
             NuevoUsuarioController controller = loader.getController();
-            
+
             controller.setNumero(number);
-            
+
             controller.cargarDatosUsuario(usuario);
             controller.setUsuariosViewController(this);
             controller.changeTitle();
@@ -233,57 +226,125 @@ public class UsuariosViewController implements Initializable {
     }
 
     private void eliminarUsuario(Usuario u) {
-        boolean eliminado = userService.delete(u.getDni());
-        if(eliminado){
-            aviso("Usuario eliminado", "/com/cd/incidenciasappfx/images/success.png");
-            cargarUsuarios();
-        }else{
-            aviso("Error", "/com/cd/incidenciasappfx/images/triangulo.png");
-        }
-        
+        Task<Boolean> task = new Task<>() {
+            @Override
+            protected Boolean call() {
+                return userService.delete(u.getDni());
+            }
+
+            @Override
+            protected void succeeded() {
+                boolean eliminado = getValue();
+                if (eliminado) {
+                    aviso("Usuario eliminado", "/com/cd/incidenciasappfx/images/success.png");
+                    cargarUsuarios();
+                } else {
+                    aviso("Error", "/com/cd/incidenciasappfx/images/triangulo.png");
+                }
+            }
+
+            @Override
+            protected void failed() {
+                aviso("Error al eliminar usuario", "/com/cd/incidenciasappfx/images/triangulo.png");
+            }
+        };
+
+        new Thread(task).start();
     }
 
     public void cargarUsuarios() {
-        List<Usuario> users = userService.findAll();
-        ObservableList<Usuario> usuariosList = FXCollections.observableArrayList(users);
-        tablaUsuarios.setItems(usuariosList);
+        Task<List<Usuario>> task = new Task<>() {
+            @Override
+            protected List<Usuario> call() throws Exception {
+                return userService.findAll();
+            }
+        };
+
+        task.setOnSucceeded(event -> {
+            List<Usuario> users = task.getValue();
+            ObservableList<Usuario> usuariosList = FXCollections.observableArrayList(users);
+            tablaUsuarios.setItems(usuariosList);
+        });
+
+        task.setOnFailed(event -> {
+            task.getException().printStackTrace();
+        });
+
+        new Thread(task).start();
     }
 
     @FXML
     private void exportarExcel() {
-        Path documentsDir = Paths.get(System.getProperty("user.home"), "Documents");
-        String outputPath = documentsDir.resolve("UsuarioReport.xlsx").toString();
+        Task<Void> task = new Task<>() {
+            @Override
+            protected Void call() throws Exception {
+                Path documentsDir = Paths.get(System.getProperty("user.home"), "Documents");
+                String outputPath = documentsDir.resolve("UsuarioReport.xlsx").toString();
 
-        List<Usuario> listaUsuarios = userService.findAll();
-        Map<String, Object> params = new HashMap<>();
-        params.put("ReportTitle", "Reporte de Usuarios");
+                List<Usuario> listaUsuarios = userService.findAll();
+                Map<String, Object> params = new HashMap<>();
+                params.put("ReportTitle", "Reporte de Usuarios");
 
-        JasperReportHelper.generateReport(
-                "/com/cd/incidenciasappfx/report/UsuarioReportExcel.jrxml", outputPath,
-                params,
-                listaUsuarios,
-                new ExcelReportExporter()
-        );
+                JasperReportHelper.generateReport(
+                        "/com/cd/incidenciasappfx/report/UsuarioReportExcel.jrxml",
+                        outputPath,
+                        params,
+                        listaUsuarios,
+                        new ExcelReportExporter()
+                );
+                return null;
+            }
+
+            @Override
+            protected void succeeded() {
+                aviso("Reporte Excel generado con éxito", "/com/cd/incidenciasappfx/images/success.png");
+            }
+
+            @Override
+            protected void failed() {
+                aviso("Error al generar el reporte", "/com/cd/incidenciasappfx/images/triangulo.png");
+            }
+        };
+
+        new Thread(task).start();
     }
 
     @FXML
     private void exportarPDF() {
-        Path documentsDir = Paths.get(System.getProperty("user.home"), "Documents");
-        String outputPath = documentsDir.resolve("UsuarioReport.xlsx").toString();
+        Task<Void> task = new Task<>() {
+            @Override
+            protected Void call() throws Exception {
+                Path documentsDir = Paths.get(System.getProperty("user.home"), "Documents");
+                String outputPath = documentsDir.resolve("UsuarioReport.pdf").toString();
 
-        List<Usuario> listaUsuarios = userService.findAll();
-        Map<String, Object> params = new HashMap<>();
-        params.put("ReportTitle", "Reporte de Usuarios");
+                List<Usuario> listaUsuarios = userService.findAll();
+                Map<String, Object> params = new HashMap<>();
+                params.put("ReportTitle", "Reporte de Usuarios");
 
-        JasperReportHelper.generateReport(
-                "/com/cd/incidenciasappfx/report/UsuarioReportPdf.jrxml",
-                outputPath,
-                params,
-                listaUsuarios,
-                new PdfReportExporter()
-        );
+                JasperReportHelper.generateReport(
+                        "/com/cd/incidenciasappfx/report/UsuarioReportPdf.jrxml",
+                        outputPath,
+                        params,
+                        listaUsuarios,
+                        new PdfReportExporter()
+                );
+                return null;
+            }
+
+            @Override
+            protected void succeeded() {
+                aviso("Reporte PDF generado con éxito", "/com/cd/incidenciasappfx/images/success.png");
+            }
+
+            @Override
+            protected void failed() {
+                aviso("Error al generar el reporte", "/com/cd/incidenciasappfx/images/triangulo.png");
+            }
+        };
+
+        new Thread(task).start();
     }
-    
+
     private void aviso(String mensaje, String icono) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/cd/incidenciasappfx/views/modal_small.fxml"));

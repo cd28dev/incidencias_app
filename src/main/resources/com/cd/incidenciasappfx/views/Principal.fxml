@@ -108,6 +108,20 @@
                         </ImageView>                     
                     </graphic>
                 </Label>
+                <Label fx:id="lblSector" text="Sector" styleClass="sidebar-subitem">
+                    <graphic>
+                        <ImageView fx:id="iconSerenazgo" styleClass="icon-style">
+                            <Image url="@/com/cd/incidenciasappfx/images/sector.png" />
+                        </ImageView>                     
+                    </graphic>
+                </Label>
+                <Label fx:id="lblUrbanizacion" text="Urbanizacion" styleClass="sidebar-subitem">
+                    <graphic>
+                        <ImageView fx:id="iconSerenazgo" styleClass="icon-style">
+                            <Image url="@/com/cd/incidenciasappfx/images/urb.png" />
+                        </ImageView>                     
+                    </graphic>
+                </Label>
             </VBox>
         </VBox>
     </left>

@@ -5,6 +5,7 @@ import com.cd.incidenciasappfx.models.Usuario;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.ParameterMode;
 import jakarta.persistence.StoredProcedureQuery;
+import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -15,16 +16,12 @@ import java.util.Optional;
  */
 public class UsuarioRepositoryImpl implements IUsuarioRepository {
 
-    private final EntityManager entityManager;
-
-    public UsuarioRepositoryImpl() {
-        this.entityManager = JpaUtil.getEntityManager();
-    }
-
+    @Transactional
     @Override
     public Optional<Usuario> save(Usuario user) {
+        EntityManager em = JpaUtil.getEntityManager();
         try {
-            StoredProcedureQuery query = entityManager.createStoredProcedureQuery("sp_insertar_usuario");
+            StoredProcedureQuery query = em.createStoredProcedureQuery("sp_insertar_usuario");
             query.registerStoredProcedureParameter("p_nombre", String.class, jakarta.persistence.ParameterMode.IN);
             query.registerStoredProcedureParameter("p_apellido", String.class, jakarta.persistence.ParameterMode.IN);
             query.registerStoredProcedureParameter("p_dni", String.class, jakarta.persistence.ParameterMode.IN);
@@ -47,18 +44,13 @@ public class UsuarioRepositoryImpl implements IUsuarioRepository {
             return Optional.of(user);
 
         } catch (jakarta.persistence.PersistenceException e) {
-            Throwable cause = e.getCause();
-            if (cause instanceof java.sql.SQLException sqlEx) {
-                String sqlState = sqlEx.getSQLState();
-                if ("45000".equals(sqlState)) {
-                    System.out.println("Error: " + sqlEx.getMessage());
-                }
-            }
-
-            e.printStackTrace();
+            handleSQLException(e);
             return Optional.empty();
+        }finally {
+            em.close();
         }
     }
+
 
     @Override
     public Optional<Usuario> findById(String dni) {
@@ -89,14 +81,7 @@ public class UsuarioRepositoryImpl implements IUsuarioRepository {
             }
 
         } catch (jakarta.persistence.PersistenceException e) {
-            Throwable cause = e.getCause();
-            if (cause instanceof java.sql.SQLException sqlEx) {
-                String sqlState = sqlEx.getSQLState();
-                if ("45000".equals(sqlState)) {
-                    System.out.println("Error: " + sqlEx.getMessage());
-                }
-            }
-            e.printStackTrace();
+            handleSQLException(e);
         } finally {
             em.close();
         }
@@ -131,14 +116,7 @@ public class UsuarioRepositoryImpl implements IUsuarioRepository {
             }
 
         } catch (jakarta.persistence.PersistenceException e) {
-            Throwable cause = e.getCause();
-            if (cause instanceof java.sql.SQLException sqlEx) {
-                String sqlState = sqlEx.getSQLState();
-                if ("45000".equals(sqlState)) {
-                    System.out.println("Error: " + sqlEx.getMessage());
-                }
-            }
-            e.printStackTrace();
+            handleSQLException(e);
         } finally {
             em.close();
         }
@@ -148,8 +126,9 @@ public class UsuarioRepositoryImpl implements IUsuarioRepository {
 
     @Override
     public Optional<Usuario> update(Usuario user) {
+        EntityManager em = JpaUtil.getEntityManager();
         try {
-            StoredProcedureQuery query = entityManager.createStoredProcedureQuery("sp_actualizar_usuario");
+            StoredProcedureQuery query = em.createStoredProcedureQuery("sp_actualizar_usuario");
 
             // Registrar parámetros de entrada
             query.registerStoredProcedureParameter("p_id_usuario", Integer.class, jakarta.persistence.ParameterMode.IN);
@@ -177,23 +156,18 @@ public class UsuarioRepositoryImpl implements IUsuarioRepository {
             return Optional.of(user);
 
         } catch (jakarta.persistence.PersistenceException e) {
-            Throwable cause = e.getCause();
-            if (cause instanceof java.sql.SQLException sqlEx) {
-                String sqlState = sqlEx.getSQLState();
-                if ("45000".equals(sqlState)) {
-                    System.out.println("Error: " + sqlEx.getMessage());
-                }
-            }
-
-            e.printStackTrace();
+            handleSQLException(e);
             return Optional.empty();
+        }finally{
+            em.close();
         }
     }
 
     @Override
     public boolean delete(String dni) {
+        EntityManager em = JpaUtil.getEntityManager();
         try {
-            StoredProcedureQuery query = entityManager.createStoredProcedureQuery("eliminar_usuario_por_dni");
+            StoredProcedureQuery query = em.createStoredProcedureQuery("eliminar_usuario_por_dni");
 
             query.registerStoredProcedureParameter("p_dni", String.class, jakarta.persistence.ParameterMode.IN);
             query.registerStoredProcedureParameter("p_resultado", Integer.class, jakarta.persistence.ParameterMode.OUT);
@@ -204,19 +178,13 @@ public class UsuarioRepositoryImpl implements IUsuarioRepository {
 
             Integer resultado = (Integer) query.getOutputParameterValue("p_resultado");
 
-            return resultado != null && resultado == 1; 
+            return resultado != null && resultado == 1;
 
         } catch (jakarta.persistence.PersistenceException e) {
-            Throwable cause = e.getCause();
-            if (cause instanceof java.sql.SQLException sqlEx) {
-                String sqlState = sqlEx.getSQLState();
-                if ("45000".equals(sqlState)) {
-                    System.out.println("Error: " + sqlEx.getMessage());
-                }
-            }
-
-            e.printStackTrace();
+            handleSQLException(e);
             return false;
+        }finally{
+            em.close();
         }
     }
 
@@ -229,14 +197,7 @@ public class UsuarioRepositoryImpl implements IUsuarioRepository {
             StoredProcedureQuery query = em.createStoredProcedureQuery("GetNextUserId");
             nextId = (Integer) query.getSingleResult();
         } catch (jakarta.persistence.PersistenceException e) {
-            Throwable cause = e.getCause();
-            if (cause instanceof java.sql.SQLException sqlEx) {
-                String sqlState = sqlEx.getSQLState();
-                if ("45000".equals(sqlState)) {
-                    System.out.println("Error: " + sqlEx.getMessage());
-                }
-            }
-            e.printStackTrace();
+            handleSQLException(e);
         } finally {
             em.close();
         }
@@ -280,19 +241,23 @@ public class UsuarioRepositoryImpl implements IUsuarioRepository {
             }
 
         } catch (jakarta.persistence.PersistenceException e) {
-            Throwable cause = e.getCause();
-            if (cause instanceof java.sql.SQLException sqlEx) {
-                String sqlState = sqlEx.getSQLState();
-                if ("45000".equals(sqlState)) {
-                    System.out.println("Error: " + sqlEx.getMessage());
-                }
-            }
-            e.printStackTrace();
+            handleSQLException(e);
         } finally {
             em.close();
         }
 
         return Optional.ofNullable(usuario);
+    }
+
+    private void handleSQLException(jakarta.persistence.PersistenceException e) {
+        Throwable cause = e.getCause();
+        if (cause instanceof java.sql.SQLException sqlEx) {
+            String sqlState = sqlEx.getSQLState();
+            if ("45000".equals(sqlState)) {
+                System.out.println("Error: " + sqlEx.getMessage());
+            }
+        }
+        e.printStackTrace();
     }
 
 }

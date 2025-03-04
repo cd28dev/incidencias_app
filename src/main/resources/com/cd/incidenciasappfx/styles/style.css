@@ -48,7 +48,7 @@
 .sidebar-subitem {
     -fx-text-fill: white;
     -fx-font-size: 15px;
-    -fx-padding: 5 0 5 20;
+    -fx-padding: 2 0 2 20;
     -fx-pref-width: 190px;
 }
 .sidebar-subitem:hover {
@@ -77,8 +77,8 @@
 }
 
 .icon-style {
-    -fx-fit-width: 30px;  /* Establece el ancho de la imagen */
-    -fx-fit-height: 30px; /* Establece la altura de la imagen */
+    -fx-fit-width: 28px;  /* Establece el ancho de la imagen */
+    -fx-fit-height: 28px; /* Establece la altura de la imagen */
     -fx-preserve-ratio: true;  /* Mantiene las proporciones de la imagen */
 }
 
