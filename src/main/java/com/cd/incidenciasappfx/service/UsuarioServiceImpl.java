@@ -73,7 +73,8 @@ public class UsuarioServiceImpl implements IUsuarioService {
     }
 
     @Override
-    public boolean delete(String dni) {
+    public boolean delete(Usuario u) {
+        String dni = u.getDni();
         return usuarioRepository.delete(dni);
     }
 

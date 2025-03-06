@@ -5,12 +5,12 @@
 <?import javafx.scene.image.*?>
 
 <VBox spacing="10.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
-      fx:controller="com.cd.incidenciasappfx.controllers.UsuariosViewController"
+      fx:controller="com.cd.incidenciasappfx.controllers.SectorViewController"
       stylesheets="@/com/cd/incidenciasappfx/styles/page.css">
     
     <!-- Encabezado -->
     <HBox spacing="10" styleClass="header">
-        <Label text="Lista de Usuarios" styleClass="header-title" />
+        <Label text="Lista de Sectores" styleClass="header-title" />
         <Region HBox.hgrow="ALWAYS"/>
 
         <!-- Botones de Exportación -->
@@ -41,7 +41,7 @@
         
         <!-- Campo de Búsqueda con Icono de Lupa -->
         <HBox spacing="5" styleClass="search-box">
-            <TextField fx:id="txtBuscarDoc" promptText="Buscar por N° Doc" styleClass="search-field"/>
+            <TextField fx:id="txtBuscarSector" promptText="Buscar por Sector" styleClass="search-field"/>
             <Button fx:id="btnBuscar" styleClass="search-button">
                 <graphic>
                     <ImageView fitHeight="16" fitWidth="16">
@@ -54,20 +54,17 @@
         </HBox>
     </HBox>
     
-    <!-- Tabla de Usuarios -->
+    <!-- Tabla de Roles -->
     <TableView fx:id="tabla" styleClass="table-view"  VBox.vgrow="ALWAYS">
         <columns>
-            <TableColumn text="N° Doc" fx:id="colDoc" />
-            <TableColumn text="Nombres" fx:id="colNombres" />
-            <TableColumn text="Apellidos" fx:id="colApellidos" />
-            <TableColumn text="Email" fx:id="colEmail" />
-            <TableColumn text="Username" fx:id="colUsername" />
-            <TableColumn text="Rol" fx:id="colRol" />
+            <TableColumn text="Id Sector" fx:id="colIdSector" />
+            <TableColumn text="Sector" fx:id="colSector" />
             <TableColumn text="Acción" fx:id="colAccion" />
         </columns>
     </TableView>
     
     <HBox spacing="10" alignment="CENTER" styleClass="footer">
-        <Label text="© 2025 Mi Aplicación - Todos los derechos reservados" />
+        <Label text="© 2025 CD - Todos los derechos reservados" />
     </HBox>
 </VBox>
+

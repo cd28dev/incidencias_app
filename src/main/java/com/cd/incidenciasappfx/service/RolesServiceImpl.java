@@ -41,7 +41,8 @@ public class RolesServiceImpl implements IRolesService {
     }
 
     @Override
-    public boolean delete(int id) {
+    public boolean delete(Rol r) {
+        int id = r.getIdRol();
         return rolesRepository.delete(id);
     }
 

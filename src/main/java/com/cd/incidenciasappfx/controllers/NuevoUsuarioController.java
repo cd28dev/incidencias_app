@@ -1,6 +1,8 @@
 package com.cd.incidenciasappfx.controllers;
 
+import com.cd.incidenciasappfx.helper.AlertHelper;
 import com.cd.incidenciasappfx.helper.ImageHelper;
+import com.cd.incidenciasappfx.helper.ModalControllerHelper;
 import com.cd.incidenciasappfx.models.Rol;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -11,32 +13,21 @@ import com.cd.incidenciasappfx.service.IRolesService;
 import com.cd.incidenciasappfx.service.IUsuarioService;
 import com.cd.incidenciasappfx.service.RolesServiceImpl;
 import com.cd.incidenciasappfx.service.UsuarioServiceImpl;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.util.List;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
+
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
-public class NuevoUsuarioController {
+public class NuevoUsuarioController extends ModalControllerHelper<Usuario> {
 
     private IUsuarioService userService;
     private IRolesService rolService;
     private UsuariosViewController usuariosViewController;
 
-    @FXML
-    private Label lblNewUser;
     @FXML
     private TextField txtDocumento;
     @FXML
@@ -55,15 +46,14 @@ public class NuevoUsuarioController {
     private ComboBox<String> cbRol;
     @FXML
     private Button btnSubirFoto;
-    @FXML
-    private Button btnGuardar;
 
     @FXML
     private ImageView imgPreview;
 
     private String fotoPath;
 
-    private int numero;
+    public NuevoUsuarioController() {
+    }
 
     @FXML
     public void initialize() {
@@ -72,17 +62,6 @@ public class NuevoUsuarioController {
         deshabilitarButtons();
         addListeners();
         cargarRoles();
-    }
-
-    public void setNumero(int numero) {
-        this.numero = numero;
-        procesarNumero();
-    }
-
-    private void procesarNumero() {
-        if (numero == 1) {
-            changeTitle();
-        }
     }
 
     private void deshabilitarButtons() {
@@ -111,7 +90,7 @@ public class NuevoUsuarioController {
         btnGuardar.setDisable(!camposLlenos);
     }
 
-    public void cargarDatosUsuario(Usuario u) {
+    public void cargarCamposUsuario(Usuario u) {
         idUser.setText(String.valueOf(u.getIdUsuario()));
         txtDocumento.setText(u.getDni());
         txtNombres.setText(u.getNombre());
@@ -121,7 +100,6 @@ public class NuevoUsuarioController {
         cbRol.setValue(u.getRol().getNombre());
 
         if (u.getFoto() != null && !u.getFoto().isEmpty()) {
-            System.out.println("Cargando imagen desde: " + u.getFoto());
             fotoPath = u.getFoto();
 
             Image image = ImageHelper.cargarImagen(fotoPath);
@@ -129,7 +107,6 @@ public class NuevoUsuarioController {
             if (image != null) {
                 imgPreview.setImage(image);
             } else {
-                System.out.println("Advertencia: La imagen no existe en la ruta especificada.");
                 imgPreview.setImage(null); // Puedes establecer una imagen por defecto aquí
             }
         }
@@ -156,22 +133,6 @@ public class NuevoUsuarioController {
         new Thread(task).start();
     }
 
-    public void changeTitle() {
-        lblNewUser.setText("Actualizar Usuario");
-        btnGuardar.setText("Update");
-        btnGuardar.setStyle("-fx-background-color: #D4A017;");
-    }
-
-    @FXML
-    public void saveUser() {
-        if (numero == 0) {
-            registrarUser();
-        } else if (numero == 1) {
-            updateUser();
-        }
-
-    }
-
     @FXML
     private String subirFoto() {
         String username = txtUsername.getText();
@@ -184,58 +145,48 @@ public class NuevoUsuarioController {
         return fotoPath;
     }
 
-    private String copiarImagen(File file) {
-        String username = txtUsername.getText();
-
-        try {
-            File directorio = new File("fotos");
-            if (!directorio.exists()) {
-                directorio.mkdirs();
-            }
-
-            String extension = file.getName().substring(file.getName().lastIndexOf("."));
-            String nuevoNombre = username + "_profile" + extension;
-
-            File destino = new File(directorio, nuevoNombre);
-
-            Files.copy(file.toPath(), destino.toPath(), StandardCopyOption.REPLACE_EXISTING);
-
-            return "fotos/" + nuevoNombre;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    private void closeModal(Button btn) {
-        Stage stage = (Stage) btn.getScene().getWindow();
-        stage.close();
-    }
-
     public void setUsuariosViewController(UsuariosViewController controller) {
         this.usuariosViewController = controller;
     }
 
-    private void mostrarModal(String mensaje, String icono) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/cd/incidenciasappfx/views/modal_small.fxml"));
-            Parent root = loader.load();
-
-            ModalSmallController controller = loader.getController();
-            controller.setMessage(mensaje, icono);
-
-            Stage stage = new Stage();
-            stage.setTitle("Aviso");
-            stage.setScene(new Scene(root));
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setResizable(false);
-            stage.showAndWait();
-        } catch (IOException e) {
-            e.printStackTrace();
+    @FXML
+    private void save() {
+        if (numero == 0) {
+            registrarUser();
+        } else if (numero == 1) {
+            actualizarUser();
         }
     }
 
-    public void updateUser() {
+    private void registrarUser() {
+        String documento = txtDocumento.getText();
+        String nombres = txtNombres.getText();
+        String apellidos = txtApellidos.getText();
+        String email = txtEmail.getText();
+        String username = txtUsername.getText();
+        String rolSeleccionado = cbRol.getValue();
+        String foto = fotoPath;
+
+        if (!email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+            AlertHelper.mostrarError("Correo inválido");
+            return;
+        }
+
+        Usuario usuario = new Usuario();
+        Rol rol = new Rol();
+        rol.setNombre(rolSeleccionado);
+        usuario.setDni(documento);
+        usuario.setNombre(nombres);
+        usuario.setApellido(apellidos);
+        usuario.setCorreo(email);
+        usuario.setUsuario(username);
+        usuario.setRol(rol);
+        usuario.setFoto(foto);
+
+        registrarEntidad(usuario, userService::save, usuariosViewController::cargarUsuarios);
+    }
+
+    private void actualizarUser() {
         String id = idUser.getText();
         String documento = txtDocumento.getText();
         String nombres = txtNombres.getText();
@@ -247,106 +198,30 @@ public class NuevoUsuarioController {
 
         if (documento.isEmpty() || nombres.isEmpty() || apellidos.isEmpty()
                 || email.isEmpty() || username.isEmpty() || rolSeleccionado == null) {
-            mostrarModal("Todos los campos son obligatorios", "/com/cd/incidenciasappfx/images/triangulo.png");
+            AlertHelper.mostrarError("Todos los campos son obligatorios");
             return;
         }
 
         if (!email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
-            mostrarModal("Correo inválido", "/com/cd/incidenciasappfx/images/triangulo.png");
+            AlertHelper.mostrarError("Correo inválido");
             return;
         }
 
-        // Crear un `Task` para ejecutar en segundo plano
-        Task<Boolean> task = new Task<>() {
-            @Override
-            protected Boolean call() throws Exception {
+        Usuario usuario = new Usuario();
+        Rol rol = new Rol();
+        rol.setNombre(rolSeleccionado);
+        usuario.setIdUsuario(Integer.parseInt(id));
+        usuario.setDni(documento);
+        usuario.setNombre(nombres);
+        usuario.setApellido(apellidos);
+        usuario.setCorreo(email);
+        usuario.setUsuario(username);
+        usuario.setRol(rol);
+        usuario.setFoto(foto);
 
-                Usuario usuario = new Usuario();
-                Rol rol = new Rol();
-                usuario.setIdUsuario(Integer.parseInt(id));
-                usuario.setDni(documento);
-                usuario.setNombre(nombres);
-                usuario.setApellido(apellidos);
-                usuario.setCorreo(email);
-                usuario.setUsuario(username);
-                rol.setNombre(rolSeleccionado);
-                usuario.setRol(rol);
-                usuario.setFoto(foto);
-
-                return userService.update(usuario).isPresent();
-            }
-
-            @Override
-            protected void succeeded() {
-                if (getValue()) {
-                    mostrarModal("Usuario actualizado", "/com/cd/incidenciasappfx/images/success.png");
-                    closeModal(btnGuardar);
-                    usuariosViewController.cargarUsuarios();
-                } else {
-                    mostrarModal("No se pudo actualizar el usuario", "/com/cd/incidenciasappfx/images/triangulo.png");
-                }
-            }
-
-            @Override
-            protected void failed() {
-                mostrarModal("Error inesperado", "/com/cd/incidenciasappfx/images/triangulo.png");
-            }
-        };
-
-        new Thread(task).start(); // Ejecutar en segundo plano
-
-    }
-
-    public void registrarUser() {
-        String documento = txtDocumento.getText();
-        String nombres = txtNombres.getText();
-        String apellidos = txtApellidos.getText();
-        String email = txtEmail.getText();
-        String username = txtUsername.getText();
-        String rolSeleccionado = cbRol.getValue();
-        String foto = fotoPath;
-
-        if (!email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
-            mostrarModal("Correo inválido", "/com/cd/incidenciasappfx/images/triangulo.png");
-            return;
-        }
-
-        Task<Boolean> task = new Task<>() {
-            @Override
-            protected Boolean call() throws Exception {
-
-                Usuario usuario = new Usuario();
-                Rol rol = new Rol();
-                usuario.setDni(documento);
-                usuario.setNombre(nombres);
-                usuario.setApellido(apellidos);
-                usuario.setCorreo(email);
-                usuario.setUsuario(username);
-                rol.setNombre(rolSeleccionado);
-                usuario.setRol(rol);
-                usuario.setFoto(foto);
-
-                return userService.save(usuario).isPresent();
-            }
-
-            @Override
-            protected void succeeded() {
-                if (getValue()) {
-                    mostrarModal("Usuario registrado", "/com/cd/incidenciasappfx/images/success.png");
-                    closeModal(btnGuardar);
-                    usuariosViewController.cargarUsuarios();
-                } else {
-                    mostrarModal("Error al registrar usuario", "/com/cd/incidenciasappfx/images/triangulo.png");
-                }
-            }
-
-            @Override
-            protected void failed() {
-                mostrarModal("Error inesperado al registrar usuario", "/com/cd/incidenciasappfx/images/triangulo.png");
-            }
-        };
-
-        new Thread(task).start();
+       
+        actualizarEntidad(usuario,userService::update,usuariosViewController::cargarUsuarios);
     }
 
 }
+

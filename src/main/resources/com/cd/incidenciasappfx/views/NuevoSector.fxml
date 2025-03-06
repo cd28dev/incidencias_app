@@ -14,10 +14,10 @@
             fx:id="modalPane" prefWidth="330" prefHeight="250"
             stylesheets="@/com/cd/incidenciasappfx/styles/nuevousuario.css"
             styleClass="modal"
-            fx:controller="com.cd.incidenciasappfx.controllers.NuevoRolController">
+            fx:controller="com.cd.incidenciasappfx.controllers.NuevoSectorController">
 
      <VBox spacing="10" alignment="CENTER" layoutX="20" layoutY="20">
-        <Label fx:id="lblTitle" text="Nuevo Rol" styleClass="modal-title">
+        <Label fx:id="lblTitle" text="Nuevo Sector" styleClass="modal-title">
             <graphic>
                 <ImageView fx:id="iconIndex" styleClass="icon-style">
                     <Image url="@/com/cd/incidenciasappfx/images/newUser.png" />
@@ -26,10 +26,10 @@
         </Label>
 
         <GridPane hgap="10" vgap="10" alignment="CENTER">
-            <TextField fx:id="idRol" visible="false" managed="false"/>
+            <TextField fx:id="idSector" visible="false" managed="false"/>
             
-            <Label text="Rol:" GridPane.rowIndex="1" styleClass="form-label"/>
-            <TextField fx:id="txtRol" GridPane.columnIndex="1" GridPane.rowIndex="1" styleClass="form-field"/>
+            <Label text="Sector:" GridPane.rowIndex="1" styleClass="form-label"/>
+            <TextField fx:id="txtSector" GridPane.columnIndex="1" GridPane.rowIndex="1" styleClass="form-field"/>
         </GridPane>
 
         <Region prefHeight="20"/>

@@ -42,7 +42,8 @@ public class SectorServiceImpl implements ISectorService{
     }
 
     @Override
-    public boolean delete(int id) {
+    public boolean delete(Sector s) {
+        int id = s.getId();
         return sectorRepository.delete(id);
     }
 

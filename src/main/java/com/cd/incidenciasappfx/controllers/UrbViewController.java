@@ -1,9 +1,11 @@
+
 package com.cd.incidenciasappfx.controllers;
 
 import com.cd.incidenciasappfx.helper.ControllerHelper;
 import com.cd.incidenciasappfx.helper.ExcelReportExporter;
 import com.cd.incidenciasappfx.helper.PdfReportExporter;
 import com.cd.incidenciasappfx.models.Sector;
+import com.cd.incidenciasappfx.models.Urbanizacion;
 import com.cd.incidenciasappfx.service.ISectorService;
 import com.cd.incidenciasappfx.service.SectorServiceImpl;
 import java.net.URL;
@@ -14,21 +16,22 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 
+
 /**
- * SectorViewController.java
- *
+ * UrbViewController.java
+ * 
  * @author CDAA
  */
-public class SectorViewController extends ControllerHelper<Sector> implements Initializable {
+public class UrbViewController extends ControllerHelper<Urbanizacion> implements Initializable{
 
-    private ISectorService sectorService;
+     private IUrbService urbService;
 
     @FXML
-    private TableColumn<Sector, Integer> colIdSector;
+    private TableColumn<Urbanizacion, Integer> colIdUrb;
     @FXML
-    private TableColumn<Sector, String> colSector;
+    private TableColumn<Urbanizacion, String> colUrb;
     @FXML
-    private TableColumn<Sector, Void> colAccion;
+    private TableColumn<Urbanizacion, Void> colAccion;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {

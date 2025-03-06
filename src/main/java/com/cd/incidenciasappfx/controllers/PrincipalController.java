@@ -88,6 +88,11 @@ public class PrincipalController implements Initializable {
     private void handleRoles() {
         loadView("RolesView");
     }
+    
+    @FXML
+    private void handleSectores(){
+        loadView("SectorView");
+    }
 
     public void setUserAutenticado(Usuario user) {
         this.usuario = user;

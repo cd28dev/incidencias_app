@@ -17,5 +17,5 @@ public interface IRolesService {
     Optional<Rol> findById(Integer idRol);
     List<Rol> findAll();
     Optional<Rol> update(Rol r);
-    boolean delete(int id);
+    boolean delete(Rol r);
 }

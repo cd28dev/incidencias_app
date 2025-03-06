@@ -5,12 +5,12 @@
 <?import javafx.scene.image.*?>
 
 <VBox spacing="10.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
-      fx:controller="com.cd.incidenciasappfx.controllers.SectorViewController"
+      fx:controller="com.cd.incidenciasappfx.controllers.RolesViewController"
       stylesheets="@/com/cd/incidenciasappfx/styles/page.css">
     
     <!-- Encabezado -->
     <HBox spacing="10" styleClass="header">
-        <Label text="Lista de Sectores" styleClass="header-title" />
+        <Label text="Lista de Roles" styleClass="header-title" />
         <Region HBox.hgrow="ALWAYS"/>
 
         <!-- Botones de Exportación -->
@@ -41,7 +41,7 @@
         
         <!-- Campo de Búsqueda con Icono de Lupa -->
         <HBox spacing="5" styleClass="search-box">
-            <TextField fx:id="txtBuscarSector" promptText="Buscar por Sector" styleClass="search-field"/>
+            <TextField fx:id="txtBuscarRol" promptText="Buscar por Rol" styleClass="search-field"/>
             <Button fx:id="btnBuscar" styleClass="search-button">
                 <graphic>
                     <ImageView fitHeight="16" fitWidth="16">
@@ -55,10 +55,10 @@
     </HBox>
     
     <!-- Tabla de Roles -->
-    <TableView fx:id="tablaSector" styleClass="table-view"  VBox.vgrow="ALWAYS">
+    <TableView fx:id="tabla" styleClass="table-view"  VBox.vgrow="ALWAYS">
         <columns>
-            <TableColumn text="Id Sector" fx:id="colIdSector" />
-            <TableColumn text="Sector" fx:id="colSector" />
+            <TableColumn text="Id Rol" fx:id="colIdRol" />
+            <TableColumn text="Rol" fx:id="colRol" />
             <TableColumn text="Acción" fx:id="colAccion" />
         </columns>
     </TableView>

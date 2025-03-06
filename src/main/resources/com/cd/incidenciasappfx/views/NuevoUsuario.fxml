@@ -18,7 +18,7 @@
 
 
     <VBox spacing="10" alignment="CENTER" layoutX="20" layoutY="20">
-        <Label fx:id="lblNewUser" text="Nuevo Usuario" styleClass="modal-title">
+        <Label fx:id="lblTitle" text="Nuevo Usuario" styleClass="modal-title">
             <graphic>
                 <ImageView fx:id="iconIndex" styleClass="icon-style">
                     <Image url="@/com/cd/incidenciasappfx/images/newUser.png" />
@@ -58,7 +58,7 @@
         </VBox>
         <Region prefHeight="10"/>
         <HBox spacing="15" alignment="CENTER">
-            <Button text="Guardar" fx:id="btnGuardar" styleClass="btn-primary" prefWidth="100" onAction="#saveUser"/>
+            <Button text="Guardar" fx:id="btnGuardar" styleClass="btn-primary" prefWidth="100" onAction="#save"/>
             <Button text="Cancelar" fx:id="btnCancelar" styleClass="btn-danger" prefWidth="100"/>
         </HBox>
     </VBox>

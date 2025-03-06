@@ -14,8 +14,8 @@ import java.util.Optional;
  */
 public interface ISectorService {
     Optional<Sector> save(Sector r);
-    Optional<Sector> findById(Integer idRol);
+    Optional<Sector> findById(Integer idSector);
     List<Sector> findAll();
-    Optional<Sector> update(Sector r);
-    boolean delete(int id);
+    Optional<Sector> update(Sector s);
+    boolean delete(Sector s);
 }
