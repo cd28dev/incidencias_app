@@ -13,6 +13,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 
 /**
  * SectorViewController.java
@@ -22,6 +23,8 @@ import javafx.scene.control.TableColumn;
 public class SectorViewController extends ControllerHelper<Sector> implements Initializable {
 
     private ISectorService sectorService;
+    @FXML
+    protected TableView<Sector> tabla;
 
     @FXML
     private TableColumn<Sector, Integer> colIdSector;
@@ -44,7 +47,8 @@ public class SectorViewController extends ControllerHelper<Sector> implements In
                     modalController.setNumero(0);
                     modalController.setSectorViewController(this);
                 },
-                "Nuevo Sector");
+                "Nuevo Sector",
+                tabla.getScene().getWindow());
     }
 
     private void configColumns() {
@@ -55,7 +59,8 @@ public class SectorViewController extends ControllerHelper<Sector> implements In
                 -> new ReadOnlyObjectWrapper<>(data.getValue().getId())
         );
         colSector.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNombre()));
-        configurarColumnaAccion(colAccion,
+        configurarColumnaAccion(
+                colAccion,
                 sector -> abrirModalActualizar(sector, 1),
                 sector -> eliminarSector(sector));
     }
@@ -67,15 +72,16 @@ public class SectorViewController extends ControllerHelper<Sector> implements In
                     controller.cargarCamposSector(s);
                     controller.setSectorViewController(this);
                 },
-                "Actualizar Sector");
+                "Actualizar Sector",
+                tabla.getScene().getWindow());
     }
 
     public void cargarSectores(){
-        cargarTabla(sectorService::findAll);
+        cargarTabla(tabla,sectorService::findAll);
     }
     
     private void eliminarSector(Sector sector) {
-        eliminarRegistro(sector, s -> sectorService.delete(s), () -> cargarTabla(sectorService::findAll));
+        eliminarRegistro(sector, s -> sectorService.delete(s), () -> cargarTabla(tabla,sectorService::findAll),tabla);
 
     }
 

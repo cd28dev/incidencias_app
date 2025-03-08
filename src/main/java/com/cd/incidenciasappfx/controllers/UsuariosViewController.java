@@ -16,6 +16,7 @@ import com.cd.incidenciasappfx.service.IUsuarioService;
 import com.cd.incidenciasappfx.service.UsuarioServiceImpl;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 
 /**
  * FXML Controller class
@@ -25,6 +26,8 @@ import javafx.scene.control.TableColumn;
 public class UsuariosViewController extends ControllerHelper<Usuario> implements Initializable {
 
     private IUsuarioService userService;
+    @FXML
+    protected TableView<Usuario> tabla;
 
     @FXML
     private TableColumn<Usuario, String> colDoc;
@@ -55,7 +58,8 @@ public class UsuariosViewController extends ControllerHelper<Usuario> implements
                     modalController.setNumero(0);
                     modalController.setUsuariosViewController(this);
                 },
-                "Nuevo Usuario");
+                "Nuevo Usuario",
+                tabla.getScene().getWindow());
     }
 
     private void configColumns() {
@@ -69,7 +73,8 @@ public class UsuariosViewController extends ControllerHelper<Usuario> implements
         colUsername.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getUsuario()));
         colRol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getRol().getNombre()));
 
-        configurarColumnaAccion(colAccion,
+        configurarColumnaAccion(
+                colAccion,
                 usuario -> abrirModalActualizar(usuario, 1),
                 usuario -> eliminarUsuario(usuario));
 
@@ -82,15 +87,17 @@ public class UsuariosViewController extends ControllerHelper<Usuario> implements
                     controller.cargarCamposUsuario(usuario);
                     controller.setUsuariosViewController(this);
                 },
-                "Actualizar Usuario");
+                "Actualizar Usuario",
+                tabla.getScene().getWindow()
+                );
     }
 
-    public void cargarUsuarios(){
-        cargarTabla(userService::findAll);
+    public void cargarUsuarios() {
+        cargarTabla(tabla,userService::findAll);
     }
-    
+
     private void eliminarUsuario(Usuario u) {
-        eliminarRegistro(u, userService::delete, () -> cargarTabla(userService::findAll));
+        eliminarRegistro(u, userService::delete, () -> cargarTabla(tabla,userService::findAll),tabla);
 
     }
 

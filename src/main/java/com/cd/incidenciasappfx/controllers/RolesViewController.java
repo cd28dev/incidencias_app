@@ -13,7 +13,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
-
+import javafx.scene.control.TableView;
 
 /**
  * RolesViewController.java
@@ -23,6 +23,8 @@ import javafx.scene.control.TableColumn;
 public class RolesViewController extends ControllerHelper<Rol> implements Initializable {
 
     private IRolesService rolService;
+    @FXML
+    protected TableView<Rol> tabla;
 
     @FXML
     private TableColumn<Rol, Integer> colIdRol;
@@ -30,7 +32,6 @@ public class RolesViewController extends ControllerHelper<Rol> implements Initia
     private TableColumn<Rol, String> colRol;
     @FXML
     private TableColumn<Rol, Void> colAccion;
-
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -46,9 +47,9 @@ public class RolesViewController extends ControllerHelper<Rol> implements Initia
                     modalController.setNumero(0);
                     modalController.setRolViewController(this);
                 },
-                "Nuevo Rol");
+                "Nuevo Rol",
+                tabla.getScene().getWindow());
     }
-
 
     private void configColumns() {
         tabla.getColumns().clear();
@@ -56,27 +57,29 @@ public class RolesViewController extends ControllerHelper<Rol> implements Initia
 
         colIdRol.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(data.getValue().getIdRol()));
         colRol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNombre()));
-        configurarColumnaAccion(colAccion,
+        configurarColumnaAccion(
+                colAccion,
                 rol -> abrirModalActualizar(rol, 1),
                 rol -> eliminarRol(rol));
     }
 
     private void abrirModalActualizar(Rol rol, int number) {
         abrirModal("/com/cd/incidenciasappfx/views/NuevoRol.fxml",
-        (NuevoRolController controller) -> {
-            controller.setNumero(number);
-            controller.cargarCamposRol(rol);
-            controller.setRolViewController(this);
-        }, 
-        "Actualizar Rol");
+                (NuevoRolController controller) -> {
+                    controller.setNumero(number);
+                    controller.cargarCamposRol(rol);
+                    controller.setRolViewController(this);
+                },
+                "Actualizar Rol",
+                tabla.getScene().getWindow());
     }
 
-    public void cargarRoles(){
-        cargarTabla(rolService::findAll);
+    public void cargarRoles() {
+        cargarTabla(tabla,rolService::findAll);
     }
-    
+
     private void eliminarRol(Rol rol) {
-        eliminarRegistro(rol, r -> rolService.delete(r), () -> cargarTabla(rolService::findAll));
+        eliminarRegistro(rol, r -> rolService.delete(r), () -> cargarTabla(tabla,rolService::findAll),tabla);
     }
 
     @FXML

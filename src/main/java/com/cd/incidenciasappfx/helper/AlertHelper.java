@@ -2,9 +2,12 @@ package com.cd.incidenciasappfx.helper;
 
 import com.cd.incidenciasappfx.controllers.ModalSmallController;
 import java.io.IOException;
+import java.util.Optional;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -40,5 +43,15 @@ public class AlertHelper {
 
     public static void mostrarError(String mensaje) {
         mostrarAviso(mensaje, "/com/cd/incidenciasappfx/images/triangulo.png");
+    }
+    
+    public static boolean mostrarConfirmacionEliminacion() {
+        Alert confirmDialog = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmDialog.setTitle("Confirmar eliminación");
+        confirmDialog.setHeaderText("¿Estás seguro de que deseas eliminar este registro?");
+        confirmDialog.setContentText("Esta acción no se puede deshacer.");
+
+        Optional<ButtonType> result = confirmDialog.showAndWait();
+        return result.isPresent() && result.get() == ButtonType.OK;
     }
 }

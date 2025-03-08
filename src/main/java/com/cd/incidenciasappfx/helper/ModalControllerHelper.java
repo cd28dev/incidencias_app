@@ -1,4 +1,3 @@
-
 package com.cd.incidenciasappfx.helper;
 
 import java.lang.reflect.ParameterizedType;
@@ -10,24 +9,22 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
-
 /**
  * ModalControllerHelper.java
- * 
+ *
  * @author CDAA
  * @param <T>
  */
 public abstract class ModalControllerHelper<T> {
+
     private final Class<T> tipo = (Class<T>) ((ParameterizedType) getClass()
-                .getGenericSuperclass()).getActualTypeArguments()[0];
+            .getGenericSuperclass()).getActualTypeArguments()[0];
     protected int numero;
     @FXML
     protected Button btnGuardar;
     @FXML
     protected Label lblTitle;
-    
-    
-    
+
     public void setNumero(int numero) {
         this.numero = numero;
         procesarNumero();
@@ -38,11 +35,10 @@ public abstract class ModalControllerHelper<T> {
             changeTitle();
         }
     }
-    
 
     protected void changeTitle() {
-        
-        lblTitle.setText("Actualizar "+tipo.getSimpleName());
+
+        lblTitle.setText("Actualizar " + tipo.getSimpleName());
         btnGuardar.setText("Update");
         btnGuardar.setStyle("-fx-background-color: #D4A017;");
     }
@@ -51,6 +47,7 @@ public abstract class ModalControllerHelper<T> {
         Stage stage = (Stage) btn.getScene().getWindow();
         stage.close();
     }
+
     protected <T> void registrarEntidad(
             T entidad,
             Function<T, Optional<T>> saveFunction,
@@ -74,12 +71,18 @@ public abstract class ModalControllerHelper<T> {
         });
 
         task.setOnFailed(event -> {
-            AlertHelper.mostrarAviso("Error inesperado al registrar", "/com/cd/incidenciasappfx/images/triangulo.png");
+            Throwable error = task.getException();
+            if (error != null) {
+                error.printStackTrace(); // Imprime el error en la consola para depuración
+                AlertHelper.mostrarAviso("Error: " + error.getMessage(), "/com/cd/incidenciasappfx/images/triangulo.png");
+            } else {
+                AlertHelper.mostrarAviso("Error inesperado al registrar", "/com/cd/incidenciasappfx/images/triangulo.png");
+            }
         });
 
         new Thread(task).start();
     }
-    
+
     protected <T> void actualizarEntidad(
             T entidad,
             Function<T, Optional<T>> updateFunction,

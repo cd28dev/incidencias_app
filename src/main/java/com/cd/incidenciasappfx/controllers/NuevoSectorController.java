@@ -6,6 +6,7 @@ import com.cd.incidenciasappfx.models.Sector;
 import com.cd.incidenciasappfx.service.ISectorService;
 import com.cd.incidenciasappfx.service.SectorServiceImpl;
 import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 
 /**
@@ -22,6 +23,9 @@ public class NuevoSectorController extends ModalControllerHelper<Sector> {
     private TextField idSector;
     @FXML
     private TextField txtSector;
+    
+    @FXML
+    private ComboBox<String> cbSector;
 
     public NuevoSectorController() {
     }

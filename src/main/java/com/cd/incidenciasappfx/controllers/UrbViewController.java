@@ -1,13 +1,11 @@
-
 package com.cd.incidenciasappfx.controllers;
 
 import com.cd.incidenciasappfx.helper.ControllerHelper;
 import com.cd.incidenciasappfx.helper.ExcelReportExporter;
 import com.cd.incidenciasappfx.helper.PdfReportExporter;
-import com.cd.incidenciasappfx.models.Sector;
 import com.cd.incidenciasappfx.models.Urbanizacion;
-import com.cd.incidenciasappfx.service.ISectorService;
-import com.cd.incidenciasappfx.service.SectorServiceImpl;
+import com.cd.incidenciasappfx.service.IUrbService;
+import com.cd.incidenciasappfx.service.UrbServiceImpl;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -15,83 +13,93 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
-
+import javafx.scene.control.TableView;
 
 /**
  * UrbViewController.java
- * 
+ *
  * @author CDAA
  */
-public class UrbViewController extends ControllerHelper<Urbanizacion> implements Initializable{
+public class UrbViewController extends ControllerHelper<Urbanizacion> implements Initializable {
 
-     private IUrbService urbService;
+    private IUrbService urbService;
 
+    @FXML
+    protected TableView<Urbanizacion> tabla;
     @FXML
     private TableColumn<Urbanizacion, Integer> colIdUrb;
     @FXML
     private TableColumn<Urbanizacion, String> colUrb;
     @FXML
+    private TableColumn<Urbanizacion, String> colSector;
+
+    @FXML
     private TableColumn<Urbanizacion, Void> colAccion;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        sectorService = new SectorServiceImpl();
+        urbService = new UrbServiceImpl();
         configColumns();
-        cargarSectores();
+        cargarUrb();
     }
 
     @FXML
     private void abrirModal0() {
-        abrirModal("/com/cd/incidenciasappfx/views/NuevoSector.fxml",
-                (NuevoSectorController modalController) -> {
+        abrirModal("/com/cd/incidenciasappfx/views/NuevoUrb.fxml",
+                (NuevoUrbController modalController) -> {
                     modalController.setNumero(0);
-                    modalController.setSectorViewController(this);
+                    modalController.setUrbViewController(this);
                 },
-                "Nuevo Sector");
+                "Nuevo Sector",
+                tabla.getScene().getWindow());
     }
 
     private void configColumns() {
         tabla.getColumns().clear();
-        tabla.getColumns().addAll(colIdSector, colSector, colAccion);
+        tabla.getColumns().addAll(colIdUrb,colUrb,colSector, colAccion);
 
-        colIdSector.setCellValueFactory(data
+        colIdUrb.setCellValueFactory(data
                 -> new ReadOnlyObjectWrapper<>(data.getValue().getId())
         );
-        colSector.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNombre()));
-        configurarColumnaAccion(colAccion,
-                sector -> abrirModalActualizar(sector, 1),
-                sector -> eliminarSector(sector));
+        colUrb.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNombre()));
+        colSector.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getSector().getNombre()));
+
+        configurarColumnaAccion(
+                colAccion,
+                urb -> abrirModalActualizar(urb, 1),
+                urb -> eliminarSector(urb));
     }
 
-    private void abrirModalActualizar(Sector s, int number) {
-        abrirModal("/com/cd/incidenciasappfx/views/NuevoSector.fxml",
-                (NuevoSectorController controller) -> {
+    private void abrirModalActualizar(Urbanizacion u, int number) {
+        abrirModal("/com/cd/incidenciasappfx/views/NuevoUrb.fxml",
+                (NuevoUrbController controller) -> {
                     controller.setNumero(number);
-                    controller.cargarCamposSector(s);
-                    controller.setSectorViewController(this);
+                    controller.cargarCamposUrb(u);
+                    controller.setUrbViewController(this);
                 },
-                "Actualizar Sector");
+                "Actualizar Urbanizacion",
+                tabla.getScene().getWindow());
     }
 
-    public void cargarSectores(){
-        cargarTabla(sectorService::findAll);
+    public void cargarUrb() {
+        cargarTabla(tabla, urbService::findAll);
     }
-    
-    private void eliminarSector(Sector sector) {
-        eliminarRegistro(sector, s -> sectorService.delete(s), () -> cargarTabla(sectorService::findAll));
+
+    private void eliminarSector(Urbanizacion urb) {
+        eliminarRegistro(urb, u -> urbService.delete(u), () -> cargarTabla(tabla,urbService::findAll),tabla);
 
     }
 
     @FXML
     private void exportarExcel() {
         exportarReporte("/com/cd/incidenciasappfx/report/SectorReportExcel.jrxml", "SectorReport.xlsx",
-                sectorService::findAll, new ExcelReportExporter());
+                urbService::findAll, new ExcelReportExporter());
     }
 
     @FXML
     private void exportarPDF() {
         exportarReporte("/com/cd/incidenciasappfx/report/SectorReportPdf.jrxml", "SectorReport.pdf",
-                sectorService::findAll, new PdfReportExporter());
+                urbService::findAll, new PdfReportExporter());
     }
 
 }

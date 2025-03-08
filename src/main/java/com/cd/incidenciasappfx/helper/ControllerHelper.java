@@ -6,13 +6,14 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -35,11 +36,10 @@ import javafx.stage.Window;
  * @param <T>
  */
 public abstract class ControllerHelper<T> {
-    
-    @FXML
-    protected TableView<T> tabla;
 
-    protected <C> void abrirModal(String fxmlPath, Consumer<C> configurador, String titulo) {
+    private static final ExecutorService executor = Executors.newCachedThreadPool();
+
+    protected <C> void abrirModal(String fxmlPath, Consumer<C> configurador, String titulo, Window owner) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent root = loader.load();
@@ -49,8 +49,8 @@ public abstract class ControllerHelper<T> {
 
             Stage modalStage = new Stage();
             modalStage.initModality(Modality.WINDOW_MODAL);
-            if (tabla.getScene().getWindow() != null) {
-                modalStage.initOwner(tabla.getScene().getWindow());
+            if (owner != null) {
+                modalStage.initOwner(owner);
             }
             modalStage.setScene(new Scene(root));
             modalStage.setTitle(titulo);
@@ -61,7 +61,7 @@ public abstract class ControllerHelper<T> {
         }
     }
 
-    protected void cargarTabla(Supplier<List<T>> fetchFunction) {
+    public static <T> void cargarTabla(TableView<T> tabla, Supplier<List<T>> fetchFunction) {
         Task<List<T>> task = new Task<>() {
             @Override
             protected List<T> call() throws Exception {
@@ -70,20 +70,31 @@ public abstract class ControllerHelper<T> {
         };
 
         task.setOnSucceeded(event -> {
-            ObservableList<T> dataList = FXCollections.observableArrayList(task.getValue());
-            tabla.setItems(dataList); // Se actualiza la UI en el hilo principal
+            List<T> result = task.getValue();
+            Platform.runLater(() -> tabla.setItems(FXCollections.observableArrayList(result)));
         });
 
         task.setOnFailed(event -> {
-            task.getException().printStackTrace();
-            AlertHelper.mostrarAviso("Error al cargar datos", "/com/cd/incidenciasappfx/images/triangulo.png");
+            Throwable ex = task.getException();
+            Platform.runLater(() -> AlertHelper.mostrarAviso(
+                    "Error al cargar datos: " + ex.getMessage(),
+                    "/com/cd/incidenciasappfx/images/triangulo.png"
+            ));
         });
 
-        new Thread(task).start();
+        executor.execute(task);
         tabla.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        
+        tabla.setSelectionModel(null);
     }
 
-    protected void eliminarRegistro(T t, Function<T, Boolean> deleteFunction, Runnable onSuccess) {
+    protected void eliminarRegistro(T t, Function<T, Boolean> deleteFunction, Runnable onSuccess, TableView<T> tabla) {
+        if(!AlertHelper.mostrarConfirmacionEliminacion()) {
+            return; 
+        }
+
+        tabla.setDisable(true);
+
         Task<Boolean> task = new Task<>() {
             @Override
             protected Boolean call() throws Exception {
@@ -92,6 +103,7 @@ public abstract class ControllerHelper<T> {
 
             @Override
             protected void succeeded() {
+                tabla.setDisable(false); // Reactivar la UI
                 if (getValue()) {
                     AlertHelper.mostrarAviso("Registro eliminado", "/com/cd/incidenciasappfx/images/success.png");
                     onSuccess.run();
@@ -102,6 +114,8 @@ public abstract class ControllerHelper<T> {
 
             @Override
             protected void failed() {
+                tabla.setDisable(false); // Reactivar la UI
+                getException().printStackTrace();
                 AlertHelper.mostrarAviso("Error inesperado al eliminar registro", "/com/cd/incidenciasappfx/images/triangulo.png");
             }
         };

@@ -93,6 +93,11 @@ public class PrincipalController implements Initializable {
     private void handleSectores(){
         loadView("SectorView");
     }
+    
+    @FXML   
+    private void handleUrb(){
+        loadView("UrbanizacionView");
+    }
 
     public void setUserAutenticado(Usuario user) {
         this.usuario = user;
