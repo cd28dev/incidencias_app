@@ -1,6 +1,8 @@
 package com.cd.incidenciasappfx.helper;
 
+import com.sun.tools.javac.Main;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -58,6 +60,8 @@ public abstract class ControllerHelper<T> {
             modalStage.showAndWait();
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            Platform.runLater(() -> System.gc()); // Forzar recolección de basura
         }
     }
 
@@ -82,15 +86,14 @@ public abstract class ControllerHelper<T> {
             ));
         });
 
-        executor.execute(task);
+        executor.execute(task); // Forzar recolección de basura
         tabla.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        
         tabla.setSelectionModel(null);
     }
 
     protected void eliminarRegistro(T t, Function<T, Boolean> deleteFunction, Runnable onSuccess, TableView<T> tabla) {
-        if(!AlertHelper.mostrarConfirmacionEliminacion()) {
-            return; 
+        if (!AlertHelper.mostrarConfirmacionEliminacion()) {
+            return;
         }
 
         tabla.setDisable(true);
@@ -158,39 +161,65 @@ public abstract class ControllerHelper<T> {
             Consumer<T> onEliminar) {
 
         colAccion.setCellFactory(param -> new TableCell<>() {
-            private final Button btnActualizar = crearBoton("update.png", "-fx-background-color: transparent;",
-                    "-fx-background-color: rgba(0, 0, 0, 0.1); -fx-border-radius: 5px; -fx-background-radius: 5px;",
-                    onActualizar, this);
-
-            private final Button btnEliminar = crearBoton("delete.png", "-fx-background-color: transparent;",
-                    "-fx-background-color: rgba(255, 0, 0, 0.2); -fx-border-radius: 5px; -fx-background-radius: 5px;",
-                    onEliminar, this);
-
-            private final HBox contenedorBotones = new HBox(10, btnActualizar, btnEliminar);
+            private final Button btnActualizar;
+            private final Button btnEliminar;
+            private final HBox contenedorBotones;
 
             {
+                btnActualizar = crearBoton("update.png", "-fx-background-color: transparent;",
+                        "-fx-background-color: rgba(0, 0, 0, 0.1); -fx-border-radius: 5px; -fx-background-radius: 5px;",
+                        onActualizar, this);
+
+                btnEliminar = crearBoton("delete.png", "-fx-background-color: transparent;",
+                        "-fx-background-color: rgba(255, 0, 0, 0.2); -fx-border-radius: 5px; -fx-background-radius: 5px;",
+                        onEliminar, this);
+
+                contenedorBotones = new HBox(10, btnActualizar, btnEliminar);
                 configurarContenedorBotones(contenedorBotones);
+                // 🔹 Aplicar estilos correctamente después de la inicialización
+                Platform.runLater(() -> {
+                    btnActualizar.setStyle("-fx-background-color: transparent;");
+                    btnEliminar.setStyle("-fx-background-color: transparent;");
+                });
             }
 
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
+
                 if (empty) {
                     setGraphic(null);
                 } else {
                     setGraphic(contenedorBotones);
+                    T rowData = getTableView().getItems().get(getIndex());
+                    btnActualizar.setOnAction(event -> onActualizar.accept(rowData));
+                    btnEliminar.setOnAction(event -> onEliminar.accept(rowData));
                 }
             }
+
         });
     }
 
     private Button crearBoton(String iconPath, String estiloDefault, String estiloHover, Consumer<T> accion, TableCell<T, Void> cell) {
         Button btn = new Button();
-        ImageView icon = new ImageView(new Image(getClass().getResourceAsStream("/com/cd/incidenciasappfx/images/" + iconPath)));
-        icon.setFitWidth(20);
-        icon.setFitHeight(20);
-        btn.setGraphic(icon);
-        btn.setStyle(estiloDefault);
+
+        // Obtener la imagen de los recursos
+        InputStream imageStream = getClass().getResourceAsStream("/com/cd/incidenciasappfx/images/" + iconPath);
+
+        if (imageStream == null) {
+            System.err.println("No se encontró la imagen: " + iconPath);
+            btn.setText("X");
+            return btn;
+        }
+
+        try {
+            ImageView icon = new ImageView(new Image(imageStream));
+            icon.setFitWidth(20);
+            icon.setFitHeight(20);
+            btn.setGraphic(icon);
+        } catch (Exception e) {
+            System.err.println("Error al cargar la imagen: " + iconPath + " - " + e.getMessage());
+        }
 
         btn.setOnAction(event -> {
             T item = cell.getTableView().getItems().get(cell.getIndex());

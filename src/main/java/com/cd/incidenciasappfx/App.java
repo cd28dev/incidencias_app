@@ -20,8 +20,9 @@ public class App extends Application {
         scene.getStylesheets().add(getClass().getResource("/com/cd/incidenciasappfx/styles/login.css").toExternalForm());
         stage.setScene(scene); // Asignamos la escena al stage
         stage.setTitle("Sistema de Registro de Incidencias");
-        stage.setResizable(false); 
+        stage.setResizable(false);
         stage.show();
+
     }
 
     public static void setRoot(String fxml) throws IOException {
@@ -30,6 +31,7 @@ public class App extends Application {
 
     /**
      * Carga un archivo FXML de la carpeta `views`.
+     *
      * @param fxml Nombre del archivo FXML (sin extensión).
      * @return Nodo raíz de la interfaz cargada.
      * @throws IOException Si el archivo no se encuentra.

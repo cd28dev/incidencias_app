@@ -35,12 +35,13 @@ public class PrincipalController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        
+        Platform.runLater(() -> System.gc()); // Forzar recolección de basura
         loadView("InicioView");
     }
 
     @FXML
     public void loadView(String fxmlFile) {
+        Platform.runLater(() -> System.gc()); // Forzar recolección de basura
         try {
             FXMLLoader loader = new FXMLLoader(App.class.getResource("/com/cd/incidenciasappfx/views/" + fxmlFile + ".fxml"));
             Parent view = loader.load();
@@ -76,26 +77,31 @@ public class PrincipalController implements Initializable {
 
     @FXML
     private void handleInicio(MouseEvent event) {
+        Platform.runLater(() -> System.gc()); // Forzar recolección de basura
         loadView("InicioView");
     }
 
     @FXML
     private void handleUsuarios(MouseEvent event) {
+        Platform.runLater(() -> System.gc()); // Forzar recolección de basura
         loadView("UsuariosView");
     }
 
     @FXML
     private void handleRoles() {
+        Platform.runLater(() -> System.gc()); // Forzar recolección de basura
         loadView("RolesView");
     }
     
     @FXML
     private void handleSectores(){
+        Platform.runLater(() -> System.gc()); // Forzar recolección de basura
         loadView("SectorView");
     }
     
     @FXML   
     private void handleUrb(){
+        Platform.runLater(() -> System.gc()); // Forzar recolección de basura
         loadView("UrbanizacionView");
     }
 

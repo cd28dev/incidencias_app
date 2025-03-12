@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import de.jensd.fx.glyphs.fontawesome.*?>
 
-<BorderPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.cd.incidenciasappfx.controllers.PrincipalController"
             stylesheets="@/com/cd/incidenciasappfx/styles/style.css">
 
