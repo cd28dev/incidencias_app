@@ -131,6 +131,8 @@ DELIMITER $$
 
 DELIMITER $$
 
+select * from urbanizaciones;
+
 CREATE PROCEDURE buscar_usuario_por_dni(
     IN p_dni VARCHAR(20)
 )
@@ -202,17 +204,17 @@ select*from roles;
 
 DELIMITER $$
 
-CREATE PROCEDURE `sp_listar_roles`()
+CREATE PROCEDURE `sp_listar_delitos`()
 BEGIN
-    -- Retornar una lista vacía si no hay roles
-    IF (SELECT COUNT(*) FROM roles) = 0 THEN
-        SELECT NULL AS id_rol, NULL AS nombre
+    -- Retornar una lista vacía si no hay delitos
+    IF (SELECT COUNT(*) FROM delitos) = 0 THEN
+        SELECT NULL AS id_delito, NULL AS nombre
         FROM DUAL WHERE FALSE; -- Retorna 0 filas sin lanzar error
     ELSE
         -- Retornar la lista de roles
-        SELECT id_rol, nombre FROM roles;
+        SELECT id_delito, nombre FROM delitos;
     END IF;
-END 
+END $$
 
 DELIMITER ;
 
@@ -254,21 +256,23 @@ DELIMITER ;
 
 DELIMITER $$
 
-CREATE PROCEDURE sp_insertar_rol(
+CREATE PROCEDURE sp_insertar_delito(
     IN p_nombre VARCHAR(50)
 )
 BEGIN
-    DECLARE rol_existe INT;
+    DECLARE delito_existe INT;
     
-    -- Verificar si ya existe un rol con el mismo nombre
-    SELECT COUNT(*) INTO rol_existe FROM roles WHERE nombre = p_nombre;
+	START TRANSACTION;
     
-    IF rol_existe > 0 THEN
+    SELECT COUNT(*) INTO delito_existe FROM delitos WHERE nombre = p_nombre;
+    
+    IF delito_existe > 0 THEN
+		ROLLBACK;
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'El rol ya existe';
+        SET MESSAGE_TEXT = 'El delito ya existe';
     ELSE
-        -- Insertar el nuevo rol
-        INSERT INTO roles (nombre) VALUES (p_nombre);
+        INSERT INTO delitos (nombre) VALUES (p_nombre);
+        COMMIT;
     END IF;
 END $$
 
@@ -277,40 +281,40 @@ DELIMITER ;
 
 DELIMITER $$
 
-CREATE PROCEDURE sp_buscar_rol_por_id(
-    IN p_idRol INT
+CREATE PROCEDURE sp_buscar_delito_por_id(
+    IN p_idDelito INT
 )
 BEGIN
-    SELECT idRol, nombre
-    FROM roles
-    WHERE idRol = p_idRol;
+    SELECT id_delito, nombre
+    FROM delitos
+    WHERE id_delito = p_idDelito;
 END $$
 
 DELIMITER ;
 
 DELIMITER $$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_actualizar_rol`(
-    IN p_idRol INT,
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_actualizar_Delito`(
+    IN p_idDelito INT,
     IN p_nombre VARCHAR(50)
 )
 BEGIN
-    DECLARE rol_existe INT;
+    DECLARE delito_existe INT;
     DECLARE nombre_duplicado INT;
 
     START TRANSACTION;
 
     -- Verificar si el rol a actualizar existe
-    SELECT COUNT(*) INTO rol_existe FROM roles WHERE idRol = p_idRol;
+    SELECT COUNT(*) INTO delito_existe FROM delitos WHERE id_delito = p_idDelito;
 
     -- Verificar si el nuevo nombre ya está en uso por otro rol
-    SELECT COUNT(*) INTO nombre_duplicado FROM roles WHERE nombre = p_nombre AND idRol != p_idRol;
+    SELECT COUNT(*) INTO nombre_duplicado FROM delitos WHERE nombre = p_nombre AND id_delito != p_idDelito;
 
     -- Validaciones
-    IF rol_existe = 0 THEN
+    IF delito_existe = 0 THEN
         ROLLBACK;
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Error: El rol especificado no existe';
+        SET MESSAGE_TEXT = 'Error: El delito especificado no existe';
 
     ELSEIF nombre_duplicado > 0 THEN
         ROLLBACK;
@@ -319,14 +323,14 @@ BEGIN
 
     ELSE
         -- Actualizar rol
-        UPDATE roles
+        UPDATE delitos
         SET nombre = p_nombre
-        WHERE idRol = p_idRol;
+        WHERE id_delito = p_idDelito;
 
         COMMIT;
 
         -- Retornar los datos actualizados del rol
-        SELECT idRol, nombre FROM roles WHERE idRol = p_idRol;
+        SELECT id_Delito, nombre FROM delitos WHERE id_delito = p_idDelito;
     END IF;
 END $$
 
@@ -334,8 +338,8 @@ DELIMITER ;
 
 DELIMITER $$
 
-CREATE PROCEDURE sp_eliminar_rol(
-    IN p_id_rol INT,
+CREATE PROCEDURE sp_eliminar_delito(
+    IN p_id_delito INT,
     OUT p_resultado INT
 )
 BEGIN
@@ -352,11 +356,11 @@ BEGIN
     START TRANSACTION;
 
     -- Verificar si el rol existe
-    SELECT COUNT(*) INTO v_existe FROM roles WHERE id_rol = p_id_rol;
+    SELECT COUNT(*) INTO v_existe FROM delitos WHERE id_delito = p_id_delito;
 
     IF v_existe > 0 THEN
         -- Eliminar el rol
-        DELETE FROM roles WHERE id_rol = p_id_rol;
+        DELETE FROM delitos WHERE id_delito = p_id_delito;
         
         -- Confirmar eliminación
         COMMIT;
@@ -516,3 +520,183 @@ END $$
 
 DELIMITER ;
 
+
+
+DELIMITER $$
+
+-- Listar todas las urbanizaciones
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_listar_urbanizaciones`()
+BEGIN
+    -- Retornar una lista vacía si no hay urbanizaciones
+    IF (SELECT COUNT(*) FROM urbanizaciones) = 0 THEN
+        SELECT NULL AS id_urbanizacion, NULL AS nombre, NULL AS id_sector
+        FROM DUAL WHERE FALSE; -- Retorna 0 filas sin lanzar error
+    ELSE
+        -- Retornar la lista de urbanizaciones
+        SELECT u.id_urbanizacion, u.nombre, u.id_sector, s.nombre
+        FROM urbanizaciones as u
+        INNER JOIN sectores as s ON s.id_sector=u.id_sector;
+    END IF;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_insertar_urbanizacion`(
+    IN p_nombre VARCHAR(50),
+    IN p_id_sector INT
+)
+BEGIN
+    DECLARE urbanizacion_existe INT;
+    DECLARE sector_existe INT;
+    
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        -- Si ocurre un error, se revierte la transacción
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Error al insertar la urbanización';
+    END;
+
+    START TRANSACTION;
+    
+    -- Verificar si el sector existe
+    SELECT COUNT(*) INTO sector_existe FROM sectores WHERE id_sector = p_id_sector;
+    
+    IF sector_existe = 0 THEN
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'El sector especificado no existe';
+    END IF;
+
+    -- Verificar si ya existe una urbanización con el mismo nombre en el sector
+    SELECT COUNT(*) INTO urbanizacion_existe 
+    FROM urbanizaciones 
+    WHERE nombre = p_nombre AND id_sector = p_id_sector FOR UPDATE;
+    
+    IF urbanizacion_existe > 0 THEN
+        -- Si la urbanización ya existe, se revierte la transacción
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'La urbanización ya existe en este sector';
+    ELSE
+        -- Insertar la nueva urbanización
+        INSERT INTO urbanizaciones (nombre, id_sector) VALUES (p_nombre, p_id_sector);
+        COMMIT;
+    END IF;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+-- Eliminar una urbanización por ID
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_eliminar_urbanizacion`(
+    IN p_id_urbanizacion INT,
+    OUT p_resultado INT
+)
+BEGIN
+    DECLARE v_existe INT DEFAULT 0;
+
+    -- Manejar errores de SQL
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION 
+    BEGIN
+        ROLLBACK;
+        SET p_resultado = -1; -- Error al eliminar
+    END;
+
+    -- Iniciar la transacción
+    START TRANSACTION;
+
+    -- Verificar si la urbanización existe
+    SELECT COUNT(*) INTO v_existe FROM urbanizaciones WHERE id_urbanizacion = p_id_urbanizacion;
+
+    IF v_existe > 0 THEN
+        -- Eliminar la urbanización
+        DELETE FROM urbanizaciones WHERE id_urbanizacion = p_id_urbanizacion;
+        
+        -- Confirmar eliminación
+        COMMIT;
+        SET p_resultado = 1; -- Eliminado correctamente
+    ELSE
+        -- Si no existe, deshacer la transacción
+        ROLLBACK;
+        SET p_resultado = 0; -- No encontrado
+    END IF;
+END $$
+
+DELIMITER ;
+
+
+DELIMITER $$
+
+-- Actualizar una urbanización por ID
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_actualizar_urbanizacion`(
+    IN p_id_urbanizacion INT,
+    IN p_nombre VARCHAR(50),
+    IN p_id_sector INT
+)
+BEGIN
+    DECLARE urbanizacion_existe INT;
+    DECLARE nombre_duplicado INT;
+    DECLARE sector_existe INT;
+
+    START TRANSACTION;
+
+    -- Verificar si la urbanización a actualizar existe
+    SELECT COUNT(*) INTO urbanizacion_existe FROM urbanizaciones WHERE id_urbanizacion = p_id_urbanizacion;
+
+    -- Verificar si el nuevo nombre ya está en uso en el mismo sector
+    SELECT COUNT(*) INTO nombre_duplicado FROM urbanizaciones 
+    WHERE nombre = p_nombre AND id_sector = p_id_sector AND id_urbanizacion != p_id_urbanizacion;
+
+    -- Verificar si el sector existe
+    SELECT COUNT(*) INTO sector_existe FROM sectores WHERE id_sector = p_id_sector;
+
+    -- Validaciones
+    IF urbanizacion_existe = 0 THEN
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Error: La urbanización especificada no existe';
+
+    ELSEIF nombre_duplicado > 0 THEN
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Error: El nombre de la urbanización ya está en uso en este sector';
+
+    ELSEIF sector_existe = 0 THEN
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Error: El sector especificado no existe';
+
+    ELSE
+        -- Actualizar urbanización
+        UPDATE urbanizaciones
+        SET nombre = p_nombre, id_sector = p_id_sector
+        WHERE id_urbanizacion = p_id_urbanizacion;
+
+        COMMIT;
+
+        -- Retornar los datos actualizados de la urbanización
+        SELECT id_urbanizacion, nombre, id_sector FROM urbanizaciones WHERE id_urbanizacion = p_id_urbanizacion;
+    END IF;
+END $$
+
+DELIMITER ;
+
+
+DELIMITER $$
+
+-- Buscar una urbanización por ID
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_buscar_urbanizacion_por_id`(
+    IN p_id_urbanizacion INT
+)
+BEGIN
+    SELECT u.id_urbanizacion, u.nombre, s.id_sector,s.nombre
+    FROM urbanizaciones as u
+    INNER JOIN sectores as s ON u.id_sector=s.id_sector
+    WHERE u.id_urbanizacion = u.p_id_urbanizacion;
+END $$
+
+DELIMITER ;
