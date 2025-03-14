@@ -25,16 +25,12 @@ public class UrbViewController extends ControllerHelper<Urbanizacion> implements
     private IUrbService urbService;
 
     @FXML
-    protected TableView<Urbanizacion> tabla;
-    @FXML
-    private TableColumn<Urbanizacion, Integer> colIdUrb;
+    private TableView<Urbanizacion> tabla;
     @FXML
     private TableColumn<Urbanizacion, String> colUrb;
     @FXML
     private TableColumn<Urbanizacion, String> colSector;
 
-    @FXML
-    private TableColumn<Urbanizacion, Void> colAccion;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -56,24 +52,23 @@ public class UrbViewController extends ControllerHelper<Urbanizacion> implements
 
     private void configColumns() {
         tabla.getColumns().clear();
-        tabla.getColumns().addAll(colIdUrb,colUrb,colSector, colAccion);
+        tabla.getColumns().addAll(colUrb,colSector, colAccion);
 
-        colIdUrb.setCellValueFactory(data
+        id.setCellValueFactory(data
                 -> new ReadOnlyObjectWrapper<>(data.getValue().getId())
         );
         colUrb.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNombre()));
         colSector.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getSector().getNombre()));
 
         configurarColumnaAccion(
-                colAccion,
-                urb -> abrirModalActualizar(urb, 1),
-                urb -> eliminarSector(urb));
+                this::abrirModalActualizar,
+                this::eliminarUrb);
     }
 
-    private void abrirModalActualizar(Urbanizacion u, int number) {
+    private void abrirModalActualizar(Urbanizacion u) {
         abrirModal("/com/cd/incidenciasappfx/views/NuevoUrb.fxml",
                 (NuevoUrbController controller) -> {
-                    controller.setNumero(number);
+                    controller.setNumero(1);
                     controller.cargarCamposUrb(u);
                     controller.setUrbViewController(this);
                 },
@@ -85,7 +80,7 @@ public class UrbViewController extends ControllerHelper<Urbanizacion> implements
         cargarTabla(tabla, urbService::findAll);
     }
 
-    private void eliminarSector(Urbanizacion urb) {
+    private void eliminarUrb(Urbanizacion urb) {
         eliminarRegistro(urb, u -> urbService.delete(u), () -> cargarTabla(tabla,urbService::findAll),tabla);
 
     }

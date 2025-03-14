@@ -25,13 +25,8 @@ public class SectorViewController extends ControllerHelper<Sector> implements In
     private ISectorService sectorService;
     @FXML
     protected TableView<Sector> tabla;
-
-    @FXML
-    private TableColumn<Sector, Integer> colIdSector;
     @FXML
     private TableColumn<Sector, String> colSector;
-    @FXML
-    private TableColumn<Sector, Void> colAccion;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -53,22 +48,21 @@ public class SectorViewController extends ControllerHelper<Sector> implements In
 
     private void configColumns() {
         tabla.getColumns().clear();
-        tabla.getColumns().addAll(colIdSector, colSector, colAccion);
+        tabla.getColumns().addAll(colSector, colAccion);
 
-        colIdSector.setCellValueFactory(data
+        id.setCellValueFactory(data
                 -> new ReadOnlyObjectWrapper<>(data.getValue().getId())
         );
         colSector.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNombre()));
         configurarColumnaAccion(
-                colAccion,
-                sector -> abrirModalActualizar(sector, 1),
-                sector -> eliminarSector(sector));
+                this::abrirModalActualizar,
+                this::eliminarSector);
     }
 
-    private void abrirModalActualizar(Sector s, int number) {
+    private void abrirModalActualizar(Sector s) {
         abrirModal("/com/cd/incidenciasappfx/views/NuevoSector.fxml",
                 (NuevoSectorController controller) -> {
-                    controller.setNumero(number);
+                    controller.setNumero(1);
                     controller.cargarCamposSector(s);
                     controller.setSectorViewController(this);
                 },

@@ -25,9 +25,11 @@ import javafx.scene.control.TableView;
  */
 public class UsuariosViewController extends ControllerHelper<Usuario> implements Initializable {
 
+
+
     private IUsuarioService userService;
     @FXML
-    protected TableView<Usuario> tabla;
+    private TableView<Usuario> tabla;
 
     @FXML
     private TableColumn<Usuario, String> colDoc;
@@ -41,8 +43,7 @@ public class UsuariosViewController extends ControllerHelper<Usuario> implements
     private TableColumn<Usuario, String> colUsername;
     @FXML
     private TableColumn<Usuario, String> colRol;
-    @FXML
-    private TableColumn<Usuario, Void> colAccion;
+
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -74,16 +75,15 @@ public class UsuariosViewController extends ControllerHelper<Usuario> implements
         colRol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getRol().getNombre()));
 
         configurarColumnaAccion(
-                colAccion,
-                usuario -> abrirModalActualizar(usuario, 1),
-                usuario -> eliminarUsuario(usuario));
+                this::abrirModalActualizar,
+                this::eliminarUsuario);
 
     }
 
-    private void abrirModalActualizar(Usuario usuario, int number) {
+    private void abrirModalActualizar(Usuario usuario) {
         abrirModal("/com/cd/incidenciasappfx/views/NuevoUsuario.fxml",
                 (NuevoUsuarioController controller) -> {
-                    controller.setNumero(number);
+                    controller.setNumero(1);
                     controller.cargarCamposUsuario(usuario);
                     controller.setUsuariosViewController(this);
                 },

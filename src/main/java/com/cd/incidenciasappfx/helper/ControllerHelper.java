@@ -1,6 +1,5 @@
 package com.cd.incidenciasappfx.helper;
 
-import com.sun.tools.javac.Main;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
@@ -16,14 +15,12 @@ import java.util.function.Supplier;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.concurrent.Task;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -38,6 +35,20 @@ import javafx.stage.Window;
  * @param <T>
  */
 public abstract class ControllerHelper<T> {
+    @FXML
+    protected Button btnBuscar;
+    @FXML
+    protected TextField txtBuscar;
+    @FXML
+    protected Button btnNuevo;
+    @FXML
+    protected Button btnExportPdf;
+    @FXML
+    protected Button btnExportExcel;
+    @FXML
+    protected TableColumn<T,Integer> id;
+    @FXML
+    protected TableColumn<T, Void> colAccion;
 
     private static final ExecutorService executor = Executors.newCachedThreadPool();
 
@@ -61,7 +72,7 @@ public abstract class ControllerHelper<T> {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            Platform.runLater(() -> System.gc()); // Forzar recolección de basura
+            Platform.runLater(System::gc); // Forzar recolección de basura
         }
     }
 
@@ -156,7 +167,6 @@ public abstract class ControllerHelper<T> {
     }
 
     protected void configurarColumnaAccion(
-            TableColumn<T, Void> colAccion,
             Consumer<T> onActualizar,
             Consumer<T> onEliminar) {
 
@@ -166,11 +176,11 @@ public abstract class ControllerHelper<T> {
             private final HBox contenedorBotones;
 
             {
-                btnActualizar = crearBoton("update.png", "-fx-background-color: transparent;",
+                btnActualizar = crearBoton("update.png",
                         "-fx-background-color: rgba(0, 0, 0, 0.1); -fx-border-radius: 5px; -fx-background-radius: 5px;",
                         onActualizar, this);
 
-                btnEliminar = crearBoton("delete.png", "-fx-background-color: transparent;",
+                btnEliminar = crearBoton("delete.png",
                         "-fx-background-color: rgba(255, 0, 0, 0.2); -fx-border-radius: 5px; -fx-background-radius: 5px;",
                         onEliminar, this);
 
@@ -200,7 +210,7 @@ public abstract class ControllerHelper<T> {
         });
     }
 
-    private Button crearBoton(String iconPath, String estiloDefault, String estiloHover, Consumer<T> accion, TableCell<T, Void> cell) {
+    private Button crearBoton(String iconPath, String estiloHover, Consumer<T> accion, TableCell<T, Void> cell) {
         Button btn = new Button();
 
         // Obtener la imagen de los recursos
@@ -227,7 +237,7 @@ public abstract class ControllerHelper<T> {
         });
 
         btn.setOnMouseEntered(event -> btn.setStyle(estiloHover));
-        btn.setOnMouseExited(event -> btn.setStyle(estiloDefault));
+        btn.setOnMouseExited(event -> btn.setStyle("-fx-background-color: transparent;"));
 
         return btn;
     }

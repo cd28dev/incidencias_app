@@ -5,13 +5,11 @@
 package com.cd.incidenciasappfx.controllers;
 
 import com.cd.incidenciasappfx.helper.ControllerHelper;
-import static com.cd.incidenciasappfx.helper.ControllerHelper.cargarTabla;
 import com.cd.incidenciasappfx.helper.ExcelReportExporter;
 import com.cd.incidenciasappfx.helper.PdfReportExporter;
 import com.cd.incidenciasappfx.models.Delito;
-import com.cd.incidenciasappfx.models.Rol;
-import com.cd.incidenciasappfx.service.IRolesService;
-import com.cd.incidenciasappfx.service.RolesServiceImpl;
+import com.cd.incidenciasappfx.service.DelitoServiceImpl;
+import com.cd.incidenciasappfx.service.IDelitoService;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -28,12 +26,9 @@ import javafx.scene.control.TableView;
  */
 public class DelitosViewController extends ControllerHelper<Delito> implements Initializable {
     
-    private IDelitosService delitoService;
+    private IDelitoService delitoService;
     @FXML
     protected TableView<Delito> tabla;
-    
-    @FXML
-    private TableColumn<Delito, Integer> colIdDelito;
     @FXML
     private TableColumn<Delito, String> colDelito;
     @FXML
@@ -41,61 +36,60 @@ public class DelitosViewController extends ControllerHelper<Delito> implements I
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        delitoService = new DelitosServiceImpl();
+        delitoService = new DelitoServiceImpl();
         configColumns();
-        cargarRoles();
+        cargarDelitos();
     }
     
     @FXML
     private void abrirModal0() {
-        abrirModal("/com/cd/incidenciasappfx/views/NuevoRol.fxml",
-                (NuevoRolController modalController) -> {
+        abrirModal("/com/cd/incidenciasappfx/views/NuevoDelito.fxml",
+                (NuevoDelitoController modalController) -> {
                     modalController.setNumero(0);
-                    modalController.setRolViewController(this);
+                    modalController.setDelitoViewController(this);
                 },
-                "Nuevo Rol",
+                "Nuevo Delito",
                 tabla.getScene().getWindow());
     }
     
     private void configColumns() {
         tabla.getColumns().clear();
-        tabla.getColumns().addAll(colIdRol, colRol, colAccion);
-        
-        colIdRol.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(data.getValue().getIdRol()));
-        colRol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNombre()));
+        tabla.getColumns().addAll(colDelito, colAccion);
+
+        id.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(data.getValue().getIdDelito()));
+        colDelito.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNombre()));
         configurarColumnaAccion(
-                colAccion,
-                delito -> abrirModalActualizar(delito, 1),
-                delito -> eliminarRol(delito));
+                this::abrirModalActualizar,
+                this::eliminarDelito);
     }
     
-    private void abrirModalActualizar(Rol rol, int number) {
-        abrirModal("/com/cd/incidenciasappfx/views/NuevoRol.fxml",
-                (NuevoRolController controller) -> {
-                    controller.setNumero(number);
-                    controller.cargarCamposRol(rol);
-                    controller.setRolViewController(this);
+    private void abrirModalActualizar(Delito delito) {
+        abrirModal("/com/cd/incidenciasappfx/views/NuevoDelito.fxml",
+                (NuevoDelitoController controller) -> {
+                    controller.setNumero(1);
+                    controller.cargarCamposDelito(delito);
+                    controller.setDelitoViewController(this);
                 },
-                "Actualizar Rol",
+                "Actualizar Delito",
                 tabla.getScene().getWindow());
     }
     
-    public void cargarRoles() {
-        cargarTabla(tabla, rolService::findAll);
+    public void cargarDelitos() {
+        cargarTabla(tabla, delitoService::findAll);
     }
     
-    private void eliminarRol(Rol rol) {
-        eliminarRegistro(rol, r -> rolService.delete(r), () -> cargarTabla(tabla, rolService::findAll), tabla);
+    private void eliminarDelito(Delito delito) {
+        eliminarRegistro(delito, r -> delitoService.delete(r), () -> cargarTabla(tabla, delitoService::findAll), tabla);
     }
     
     @FXML
     private void exportarExcel() {
-        exportarReporte("/com/cd/incidenciasappfx/report/UsuarioReportExcel.jrxml", "RolReport.xlsx", rolService::findAll, new ExcelReportExporter());
+        exportarReporte("/com/cd/incidenciasappfx/report/UsuarioReportExcel.jrxml", "RolReport.xlsx", delitoService::findAll, new ExcelReportExporter());
     }
     
     @FXML
     private void exportarPDF() {
-        exportarReporte("/com/cd/incidenciasappfx/report/RolReportPdf.jrxml", "RolReport.pdf", rolService::findAll, new PdfReportExporter());
+        exportarReporte("/com/cd/incidenciasappfx/report/RolReportPdf.jrxml", "RolReport.pdf", delitoService::findAll, new PdfReportExporter());
     }
     
 }

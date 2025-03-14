@@ -6,7 +6,6 @@ import com.cd.incidenciasappfx.models.Rol;
 import com.cd.incidenciasappfx.service.IRolesService;
 import com.cd.incidenciasappfx.service.RolesServiceImpl;
 import javafx.fxml.FXML;
-import javafx.scene.control.TextField;
 
 /**
  * NuevoRolController.java
@@ -17,14 +16,8 @@ public class NuevoRolController extends ModalControllerHelper<Rol> {
 
     private IRolesService rolService;
     private RolesViewController rolViewController;
-    @FXML
-    private TextField idRol;
-    @FXML
-    private TextField txtRol;
-
 
     public NuevoRolController() {
-
     }
 
     @FXML
@@ -39,17 +32,17 @@ public class NuevoRolController extends ModalControllerHelper<Rol> {
     }
 
     private void addListeners() {
-        txtRol.textProperty().addListener((obs, oldVal, newVal) -> validarCampos());
+        name.textProperty().addListener((obs, oldVal, newVal) -> validarCampos());
     }
 
     private void validarCampos() {
-        boolean camposLlenos = !txtRol.getText().trim().isEmpty();
+        boolean camposLlenos = !name.getText().trim().isEmpty();
         btnGuardar.setDisable(!camposLlenos);
     }
 
     public void cargarCamposRol(Rol r) {
-        idRol.setText(String.valueOf(r.getIdRol()));
-        txtRol.setText(r.getNombre());
+        id.setText(String.valueOf(r.getIdRol()));
+        name.setText(r.getNombre());
     }
 
     public void setRolViewController(RolesViewController controller) {
@@ -66,7 +59,7 @@ public class NuevoRolController extends ModalControllerHelper<Rol> {
     }
 
     private void registrarRol() {
-        String nameRol = txtRol.getText().trim();
+        String nameRol = name.getText().trim();
 
         if (nameRol.isEmpty()) {
             AlertHelper.mostrarError("El nombre del rol no puede estar vacío");
@@ -84,8 +77,8 @@ public class NuevoRolController extends ModalControllerHelper<Rol> {
     }
 
     private void actualizarRol() {
-        String idText = idRol.getText();
-        String nameRol = txtRol.getText().trim();
+        String idText = id.getText();
+        String nameRol = name.getText().trim();
 
         if (nameRol.isEmpty()) {
             AlertHelper.mostrarError("El nombre del rol no puede estar vacío");

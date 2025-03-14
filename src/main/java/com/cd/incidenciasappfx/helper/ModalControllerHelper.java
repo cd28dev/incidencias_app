@@ -7,6 +7,7 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 /**
@@ -16,14 +17,20 @@ import javafx.stage.Stage;
  * @param <T>
  */
 public abstract class ModalControllerHelper<T> {
-
-    private final Class<T> tipo = (Class<T>) ((ParameterizedType) getClass()
-            .getGenericSuperclass()).getActualTypeArguments()[0];
-    protected int numero;
+    @FXML
+    protected TextField id;
+    @FXML
+    protected TextField name;
     @FXML
     protected Button btnGuardar;
     @FXML
+    protected Button btnCancelar;
+    @FXML
     protected Label lblTitle;
+
+    private final Class<T> tipo = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+    protected int numero;
+
 
     public void setNumero(int numero) {
         this.numero = numero;

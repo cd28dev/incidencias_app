@@ -16,7 +16,6 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
 
 /**
  * NuevoUrbController.java
@@ -29,10 +28,6 @@ public class NuevoUrbController extends ModalControllerHelper<Urbanizacion> {
     private ISectorService sectorService;
     private UrbViewController urbViewController;
 
-    @FXML
-    private TextField idUrb;
-    @FXML
-    private TextField txtUrb;
     @FXML
     private ComboBox<String> cbUrb;
 
@@ -53,17 +48,17 @@ public class NuevoUrbController extends ModalControllerHelper<Urbanizacion> {
     }
 
     private void addListeners() {
-        txtUrb.textProperty().addListener((obs, oldVal, newVal) -> validarCampos());
+        name.textProperty().addListener((obs, oldVal, newVal) -> validarCampos());
     }
 
     private void validarCampos() {
-        boolean camposLlenos = !txtUrb.getText().trim().isEmpty();
+        boolean camposLlenos = !name.getText().trim().isEmpty();
         btnGuardar.setDisable(!camposLlenos);
     }
 
     public void cargarCamposUrb(Urbanizacion u) {
-        idUrb.setText(String.valueOf(u.getId()));
-        txtUrb.setText(u.getNombre());
+        id.setText(String.valueOf(u.getId()));
+        name.setText(u.getNombre());
     }
 
     @FXML
@@ -81,7 +76,7 @@ public class NuevoUrbController extends ModalControllerHelper<Urbanizacion> {
     }
 
     private void registrarUrb() {
-        String nameUrb = txtUrb.getText().trim();
+        String nameUrb = name.getText().trim();
         String sectorSeleccionado = cbUrb.getValue();
 
         if (nameUrb.isEmpty()) {
@@ -102,8 +97,8 @@ public class NuevoUrbController extends ModalControllerHelper<Urbanizacion> {
     }
 
     private void actualizarUrb() {
-        String idText = idUrb.getText();
-        String nameUrb = txtUrb.getText().trim();
+        String idText = id.getText();
+        String nameUrb = name.getText().trim();
         String sectorSeleccionado = cbUrb.getValue();
 
         if (nameUrb.isEmpty()) {

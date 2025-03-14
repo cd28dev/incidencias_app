@@ -6,8 +6,6 @@ import com.cd.incidenciasappfx.models.Sector;
 import com.cd.incidenciasappfx.service.ISectorService;
 import com.cd.incidenciasappfx.service.SectorServiceImpl;
 import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
 
 /**
  * NuevoSectorController.java
@@ -18,14 +16,6 @@ public class NuevoSectorController extends ModalControllerHelper<Sector> {
 
     private ISectorService sectorService;
     private SectorViewController sectorViewController;
-
-    @FXML
-    private TextField idSector;
-    @FXML
-    private TextField txtSector;
-    
-    @FXML
-    private ComboBox<String> cbSector;
 
     public NuevoSectorController() {
     }
@@ -42,17 +32,17 @@ public class NuevoSectorController extends ModalControllerHelper<Sector> {
     }
 
     private void addListeners() {
-        txtSector.textProperty().addListener((obs, oldVal, newVal) -> validarCampos());
+        name.textProperty().addListener((obs, oldVal, newVal) -> validarCampos());
     }
 
     private void validarCampos() {
-        boolean camposLlenos = !txtSector.getText().trim().isEmpty();
+        boolean camposLlenos = !name.getText().trim().isEmpty();
         btnGuardar.setDisable(!camposLlenos);
     }
 
     public void cargarCamposSector(Sector s) {
-        idSector.setText(String.valueOf(s.getId()));
-        txtSector.setText(s.getNombre());
+        id.setText(String.valueOf(s.getId()));
+        name.setText(s.getNombre());
     }
 
     @FXML
@@ -70,7 +60,7 @@ public class NuevoSectorController extends ModalControllerHelper<Sector> {
     }
 
     private void registrarSector() {
-        String nameSector = txtSector.getText().trim();
+        String nameSector = name.getText().trim();
 
         if (nameSector.isEmpty()) {
             AlertHelper.mostrarError("El nombre del Sector no puede estar vacío");
@@ -88,8 +78,8 @@ public class NuevoSectorController extends ModalControllerHelper<Sector> {
     }
 
     private void actualizarSector() {
-        String idText = idSector.getText();
-        String nameSector = txtSector.getText().trim();
+        String idText = id.getText();
+        String nameSector = name.getText().trim();
 
         if (nameSector.isEmpty()) {
             AlertHelper.mostrarError("El nombre del Sector no puede estar vacío");

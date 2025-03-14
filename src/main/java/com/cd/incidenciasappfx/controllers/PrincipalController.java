@@ -12,11 +12,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 public class PrincipalController implements Initializable {
 
+    @FXML
+    private HBox navbar;
     private Usuario usuario;
 
     @FXML
@@ -35,13 +38,13 @@ public class PrincipalController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Platform.runLater(() -> System.gc()); // Forzar recolección de basura
+        Platform.runLater(System::gc); // Forzar recolección de basura
         loadView("InicioView");
     }
 
     @FXML
     public void loadView(String fxmlFile) {
-        Platform.runLater(() -> System.gc()); // Forzar recolección de basura
+        Platform.runLater(System::gc); // Forzar recolección de basura
         try {
             FXMLLoader loader = new FXMLLoader(App.class.getResource("/com/cd/incidenciasappfx/views/" + fxmlFile + ".fxml"));
             Parent view = loader.load();
@@ -59,12 +62,7 @@ public class PrincipalController implements Initializable {
         boolean isVisible = personasBox.isVisible();
         personasBox.setVisible(!isVisible);
 
-        if (!personasBox.isVisible()) {
-            personasBox.setManaged(false);
-        } else {
-
-            personasBox.setManaged(true);
-        }
+        personasBox.setManaged(personasBox.isVisible());
     }
 
     // Método para alternar la visibilidad de la sección "Gestión de Datos"
@@ -76,32 +74,32 @@ public class PrincipalController implements Initializable {
     }
 
     @FXML
-    private void handleInicio(MouseEvent event) {
-        Platform.runLater(() -> System.gc()); // Forzar recolección de basura
+    private void handleInicio() {
+        Platform.runLater(System::gc); // Forzar recolección de basura
         loadView("InicioView");
     }
 
     @FXML
-    private void handleUsuarios(MouseEvent event) {
-        Platform.runLater(() -> System.gc()); // Forzar recolección de basura
+    private void handleUsuarios() {
+        Platform.runLater(System::gc); // Forzar recolección de basura
         loadView("UsuariosView");
     }
 
     @FXML
     private void handleRoles() {
-        Platform.runLater(() -> System.gc()); // Forzar recolección de basura
+        Platform.runLater(System::gc); // Forzar recolección de basura
         loadView("RolesView");
     }
     
     @FXML
     private void handleSectores(){
-        Platform.runLater(() -> System.gc()); // Forzar recolección de basura
+        Platform.runLater(System::gc); // Forzar recolección de basura
         loadView("SectorView");
     }
     
     @FXML   
     private void handleUrb(){
-        Platform.runLater(() -> System.gc()); // Forzar recolección de basura
+        Platform.runLater(System::gc); // Forzar recolección de basura
         loadView("UrbanizacionView");
     }
 
@@ -123,4 +121,8 @@ public class PrincipalController implements Initializable {
         userActivo.setText("Bienvenido, "+usuario.getRol().getNombre());
     }
 
+    public void handleDelitos(MouseEvent mouseEvent) {
+        Platform.runLater(System::gc); // Forzar recolección de basura
+        loadView("DelitosView");
+    }
 }

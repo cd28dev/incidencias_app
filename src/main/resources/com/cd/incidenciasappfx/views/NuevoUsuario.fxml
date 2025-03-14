@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.net.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.collections.FXCollections?>
@@ -32,7 +28,7 @@
             <TextField fx:id="txtDocumento" GridPane.columnIndex="1" styleClass="form-field"/>
             
             <Label text="Nombres:" GridPane.rowIndex="1" styleClass="form-label"/>
-            <TextField fx:id="txtNombres" GridPane.columnIndex="1" GridPane.rowIndex="1" styleClass="form-field"/>
+            <TextField fx:id="name" GridPane.columnIndex="1" GridPane.rowIndex="1" styleClass="form-field"/>
             
             <Label text="Apellidos:" GridPane.rowIndex="2" styleClass="form-label"/>
             <TextField fx:id="txtApellidos" GridPane.columnIndex="1" GridPane.rowIndex="2" styleClass="form-field"/>

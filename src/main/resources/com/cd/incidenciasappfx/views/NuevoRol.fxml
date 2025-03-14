@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.net.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.collections.FXCollections?>
+
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 
@@ -26,10 +23,10 @@
         </Label>
 
         <GridPane hgap="10" vgap="10" alignment="CENTER">
-            <TextField fx:id="idRol" visible="false" managed="false"/>
+            <TextField fx:id="id" visible="false" managed="false"/>
             
             <Label text="Rol:" GridPane.rowIndex="1" styleClass="form-label"/>
-            <TextField fx:id="txtRol" GridPane.columnIndex="1" GridPane.rowIndex="1" styleClass="form-field"/>
+            <TextField fx:id="name" GridPane.columnIndex="1" GridPane.rowIndex="1" styleClass="form-field"/>
         </GridPane>
 
         <Region prefHeight="20"/>

@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.image.*?>
@@ -17,18 +16,14 @@
         <Button fx:id="btnExportExcel" styleClass="btn-export" onAction="#exportarExcel">
             <graphic>
                 <ImageView fitHeight="20" fitWidth="20">
-                    <image>
-                        <Image url="@/com/cd/incidenciasappfx/images/excel.png" />
-                    </image>
+                    <Image url="@/com/cd/incidenciasappfx/images/excel.png"/>
                 </ImageView>
             </graphic>
         </Button>
         <Button fx:id="btnExportPdf" styleClass="btn-export" onAction="#exportarPDF">
             <graphic>
                 <ImageView fitHeight="20" fitWidth="20">
-                    <image>
-                        <Image url="@/com/cd/incidenciasappfx/images/pdf.png" />
-                    </image>
+                    <Image url="@/com/cd/incidenciasappfx/images/pdf.png"/>
                 </ImageView>
             </graphic>
         </Button>
@@ -41,13 +36,11 @@
         
         <!-- Campo de Búsqueda con Icono de Lupa -->
         <HBox spacing="5" styleClass="search-box">
-            <TextField fx:id="txtBuscarSector" promptText="Buscar por Sector" styleClass="search-field"/>
+            <TextField fx:id="txtBuscar" promptText="Buscar por Sector" styleClass="search-field"/>
             <Button fx:id="btnBuscar" styleClass="search-button">
                 <graphic>
                     <ImageView fitHeight="16" fitWidth="16">
-                        <image>
-                            <Image url="@/com/cd/incidenciasappfx/images/lupa.png" />
-                        </image>
+                        <Image url="@/com/cd/incidenciasappfx/images/lupa.png"/>
                     </ImageView>
                 </graphic>
             </Button>
@@ -57,7 +50,7 @@
     <!-- Tabla de Roles -->
     <TableView fx:id="tabla" styleClass="table-view"  VBox.vgrow="ALWAYS">
         <columns>
-            <TableColumn text="Id Sector" fx:id="colIdSector" />
+            <TableColumn text="Id Sector" fx:id="id" />
             <TableColumn text="Sector" fx:id="colSector" />
             <TableColumn text="Acción" fx:id="colAccion" />
         </columns>

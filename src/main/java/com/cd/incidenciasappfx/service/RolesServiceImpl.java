@@ -13,7 +13,7 @@ import java.util.Optional;
  */
 public class RolesServiceImpl implements IRolesService {
 
-    private IRolesRepository rolesRepository;
+    private final IRolesRepository rolesRepository;
 
     public RolesServiceImpl() {
         rolesRepository = new RolesRepositoryImpl();

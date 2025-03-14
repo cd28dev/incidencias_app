@@ -6,7 +6,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox spacing="10.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<VBox spacing="10.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.cd.incidenciasappfx.controllers.DelitosViewController"
       stylesheets="@/com/cd/incidenciasappfx/styles/page.css">
     
@@ -59,7 +61,7 @@
     <!-- Tabla de Roles -->
     <TableView fx:id="tabla" styleClass="table-view"  VBox.vgrow="ALWAYS">
         <columns>
-            <TableColumn text="Id Delito" fx:id="colIdDelito" />
+            <TableColumn text="Id Delito" fx:id="id" />
             <TableColumn text="Delito" fx:id="colDelito" />
             <TableColumn text="Acción" fx:id="colAccion" />
         </columns>

@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<AnchorPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
             fx:id="modalPane" prefWidth="330" prefHeight="250"
             stylesheets="@/com/cd/incidenciasappfx/styles/nuevousuario.css"
             styleClass="modal"
-            fx:controller="com.cd.incidenciasappfx.controllers.NuevoSectorController">
+            fx:controller="com.cd.incidenciasappfx.controllers.NuevoDelitoController">
 
-     <VBox spacing="10" alignment="CENTER" layoutX="20" layoutY="20">
-        <Label fx:id="lblTitle" text="Nuevo Sector" styleClass="modal-title">
+    <VBox spacing="10" alignment="CENTER" layoutX="20" layoutY="20">
+        <Label fx:id="lblTitle" text="Nuevo Delito" styleClass="modal-title">
             <graphic>
                 <ImageView fx:id="iconIndex" styleClass="icon-style">
                     <Image url="@/com/cd/incidenciasappfx/images/newUser.png" />
@@ -22,8 +23,8 @@
 
         <GridPane hgap="10" vgap="10" alignment="CENTER">
             <TextField fx:id="id" visible="false" managed="false"/>
-            
-            <Label text="Sector:" GridPane.rowIndex="1" styleClass="form-label"/>
+
+            <Label text="Delito:" GridPane.rowIndex="1" styleClass="form-label"/>
             <TextField fx:id="name" GridPane.columnIndex="1" GridPane.rowIndex="1" styleClass="form-field"/>
         </GridPane>
 

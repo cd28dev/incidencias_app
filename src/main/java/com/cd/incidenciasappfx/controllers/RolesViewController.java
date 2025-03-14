@@ -25,13 +25,8 @@ public class RolesViewController extends ControllerHelper<Rol> implements Initia
     private IRolesService rolService;
     @FXML
     protected TableView<Rol> tabla;
-
-    @FXML
-    private TableColumn<Rol, Integer> colIdRol;
     @FXML
     private TableColumn<Rol, String> colRol;
-    @FXML
-    private TableColumn<Rol, Void> colAccion;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -53,20 +48,19 @@ public class RolesViewController extends ControllerHelper<Rol> implements Initia
 
     private void configColumns() {
         tabla.getColumns().clear();
-        tabla.getColumns().addAll(colIdRol, colRol, colAccion);
+        tabla.getColumns().addAll(colRol, colAccion);
 
-        colIdRol.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(data.getValue().getIdRol()));
+        id.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(data.getValue().getIdRol()));
         colRol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNombre()));
         configurarColumnaAccion(
-                colAccion,
-                rol -> abrirModalActualizar(rol, 1),
-                rol -> eliminarRol(rol));
+                this::abrirModalActualizar,
+                this::eliminarRol);
     }
 
-    private void abrirModalActualizar(Rol rol, int number) {
+    private void abrirModalActualizar(Rol rol) {
         abrirModal("/com/cd/incidenciasappfx/views/NuevoRol.fxml",
                 (NuevoRolController controller) -> {
-                    controller.setNumero(number);
+                    controller.setNumero(1);
                     controller.cargarCamposRol(rol);
                     controller.setRolViewController(this);
                 },

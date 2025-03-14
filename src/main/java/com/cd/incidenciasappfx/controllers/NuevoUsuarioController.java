@@ -31,8 +31,6 @@ public class NuevoUsuarioController extends ModalControllerHelper<Usuario> {
     @FXML
     private TextField txtDocumento;
     @FXML
-    private TextField txtNombres;
-    @FXML
     private TextField txtApellidos;
     @FXML
     private TextField txtEmail;
@@ -71,7 +69,7 @@ public class NuevoUsuarioController extends ModalControllerHelper<Usuario> {
 
     private void addListeners() {
         txtDocumento.textProperty().addListener((obs, oldVal, newVal) -> validarCampos());
-        txtNombres.textProperty().addListener((obs, oldVal, newVal) -> validarCampos());
+        name.textProperty().addListener((obs, oldVal, newVal) -> validarCampos());
         txtApellidos.textProperty().addListener((obs, oldVal, newVal) -> validarCampos());
         txtEmail.textProperty().addListener((obs, oldVal, newVal) -> validarCampos());
         txtUsername.textProperty().addListener((obs, oldVal, newVal) -> validarCampos());
@@ -80,7 +78,7 @@ public class NuevoUsuarioController extends ModalControllerHelper<Usuario> {
 
     private void validarCampos() {
         boolean camposLlenos = !txtDocumento.getText().trim().isEmpty()
-                && !txtNombres.getText().trim().isEmpty()
+                && !name.getText().trim().isEmpty()
                 && !txtApellidos.getText().trim().isEmpty()
                 && !txtEmail.getText().trim().isEmpty()
                 && !txtUsername.getText().trim().isEmpty()
@@ -93,7 +91,7 @@ public class NuevoUsuarioController extends ModalControllerHelper<Usuario> {
     public void cargarCamposUsuario(Usuario u) {
         idUser.setText(String.valueOf(u.getIdUsuario()));
         txtDocumento.setText(u.getDni());
-        txtNombres.setText(u.getNombre());
+        name.setText(u.getNombre());
         txtApellidos.setText(u.getApellido());
         txtEmail.setText(u.getCorreo());
         txtUsername.setText(u.getUsuario());
@@ -104,11 +102,7 @@ public class NuevoUsuarioController extends ModalControllerHelper<Usuario> {
 
             Image image = ImageHelper.cargarImagen(fotoPath);
 
-            if (image != null) {
-                imgPreview.setImage(image);
-            } else {
-                imgPreview.setImage(null); // Puedes establecer una imagen por defecto aquí
-            }
+            imgPreview.setImage(image);
         }
     }
 
@@ -160,7 +154,7 @@ public class NuevoUsuarioController extends ModalControllerHelper<Usuario> {
 
     private void registrarUser() {
         String documento = txtDocumento.getText();
-        String nombres = txtNombres.getText();
+        String nombres = name.getText();
         String apellidos = txtApellidos.getText();
         String email = txtEmail.getText();
         String username = txtUsername.getText();
@@ -189,7 +183,7 @@ public class NuevoUsuarioController extends ModalControllerHelper<Usuario> {
     private void actualizarUser() {
         String id = idUser.getText();
         String documento = txtDocumento.getText();
-        String nombres = txtNombres.getText();
+        String nombres = name.getText();
         String apellidos = txtApellidos.getText();
         String email = txtEmail.getText();
         String username = txtUsername.getText();
