@@ -78,7 +78,7 @@
                         </ImageView>                    
                     </graphic>
                 </Label>
-                <Label fx:id="lblTipoIntervencion" text="Tipo Intervención" styleClass="sidebar-subitem">
+                <Label fx:id="lblTipoIntervencion" text="Tipo Intervención" styleClass="sidebar-subitem" onMouseClicked="#handleTipoIntervencion">
                     <graphic>
                         <ImageView fx:id="iconIntervencion" styleClass="icon-style">
                             <Image url="@/com/cd/incidenciasappfx/images/sirena.png" />

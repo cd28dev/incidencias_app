@@ -24,6 +24,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -76,7 +77,27 @@ public abstract class ControllerHelper<T> {
         }
     }
 
-    public static <T> void cargarTabla(TableView<T> tabla, Supplier<List<T>> fetchFunction) {
+    public void cargarTabla(TableView<T> tabla, Supplier<List<T>> fetchFunction) {
+        Task<List<T>> task = getTask(tabla, fetchFunction);
+
+        executor.execute(task); // Forzar recolección de basura
+        tabla.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        tabla.setSelectionModel(null);
+
+        colAccion.setMinWidth(100);
+        colAccion.setMaxWidth(100);
+        colAccion.setPrefWidth(100);
+        colAccion.setResizable(false);
+
+        tabla.getColumns().forEach(col -> {
+            if (col != colAccion) {
+                col.setMinWidth(50);  // Tamaño mínimo razonable
+                col.setPrefWidth(50);
+            }
+        });
+    }
+
+    private static <T> Task<List<T>> getTask(TableView<T> tabla, Supplier<List<T>> fetchFunction) {
         Task<List<T>> task = new Task<>() {
             @Override
             protected List<T> call() throws Exception {
@@ -96,10 +117,7 @@ public abstract class ControllerHelper<T> {
                     "/com/cd/incidenciasappfx/images/triangulo.png"
             ));
         });
-
-        executor.execute(task); // Forzar recolección de basura
-        tabla.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        tabla.setSelectionModel(null);
+        return task;
     }
 
     protected void eliminarRegistro(T t, Function<T, Boolean> deleteFunction, Runnable onSuccess, TableView<T> tabla) {

@@ -31,8 +31,7 @@ public class DelitosViewController extends ControllerHelper<Delito> implements I
     protected TableView<Delito> tabla;
     @FXML
     private TableColumn<Delito, String> colDelito;
-    @FXML
-    private TableColumn<Delito, Void> colAccion;
+
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {

@@ -121,8 +121,13 @@ public class PrincipalController implements Initializable {
         userActivo.setText("Bienvenido, "+usuario.getRol().getNombre());
     }
 
-    public void handleDelitos(MouseEvent mouseEvent) {
+    public void handleDelitos() {
         Platform.runLater(System::gc); // Forzar recolección de basura
         loadView("DelitosView");
+    }
+
+    public void handleTipoIntervencion() {
+        Platform.runLater(System::gc); // Forzar recolección de basura
+        loadView("TipoIntervencionView");
     }
 }
