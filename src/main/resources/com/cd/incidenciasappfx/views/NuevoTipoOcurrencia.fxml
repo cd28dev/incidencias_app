@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<AnchorPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:id="modalPane" prefWidth="330" prefHeight="250"
+            stylesheets="@/com/cd/incidenciasappfx/styles/nuevousuario.css"
+            styleClass="modal"
+            fx:controller="com.cd.incidenciasappfx.controllers.NuevoTipoOcuController">
+
+    <VBox spacing="10" alignment="CENTER" layoutX="20" layoutY="20">
+        <Label fx:id="lblTitle" text="Nuevo T.Ocurrencia" styleClass="modal-title">
+            <graphic>
+                <ImageView fx:id="iconIndex" styleClass="icon-style">
+                    <Image url="@/com/cd/incidenciasappfx/images/newUser.png" />
+                </ImageView>
+            </graphic>
+        </Label>
+
+        <GridPane hgap="10" vgap="10" alignment="CENTER">
+            <TextField fx:id="id" visible="false" managed="false"/>
+
+            <Label text="Tipo Int:" GridPane.rowIndex="1" styleClass="form-label"/>
+            <TextField fx:id="name" GridPane.columnIndex="1" GridPane.rowIndex="1" styleClass="form-field"/>
+        </GridPane>
+
+        <Region prefHeight="20"/>
+
+        <HBox spacing="15" alignment="CENTER">
+            <Button text="Guardar" fx:id="btnGuardar" styleClass="btn-primary" prefWidth="100" onAction="#save"/>
+            <Button text="Cancelar" fx:id="btnCancelar" styleClass="btn-danger" prefWidth="100"/>
+        </HBox>
+    </VBox>
+</AnchorPane>
+
