@@ -135,4 +135,9 @@ public class PrincipalController implements Initializable {
         Platform.runLater(System::gc); // Forzar recolección de basura
         loadView("TipoOcurrenciaView");
     }
+
+    public void handleServicios() {
+        Platform.runLater(System::gc); // Forzar recolección de basura
+        loadView("ServiciosView");
+    }
 }
