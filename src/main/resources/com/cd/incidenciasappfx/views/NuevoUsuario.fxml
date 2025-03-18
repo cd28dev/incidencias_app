@@ -55,7 +55,7 @@
         <Region prefHeight="10"/>
         <HBox spacing="15" alignment="CENTER">
             <Button text="Guardar" fx:id="btnGuardar" styleClass="btn-primary" prefWidth="100" onAction="#save"/>
-            <Button text="Cancelar" fx:id="btnCancelar" styleClass="btn-danger" prefWidth="100"/>
+            <Button text="Cancelar" fx:id="btnCancelar" styleClass="btn-danger" prefWidth="100" onAction="#closeWindow"/>
         </HBox>
     </VBox>
 </AnchorPane>

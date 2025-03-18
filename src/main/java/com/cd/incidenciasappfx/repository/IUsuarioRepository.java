@@ -17,4 +17,5 @@ public interface IUsuarioRepository {
     boolean delete(String dni);
     Integer getNextUserId();
     Optional<Usuario> validarUsuario(String username,String password);
+    Optional<Usuario> findByEmail(String email);
 }

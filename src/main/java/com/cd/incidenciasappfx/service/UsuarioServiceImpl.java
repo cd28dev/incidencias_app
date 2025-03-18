@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * UsuarioServiceImpl.java
@@ -86,6 +88,38 @@ public class UsuarioServiceImpl implements IUsuarioService {
     @Override
     public Optional<Usuario> validarUsuario(String username, String password) {
         return usuarioRepository.validarUsuario(username, password);
+    }
+
+    @Override
+    public Optional<Usuario> findByEmail(String email) {
+        Optional<Usuario> user;
+        user=  usuarioRepository.findByEmail(email);
+        if (user.isPresent()) {
+            Usuario usuario = user.get();
+            String pass = EmailHelper.genPassword();
+            String asunto = "Reset Contraseña IncidenciasAPP";
+            String mensaje = "User: "+ usuario.getUsuario() +", Su contraseña temporal es: " + pass;
+
+
+            try {
+                boolean isSendEmail = CompletableFuture.supplyAsync(() ->
+                        EmailHelper.sendEmail(usuario.getCorreo(), asunto, mensaje)
+                ).get(5, TimeUnit.SECONDS);
+
+                if (!isSendEmail) {
+                    return Optional.empty();
+                }
+
+                usuario.setPassword(pass);
+                return usuarioRepository.update(usuario);
+
+            } catch (InterruptedException | ExecutionException | TimeoutException e) {
+                Thread.currentThread().interrupt(); // 🔹 Restablecer el estado de interrupción
+                throw new RuntimeException("Error al enviar el correo.", e);
+            }
+        }
+        return Optional.empty();
+
     }
 
 }

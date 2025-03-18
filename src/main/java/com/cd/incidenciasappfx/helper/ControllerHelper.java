@@ -27,6 +27,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.stage.Window;
 
 /**
@@ -62,6 +63,7 @@ public abstract class ControllerHelper<T> {
             configurador.accept(modalController);
 
             Stage modalStage = new Stage();
+            modalStage.initStyle(StageStyle.UNDECORATED);
             modalStage.initModality(Modality.WINDOW_MODAL);
             if (owner != null) {
                 modalStage.initOwner(owner);

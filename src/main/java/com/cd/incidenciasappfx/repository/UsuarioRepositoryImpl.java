@@ -249,6 +249,43 @@ public class UsuarioRepositoryImpl implements IUsuarioRepository {
         return Optional.ofNullable(usuario);
     }
 
+    @Override
+    public Optional<Usuario> findByEmail(String email) {
+        EntityManager em = JpaUtil.getEntityManager();
+        Usuario usuario = null;
+
+        try {
+            StoredProcedureQuery query = em.createStoredProcedureQuery("buscar_usuario_por_email");
+            query.registerStoredProcedureParameter(1, String.class, ParameterMode.IN);
+            query.setParameter(1, email);
+
+            List<Object[]> resultados = query.getResultList();
+
+            if (!resultados.isEmpty()) {
+                Object[] row = resultados.get(0);
+                usuario = new Usuario();
+                usuario.setIdUsuario((Integer) row[0]);
+                usuario.setUsuario((String) row[1]);
+                usuario.setNombre((String) row[2]);
+                usuario.setApellido((String) row[3]);
+                usuario.setDni((String) row[4]);
+                usuario.setCorreo((String) row[5]);
+                Rol rol = new Rol();
+                rol.setIdRol((Integer) row[6]);
+                rol.setNombre((String) row[7]);
+                usuario.setFoto((String) row[8]);
+                usuario.setRol(rol);
+            }
+
+        } catch (jakarta.persistence.PersistenceException e) {
+            handleSQLException(e);
+        } finally {
+            em.close();
+        }
+
+        return Optional.ofNullable(usuario);
+    }
+
     private void handleSQLException(jakarta.persistence.PersistenceException e) {
         Throwable cause = e.getCause();
         if (cause instanceof java.sql.SQLException sqlEx) {

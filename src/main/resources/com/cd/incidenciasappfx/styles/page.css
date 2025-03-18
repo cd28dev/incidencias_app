@@ -47,10 +47,13 @@
 
 .search-field {
     -fx-pref-width: 140px;
-    -fx-padding: 4px;
+    -fx-padding: 6px 12px;
     -fx-border-color: #B0BEC5; /* Gris claro */
     -fx-border-radius: 4px;
     -fx-background-radius: 4px;
+    -fx-background-color:#F9FAFB;
+    -fx-font-size: 13px;
+    -fx-min-width: 100px;
 }
 
 /* Tabla de Usuarios */

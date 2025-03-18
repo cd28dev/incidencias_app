@@ -91,3 +91,101 @@
 
 .content-area {
 }
+
+.login-overlay {
+    -fx-background-color: #E3F2FD;
+    -fx-pref-width: 100%;
+    -fx-pref-height: 100%;
+    -fx-alignment: center;
+}
+
+.login-container {
+    -fx-background-color: #F9FAFB;
+    -fx-padding: 30px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 20, 0, 0, 10);
+    -fx-max-width: 400px;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+
+/* Estilo para el título */
+.title-label {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1f3b57;
+}
+
+.input-container {
+    -fx-background-color: #E3F2FD;
+    -fx-padding: 8px;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-border-color: #ccc;
+    -fx-border-width: 1px;
+    -fx-pref-width: 350px; /* Ajusta el ancho fijo */
+}
+
+.text-field, .password-field {
+    -fx-font-size: 16px;
+    -fx-pref-height: 40px;
+    -fx-pref-width: 280px; /* Ajuste del ancho de los inputs */
+    -fx-background-color: transparent;
+    -fx-border: none;
+}
+
+HBox.input-container > .text-field,
+HBox.input-container > .password-field {
+    -fx-hgrow: ALWAYS; /* Asegura que el campo de texto crezca y ocupe todo el espacio */
+}
+
+
+/* Efecto cuando el campo está seleccionado */
+.text-field:focused, .password-field:focused {
+    -fx-border-color: transparent;
+}
+
+/* Botón */
+.login-button {
+    -fx-background-color: #28a745;
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-padding: 10px 20px;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-cursor: hand;
+}
+
+.login-button:hover {
+    -fx-background-color: #218838;
+}
+
+/* Estilos para etiquetas de entrada */
+.input-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #333;
+    -fx-font-weight: bold;
+}
+
+/* Estilos para el mensaje de error */
+.error-label {
+    -fx-text-fill: red;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+/* Estilos para el checkbox */
+.check-box {
+    -fx-font-size: 14px;
+}
+
+/* Estilos para el enlace "Olvidé mi contraseña" */
+.hyperlink {
+    -fx-font-size: 14px;
+    -fx-text-fill: #007bff;
+}
+
+.hyperlink:hover {
+    -fx-underline: true;
+}
+

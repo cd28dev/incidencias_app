@@ -16,4 +16,5 @@ public interface IUsuarioService {
     boolean delete(Usuario u);
     int getNextUserId();
     Optional<Usuario> validarUsuario(String username, String password);
+    Optional<Usuario> findByEmail(String email);
 }

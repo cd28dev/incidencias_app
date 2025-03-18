@@ -2,6 +2,8 @@
 .modal {
     -fx-background-color: white;
     -fx-padding: 20px;
+    -fx-border-color: #888;  /* Cambia el color del borde */
+    -fx-border-width: 1px;   /* Grosor del borde */
     -fx-border-radius: 12px;
     -fx-background-radius: 12px;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.15), 10, 0, 0, 4);

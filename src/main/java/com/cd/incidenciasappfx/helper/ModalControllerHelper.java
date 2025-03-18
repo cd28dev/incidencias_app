@@ -118,4 +118,10 @@ public abstract class ModalControllerHelper<T> {
 
         new Thread(task).start();
     }
+
+    @FXML
+    private void closeWindow() {
+        Stage stage = (Stage) btnCancelar.getScene().getWindow();
+        stage.close();
+    }
 }
