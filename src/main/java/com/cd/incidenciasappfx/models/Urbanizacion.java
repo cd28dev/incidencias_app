@@ -2,6 +2,8 @@ package com.cd.incidenciasappfx.models;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
+
 /**
  * Urbanizacion.java
  *
@@ -9,7 +11,7 @@ import jakarta.persistence.*;
  */
 @Entity
 @Table(name = "urbanizaciones")
-public class Urbanizacion {
+public class Urbanizacion implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

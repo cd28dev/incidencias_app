@@ -136,6 +136,7 @@ public class NuevoUsuarioController extends ModalControllerHelper<Usuario> {
             imgPreview.setImage(ImageHelper.cargarImagen(fotoPath));
         }
 
+        //vamooooooooo perú csm
         return fotoPath;
     }
 

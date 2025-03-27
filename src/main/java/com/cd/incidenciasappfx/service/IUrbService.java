@@ -24,4 +24,6 @@ public interface IUrbService {
 
     boolean delete(Urbanizacion u);
 
+    List<Urbanizacion> findBySector(String nameSector);
+
 }

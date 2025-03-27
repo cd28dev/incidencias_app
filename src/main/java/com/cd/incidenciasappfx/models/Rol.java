@@ -1,6 +1,9 @@
 package com.cd.incidenciasappfx.models;
 
 import jakarta.persistence.*;
+
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -9,7 +12,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "roles")
-public class Rol {
+public class Rol implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id_rol")
@@ -22,6 +25,7 @@ public class Rol {
     private List<Usuario> usuarios;
 
     public Rol() {
+        usuarios = new ArrayList<Usuario>();
     }
 
     public Rol(String nombre, List<Usuario> usuarios) {

@@ -136,6 +136,33 @@ public class UrbRepositoryImpl implements IUrbRepository {
         }
     }
 
+    @Override
+    public List<Urbanizacion> findBySector(String nameSector) {
+        EntityManager em = JpaUtil.getEntityManager();
+        List<Urbanizacion> urbanizaciones = new ArrayList<>();
+
+        try {
+            StoredProcedureQuery query = em.createStoredProcedureQuery("sp_buscar_urbanizacion_por_sector");
+            query.registerStoredProcedureParameter(1, String.class, ParameterMode.IN);
+            query.setParameter(1, nameSector);
+
+            List<String> resultados = query.getResultList();
+
+            for (String nombreUrbanizacion : resultados) {
+                Urbanizacion u = new Urbanizacion();
+                u.setNombre(nombreUrbanizacion);
+                urbanizaciones.add(u);
+            }
+        } catch (jakarta.persistence.PersistenceException e) {
+            handleSQLException(e);
+        } finally {
+            em.close();
+        }
+
+        return urbanizaciones;
+    }
+
+
     private void handleSQLException(jakarta.persistence.PersistenceException e) {
         Throwable cause = e.getCause();
         if (cause instanceof java.sql.SQLException sqlEx) {

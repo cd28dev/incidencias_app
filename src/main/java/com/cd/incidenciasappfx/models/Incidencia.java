@@ -1,19 +1,11 @@
 
 package com.cd.incidenciasappfx.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
-import java.util.Date;
+import jakarta.persistence.*;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,7 +15,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "incidencias")
-public class Incidencia {
+public class Incidencia implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id_incidencia")
@@ -32,30 +24,28 @@ public class Incidencia {
     @Column(name="direccion",nullable = false)
     private String direccion;
 
-    @Column(name="fecha",nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date fecha;
+    @Column(name="fecha_hora_incidencia",nullable = false)
+    private LocalDateTime fecha_hora_incidencia;
 
-    @Column(name="hora",nullable = false)
-    @Temporal(TemporalType.TIME)
-    private Date hora;
+    @Column(name="fecha_hora_registro",nullable = false)
+    private LocalDateTime fecha_hora_registro;
 
-    @Column(columnDefinition = "TEXT")
-    private String manifestacion;
-
-    @Column(columnDefinition = "TEXT")
+    @Column(name="descripcion",columnDefinition = "TEXT")
     private String descripcion;
 
-    @Column(columnDefinition = "TEXT")
-    private String resultadoFinal;
-
-    @ManyToOne
-    @JoinColumn(name = "id_unidad", nullable = false)
-    private UnidadApoyo unidadApoyo;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "apoyo_policial", columnDefinition = "ENUM('Sí', 'No')")
+    private ApoyoPolicial apoyo_policial;
 
     @ManyToOne
     @JoinColumn(name = "id_usuario", nullable = false)
-    private Usuario usuario;
+    private Usuario user;
+
+    @OneToMany(mappedBy = "incidencia", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Agraviado> agraviados;
+
+    @OneToMany(mappedBy = "incidencia", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Infractor> infractores;
 
     @ManyToMany
     @JoinTable(
@@ -100,58 +90,37 @@ public class Incidencia {
     
 
     public Incidencia() {
+        urbanizaciones = new ArrayList<>();
+        servicios = new ArrayList<>();
+        delitos = new ArrayList<>();
+        infractores = new ArrayList<>();
+        agraviados = new ArrayList<>();
+        ocurrencias = new ArrayList<>();
+        intervenciones = new ArrayList<>();
     }
 
-    public Incidencia(int idIncidencia, String direccion, Date fecha, Date hora, String manifestacion, String descripcion, String resultadoFinal, UnidadApoyo unidadApoyo, Usuario usuario) {
+    public Incidencia(int idIncidencia, String direccion, LocalDateTime fecha_hora_incidencia, String descripcion, Usuario usuario) {
         this.idIncidencia = idIncidencia;
         this.direccion = direccion;
-        this.fecha = fecha;
-        this.hora = hora;
-        this.manifestacion = manifestacion;
+        this.fecha_hora_incidencia = fecha_hora_incidencia;
         this.descripcion = descripcion;
-        this.resultadoFinal = resultadoFinal;
-        this.unidadApoyo = unidadApoyo;
-        this.usuario = usuario;
+        this.user = usuario;
     }
 
-    public int getIdIncidencia() {
-        return idIncidencia;
+    public ApoyoPolicial getApoyo_policial() {
+        return apoyo_policial;
     }
 
-    public void setIdIncidencia(int idIncidencia) {
-        this.idIncidencia = idIncidencia;
+    public void setApoyo_policial(String apoyo_policial) {
+        this.apoyo_policial = ApoyoPolicial.valueOf(apoyo_policial);
     }
 
-    public String getDireccion() {
-        return direccion;
+    public List<Delito> getDelitos() {
+        return delitos;
     }
 
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
-    }
-
-    public Date getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
-    }
-
-    public Date getHora() {
-        return hora;
-    }
-
-    public void setHora(Date hora) {
-        this.hora = hora;
-    }
-
-    public String getManifestacion() {
-        return manifestacion;
-    }
-
-    public void setManifestacion(String manifestacion) {
-        this.manifestacion = manifestacion;
+    public void setDelitos(List<Delito> delitos) {
+        this.delitos = delitos;
     }
 
     public String getDescripcion() {
@@ -162,29 +131,99 @@ public class Incidencia {
         this.descripcion = descripcion;
     }
 
-    public String getResultadoFinal() {
-        return resultadoFinal;
+    public String getDireccion() {
+        return direccion;
     }
 
-    public void setResultadoFinal(String resultadoFinal) {
-        this.resultadoFinal = resultadoFinal;
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
 
-    public UnidadApoyo getUnidadApoyo() {
-        return unidadApoyo;
+    public LocalDateTime getFecha_hora_incidencia() {
+        return fecha_hora_incidencia;
     }
 
-    public void setUnidadApoyo(UnidadApoyo unidadApoyo) {
-        this.unidadApoyo = unidadApoyo;
+    public void setFecha_hora_incidencia(LocalDateTime fecha_hora_incidencia) {
+        this.fecha_hora_incidencia = fecha_hora_incidencia;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
+    public LocalDateTime getFecha_hora_registro() {
+        return fecha_hora_registro;
+    }
+
+    public void setFecha_hora_registro(LocalDateTime fecha_hora_registro) {
+        this.fecha_hora_registro = fecha_hora_registro;
+    }
+
+    public int getIdIncidencia() {
+        return idIncidencia;
+    }
+
+    public void setIdIncidencia(int idIncidencia) {
+        this.idIncidencia = idIncidencia;
+    }
+
+    public List<TipoIntervencion> getIntervenciones() {
+        return intervenciones;
+    }
+
+    public void setIntervenciones(List<TipoIntervencion> intervenciones) {
+        this.intervenciones = intervenciones;
+    }
+
+    public List<TipoOcurrencia> getOcurrencias() {
+        return ocurrencias;
+    }
+
+    public void setOcurrencias(List<TipoOcurrencia> ocurrencias) {
+        this.ocurrencias = ocurrencias;
+    }
+
+    public List<ServicioSerenazgo> getServicios() {
+        return servicios;
+    }
+
+    public void setServicios(List<ServicioSerenazgo> servicios) {
+        this.servicios = servicios;
+    }
+
+    public List<Urbanizacion> getUrbanizaciones() {
+        return urbanizaciones;
+    }
+
+    public void setUrbanizaciones(List<Urbanizacion> urbanizaciones) {
+        this.urbanizaciones = urbanizaciones;
+    }
+
+    public Usuario getUser() {
+        return user;
     }
 
     public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+        this.user = usuario;
     }
 
+    public enum ApoyoPolicial {
+        Sí, No
+    }
 
+    public List<Agraviado> getAgraviados() {
+        return agraviados;
+    }
+
+    public void setAgraviados(List<Agraviado> agraviados) {
+        this.agraviados = agraviados;
+    }
+
+    public List<Infractor> getInfractores() {
+        return infractores;
+    }
+
+    public void setInfractores(List<Infractor> infractores) {
+        this.infractores = infractores;
+    }
+
+    public void setUser(Usuario user) {
+        this.user = user;
+    }
 }

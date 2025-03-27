@@ -8,6 +8,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,7 +19,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "tipos_ocurrencia")
-public class TipoOcurrencia {
+public class TipoOcurrencia implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id_ocurrencia")
@@ -27,6 +30,10 @@ public class TipoOcurrencia {
 
     @ManyToMany(mappedBy = "ocurrencias")
     private List<Incidencia> incidencias;
+
+    public TipoOcurrencia() {
+        incidencias = new ArrayList<Incidencia>();
+    }
 
     public int getIdOcurrencia() {
         return idOcurrencia;

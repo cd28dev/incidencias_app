@@ -25,8 +25,6 @@ import javafx.scene.control.TableView;
  */
 public class UsuariosViewController extends ControllerHelper<Usuario> implements Initializable {
 
-
-
     private IUsuarioService userService;
     @FXML
     private TableView<Usuario> tabla;

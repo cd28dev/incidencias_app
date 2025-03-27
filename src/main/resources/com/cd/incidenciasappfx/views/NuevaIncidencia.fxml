@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="modalPane" prefHeight="500" prefWidth="700" styleClass="modal" stylesheets="@/com/cd/incidenciasappfx/styles/nuevousuario.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cd.incidenciasappfx.controllers.NuevaIncidenciaController">
+
+    <VBox alignment="CENTER" layoutX="20" layoutY="20" spacing="10" AnchorPane.topAnchor="0.0"
+          AnchorPane.bottomAnchor="0.0"
+          AnchorPane.leftAnchor="0.0"
+          AnchorPane.rightAnchor="0.0">
+        <Label fx:id="lblTitle" styleClass="modal-title" text="Nueva Incidencia" />
+        <Separator />
+        <!-- StackPane para manejar las secciones -->
+        <StackPane fx:id="stackPane" alignment="CENTER">
+
+            <VBox fx:id="sectionIncidencia" spacing="10" visible="false" StackPane.alignment="CENTER">
+                <GridPane alignment="CENTER" hgap="10" vgap="10">
+                    <TextField fx:id="idIncidencia" managed="false" visible="false" />
+                    <Label styleClass="form-label" text="Sector:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                    <ComboBox fx:id="cbSector" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                    <Label styleClass="form-label" text="Urbanizacion:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                    <ComboBox fx:id="cbUrbanizacion" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                    <Label styleClass="form-label" text="Dirección:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                    <TextField fx:id="txtDireccion" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+                    <Label styleClass="form-label" text="Fecha:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                    <DatePicker fx:id="dpFecha" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+                    <Label styleClass="form-label" text="Ocurrencia:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                    <ComboBox fx:id="cbOcurrencia" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+
+                    <Label styleClass="form-label" text="Intervención:" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                    <ComboBox fx:id="cbIntervencion" styleClass="form-field" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+
+                    <Label styleClass="form-label" text="Delito:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                    <ComboBox fx:id="cbDelito" styleClass="form-field" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+
+                    <Label styleClass="form-label" text="Descripcion:" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                    <TextArea fx:id="txtDescripcion" prefHeight="39.0" styleClass="form-field" GridPane.columnIndex="3" GridPane.rowIndex="2" GridPane.rowSpan="2" />
+
+                    <Label styleClass="form-label" text="¿Apoyo policial?:" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                    <HBox alignment="CENTER_LEFT" spacing="10" GridPane.columnIndex="3" GridPane.rowIndex="4">
+                        <RadioButton fx:id="rbSiApoyo" text="Sí"/>
+                        <RadioButton fx:id="rbNoApoyo" text="No"/>
+                    </HBox>
+
+
+                </GridPane>
+            </VBox>
+            <!-- Sección 2: Datos del Infractor -->
+            <VBox fx:id="sectionInfractor" prefHeight="192.0" prefWidth="658.0" spacing="10" visible="false" StackPane.alignment="CENTER">
+                <GridPane alignment="CENTER" hgap="10" vgap="10">
+                    <TextField fx:id="idInfractor" managed="false" visible="false" />
+                    <Label styleClass="form-label" text="DNI:" />
+                    <TextField fx:id="txtDniInfractor" styleClass="form-field" GridPane.columnIndex="1" />
+                    <Label styleClass="form-label" text="Nombres:" GridPane.rowIndex="1" />
+                    <TextField fx:id="txtNombresInfractor" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                    <Label styleClass="form-label" text="Apellidos:" GridPane.rowIndex="2" />
+                    <TextField fx:id="txtApellidosInfractor" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                    <Label styleClass="form-label" text="Teléfono:" GridPane.rowIndex="3" />
+                    <TextField fx:id="txtTelefonoInf" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                    <Label styleClass="form-label" text="Descargo:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                    <TextArea fx:id="txtDescargoInf" prefHeight="83.0" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="4" GridPane.rowSpan="2" />
+
+                    <Label styleClass="form-label" text="¿Existe agraviado?:" GridPane.columnIndex="0" GridPane.rowIndex="6" />
+                    <HBox alignment="CENTER_LEFT" spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                        <RadioButton fx:id="rbSiAgraviado" text="Sí"/>
+                        <RadioButton fx:id="rbNoAgraviado" text="No"/>
+                    </HBox>
+
+                </GridPane>
+
+            </VBox>
+            <!-- Sección 3: Datos del Agraviado -->
+            <VBox fx:id="sectionAgraviado" spacing="10" visible="true" StackPane.alignment="CENTER">
+                <GridPane alignment="CENTER" hgap="10" vgap="10">
+                    <TextField fx:id="idAgraviado" managed="false" visible="false" />
+                    <Label styleClass="form-label" text="DNI:" />
+                    <TextField fx:id="txtDniAgraviado" styleClass="form-field" GridPane.columnIndex="1" />
+                    <Label styleClass="form-label" text="Nombres:" GridPane.rowIndex="1" />
+                    <TextField fx:id="txtNombresAgraviado" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                    <Label styleClass="form-label" text="Apellidos:" GridPane.rowIndex="2" />
+                    <TextField fx:id="txtApellidosAgraviado" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                    <Label styleClass="form-label" text="Teléfono:" GridPane.rowIndex="3" />
+                    <TextField fx:id="txtTelefonoAgr" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                    <Label styleClass="form-label" text="Descargo:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                    <TextArea fx:id="txtDescargoAgr" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="4" GridPane.rowSpan="2" />
+
+                </GridPane>
+            </VBox>
+        </StackPane>
+        <Separator />
+        <HBox alignment="CENTER" spacing="20">
+            <Button fx:id="btnCancelar" onAction="#close" styleClass="btn-danger" text="Cancelar" />
+            <Button fx:id="btnAnterior" onAction="#volver" styleClass="btn-secondary" text="Atrás" />
+            <Button fx:id="btnSiguiente" onAction="#siguiente" styleClass="btn-azul" text="Siguiente" />
+            <Button fx:id="btnGuardar" onAction="#save" styleClass="btn-primary" text="Guardar" />
+        </HBox>
+
+    </VBox>
+</AnchorPane>

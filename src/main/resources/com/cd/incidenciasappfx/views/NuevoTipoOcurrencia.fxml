@@ -11,7 +11,11 @@
             styleClass="modal"
             fx:controller="com.cd.incidenciasappfx.controllers.NuevoTipoOcuController">
 
-    <VBox spacing="10" alignment="CENTER" layoutX="20" layoutY="20">
+    <VBox spacing="10" alignment="CENTER"
+          AnchorPane.topAnchor="0"
+          AnchorPane.bottomAnchor="0"
+          AnchorPane.leftAnchor="0"
+          AnchorPane.rightAnchor="0">
         <Label fx:id="lblTitle" text="Nuevo T.Ocurrencia" styleClass="modal-title">
             <graphic>
                 <ImageView fx:id="iconIndex" styleClass="icon-style">
@@ -19,7 +23,7 @@
                 </ImageView>
             </graphic>
         </Label>
-
+        <Separator />
         <GridPane hgap="10" vgap="10" alignment="CENTER">
             <TextField fx:id="id" visible="false" managed="false"/>
 
@@ -28,7 +32,7 @@
         </GridPane>
 
         <Region prefHeight="20"/>
-
+        <Separator />
         <HBox spacing="15" alignment="CENTER">
             <Button text="Guardar" fx:id="btnGuardar" styleClass="btn-primary" prefWidth="100" onAction="#save"/>
             <Button text="Cancelar" fx:id="btnCancelar" styleClass="btn-danger" prefWidth="100" onAction="#closeWindow"/>

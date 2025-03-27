@@ -1,13 +1,14 @@
 /* Estilo del modal */
-.modal {
-    -fx-background-color: white;
-    -fx-padding: 20px;
-    -fx-border-color: #888;  /* Cambia el color del borde */
-    -fx-border-width: 1px;   /* Grosor del borde */
+/* Estilos generales del modal */
+.modal{
+    -fx-background-color: #F9FAFB;
     -fx-border-radius: 12px;
     -fx-background-radius: 12px;
-    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.15), 10, 0, 0, 4);
+    -fx-border-color: rgba(0, 0, 0, 0.16);
+    -fx-padding: 20px;
+    -fx-background-insets: 0, 0, 20, 20;
 }
+
 
 /* Título del modal */
 .modal-title {
@@ -25,7 +26,7 @@
 }
 
 /* Campos de entrada */
-.form-field {
+.form-field, .text-area {
     -fx-pref-width: 220px;
     -fx-padding: 8px;
     -fx-border-color: #d1d5db;
@@ -37,7 +38,7 @@
 }
 
 /* Efecto al hacer clic en el campo */
-.form-field:focused {
+.form-field:focused, .text-area:focused {
     -fx-border-color: #4A90E2;
     -fx-background-color: white;
     -fx-effect: dropshadow(three-pass-box, rgba(74, 144, 226, 0.2), 8, 0, 0, 3);
@@ -46,19 +47,25 @@
 /* Botón verde moderno */
 .btn-primary {
     -fx-background-color: #4CAF50;
-    -fx-text-fill: white;
-    -fx-padding: 10px 20px;
-    -fx-border-radius: 6px;
-    -fx-background-radius: 6px;
-    -fx-font-size: 14px;
-    -fx-font-weight: bold;
-    -fx-cursor: hand;
-    -fx-transition: 0.3s;
-    -fx-margin: 20px 0 0 0; /* Agrega margen arriba (10px) */
 }
 
+/* Botón azul */
 .btn-azul {
     -fx-background-color: #0d6efd;
+}
+/* Botón gris */
+.btn-secondary {
+    -fx-background-color: #a4a1a1 !important;
+}
+
+/* Botón rojo moderno */
+.btn-danger {
+    -fx-background-color: #E53935;
+}
+
+
+/* Botones generales */
+.btn-primary, .btn-azul, .btn-danger, .btn-secondary {
     -fx-text-fill: white;
     -fx-padding: 8px 16px;
     -fx-border-radius: 6px;
@@ -69,53 +76,50 @@
 }
 
 
-/* Efecto hover para el botón guardar */
-.btn-azul:hover {
-    -fx-background-color: #0b5ed7;
-}
 
-
-
-/* Efecto hover para el botón guardar */
-.btn-primary:hover {
-    -fx-background-color: #388E3C;
+/* Efectos hover en botones */
+.btn-primary:hover, .btn-azul:hover, .btn-danger:hover,.btn-secondary:hover {
     -fx-effect: dropshadow(three-pass-box, rgba(56, 142, 60, 0.3), 8, 0, 0, 3);
 }
 
-/* Botón rojo moderno */
-.btn-danger {
-    -fx-background-color: #E53935;
-    -fx-text-fill: white;
-    -fx-padding: 10px 20px;
-    -fx-border-radius: 6px;
-    -fx-background-radius: 6px;
-    -fx-font-size: 14px;
-    -fx-font-weight: bold;
-    -fx-cursor: hand;
-    -fx-transition: 0.3s;
-}
-
-/* Efecto hover para el botón cancelar */
-.btn-danger:hover {
-    -fx-background-color: #C62828;
-    -fx-effect: dropshadow(three-pass-box, rgba(198, 40, 40, 0.3), 8, 0, 0, 3);
-}
+/* Efecto hover específico para cada color */
+.btn-primary:hover { -fx-background-color: #388E3C; }
+.btn-azul:hover { -fx-background-color: #0b5ed7; }
+.btn-danger:hover { -fx-background-color: #C62828; }
+.btn-secondary:hover { -fx-background-color: #6c757d; }
 
 /* Efecto en los botones al hacer clic */
-.btn-primary:pressed, .btn-danger:pressed {
+.btn-primary:pressed, .btn-danger:pressed, .btn-azul:pressed, .btn-secondary:pressed {
     -fx-scale-x: 0.97;
     -fx-scale-y: 0.97;
 }
 
-.icon-style {
-    -fx-fit-width: 25px;  /* Establece el ancho de la imagen */
-    -fx-fit-height: 25px; /* Establece la altura de la imagen */
-    -fx-preserve-ratio: true;  /* Mantiene las proporciones de la imagen */
+/* Checkbox estilizado */
+.check-box {
+    -fx-cursor: hand;
+    -fx-text-fill: #444;
+    -fx-font-size: 13px;
 }
 
+/* Estilos para imágenes */
+.icon-style {
+    -fx-fit-width: 25px;
+    -fx-fit-height: 25px;
+    -fx-preserve-ratio: true;
+}
+
+/* Asegurar que las imágenes de perfil sean redondas */
 .image-preview {
     -fx-border-radius: 50%;
     -fx-background-radius: 50%;
     -fx-border-color: #ccc;
     -fx-border-width: 2px;
+    /*-fx-clip: ellipse(50% 50% at 50% 50%);*/
 }
+
+.hbox-buttons {
+    -fx-alignment: CENTER;
+
+}
+
+

@@ -10,6 +10,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -20,7 +23,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "sectores")
-public class Sector {
+public class Sector implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_sector")
@@ -33,7 +36,9 @@ public class Sector {
     private List<Urbanizacion> urbanizaciones;
 
     // Constructores, getters y setters
-    public Sector() {}
+    public Sector() {
+        urbanizaciones = new ArrayList<Urbanizacion>();
+    }
 
     public Sector(String nombre) {
         this.nombre = nombre;

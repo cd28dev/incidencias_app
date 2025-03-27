@@ -204,15 +204,15 @@ select*from roles;
 
 DELIMITER $$
 
-CREATE PROCEDURE `sp_listar_delitos`()
+CREATE PROCEDURE `sp_listar_tipos_ocurrencia`()
 BEGIN
     -- Retornar una lista vacía si no hay delitos
-    IF (SELECT COUNT(*) FROM delitos) = 0 THEN
-        SELECT NULL AS id_delito, NULL AS nombre
+    IF (SELECT COUNT(*) FROM tipos_ocurrencia) = 0 THEN
+        SELECT NULL AS id_ocurrencia, NULL AS nombre
         FROM DUAL WHERE FALSE; -- Retorna 0 filas sin lanzar error
     ELSE
         -- Retornar la lista de roles
-        SELECT id_delito, nombre FROM delitos;
+        SELECT id_ocurrencia, nombre FROM tipos_ocurrencia;
     END IF;
 END $$
 
@@ -256,22 +256,22 @@ DELIMITER ;
 
 DELIMITER $$
 
-CREATE PROCEDURE sp_insertar_delito(
+CREATE PROCEDURE sp_insertar_tOcurrencia(
     IN p_nombre VARCHAR(50)
 )
 BEGIN
-    DECLARE delito_existe INT;
+    DECLARE tOcurrencia_existe INT;
     
 	START TRANSACTION;
     
-    SELECT COUNT(*) INTO delito_existe FROM delitos WHERE nombre = p_nombre;
+    SELECT COUNT(*) INTO tOcurrencia_existe FROM tipos_ocurrencia WHERE nombre = p_nombre;
     
-    IF delito_existe > 0 THEN
+    IF tOcurrencia_existe > 0 THEN
 		ROLLBACK;
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'El delito ya existe';
+        SET MESSAGE_TEXT = 'El tipo de ocurrencia ya existe';
     ELSE
-        INSERT INTO delitos (nombre) VALUES (p_nombre);
+        INSERT INTO tipos_ocurrencia (nombre) VALUES (p_nombre);
         COMMIT;
     END IF;
 END $$
@@ -281,56 +281,56 @@ DELIMITER ;
 
 DELIMITER $$
 
-CREATE PROCEDURE sp_buscar_delito_por_id(
-    IN p_idDelito INT
+CREATE PROCEDURE sp_buscar_tOcurrencia_por_id(
+    IN p_idTipoOcurrencia INT
 )
 BEGIN
-    SELECT id_delito, nombre
-    FROM delitos
-    WHERE id_delito = p_idDelito;
+    SELECT id_ocurrencia, nombre
+    FROM tipos_ocurrencia
+    WHERE id_ocurrencia = p_idTipoOcurrencia;
 END $$
 
 DELIMITER ;
 
 DELIMITER $$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_actualizar_Delito`(
-    IN p_idDelito INT,
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_actualizar_tipo_ocurrencia`(
+    IN p_idTipoOcurrencia INT,
     IN p_nombre VARCHAR(50)
 )
 BEGIN
-    DECLARE delito_existe INT;
+    DECLARE tipo_ocurrencia_existe INT;
     DECLARE nombre_duplicado INT;
 
     START TRANSACTION;
 
     -- Verificar si el rol a actualizar existe
-    SELECT COUNT(*) INTO delito_existe FROM delitos WHERE id_delito = p_idDelito;
+    SELECT COUNT(*) INTO tipo_ocurrencia_existe FROM tipos_ocurrencia WHERE id_ocurrencia = p_idTipoOcurrencia;
 
     -- Verificar si el nuevo nombre ya está en uso por otro rol
-    SELECT COUNT(*) INTO nombre_duplicado FROM delitos WHERE nombre = p_nombre AND id_delito != p_idDelito;
+    SELECT COUNT(*) INTO nombre_duplicado FROM tipos_ocurrencia WHERE nombre = p_nombre AND id_ocurrencia != p_idTipoOcurrencia;
 
     -- Validaciones
-    IF delito_existe = 0 THEN
+    IF tipo_ocurrencia_existe = 0 THEN
         ROLLBACK;
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Error: El delito especificado no existe';
+        SET MESSAGE_TEXT = 'Error: El tipo de ocurrencia especificado no existe';
 
     ELSEIF nombre_duplicado > 0 THEN
         ROLLBACK;
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Error: El nombre del rol ya está en uso';
+        SET MESSAGE_TEXT = 'Error: El nombre del tipo ya está en uso';
 
     ELSE
         -- Actualizar rol
-        UPDATE delitos
+        UPDATE tipos_ocurrencia
         SET nombre = p_nombre
-        WHERE id_delito = p_idDelito;
+        WHERE id_ocurrencia = p_idTipoOcurrencia;
 
         COMMIT;
 
         -- Retornar los datos actualizados del rol
-        SELECT id_Delito, nombre FROM delitos WHERE id_delito = p_idDelito;
+        SELECT id_ocurrencia, nombre FROM tipos_ocurrencia WHERE id_ocurrencia = p_idTipoOcurrencia;
     END IF;
 END $$
 
@@ -338,8 +338,8 @@ DELIMITER ;
 
 DELIMITER $$
 
-CREATE PROCEDURE sp_eliminar_delito(
-    IN p_id_delito INT,
+CREATE PROCEDURE sp_eliminar_tipo_ocurrencia(
+    IN p_id_tipo_ocurrencia INT,
     OUT p_resultado INT
 )
 BEGIN
@@ -356,11 +356,11 @@ BEGIN
     START TRANSACTION;
 
     -- Verificar si el rol existe
-    SELECT COUNT(*) INTO v_existe FROM delitos WHERE id_delito = p_id_delito;
+    SELECT COUNT(*) INTO v_existe FROM tipos_ocurrencia WHERE id_ocurrencia = p_id_tipo_ocurrencia;
 
     IF v_existe > 0 THEN
         -- Eliminar el rol
-        DELETE FROM delitos WHERE id_delito = p_id_delito;
+        DELETE FROM tipos_ocurrencia WHERE id_ocurrencia = p_id_tipo_ocurrencia;
         
         -- Confirmar eliminación
         COMMIT;
@@ -543,48 +543,34 @@ DELIMITER ;
 
 DELIMITER $$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_insertar_urbanizacion`(
-    IN p_nombre VARCHAR(50),
-    IN p_id_sector INT
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_insertar_servicioserenazgo`(
+    IN p_nombre VARCHAR(50)
 )
 BEGIN
-    DECLARE urbanizacion_existe INT;
-    DECLARE sector_existe INT;
+    DECLARE ss_existe INT;
     
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
         -- Si ocurre un error, se revierte la transacción
         ROLLBACK;
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Error al insertar la urbanización';
+        SET MESSAGE_TEXT = 'Error al insertar el servicio de serenazgo';
     END;
 
     START TRANSACTION;
     
     -- Verificar si el sector existe
-    SELECT COUNT(*) INTO sector_existe FROM sectores WHERE id_sector = p_id_sector;
+    SELECT COUNT(*) INTO ss_existe FROM servicios_serenazgo WHERE nombre = p_nombre;
     
-    IF sector_existe = 0 THEN
+    IF ss_existe > 0 THEN
         ROLLBACK;
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'El sector especificado no existe';
-    END IF;
-
-    -- Verificar si ya existe una urbanización con el mismo nombre en el sector
-    SELECT COUNT(*) INTO urbanizacion_existe 
-    FROM urbanizaciones 
-    WHERE nombre = p_nombre AND id_sector = p_id_sector FOR UPDATE;
-    
-    IF urbanizacion_existe > 0 THEN
-        -- Si la urbanización ya existe, se revierte la transacción
-        ROLLBACK;
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'La urbanización ya existe en este sector';
-    ELSE
-        -- Insertar la nueva urbanización
-        INSERT INTO urbanizaciones (nombre, id_sector) VALUES (p_nombre, p_id_sector);
+        SET MESSAGE_TEXT = 'El servicio especificado ya existe';
+     ELSE
+        INSERT INTO servicios_serenazgo (nombre) VALUES (p_nombre);
         COMMIT;
     END IF;
+   
 END $$
 
 DELIMITER ;
@@ -697,6 +683,249 @@ BEGIN
     FROM urbanizaciones as u
     INNER JOIN sectores as s ON u.id_sector=s.id_sector
     WHERE u.id_urbanizacion = u.p_id_urbanizacion;
+    
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_buscar_servicio_por_id`(
+    IN p_id_ss INT
+)
+BEGIN
+    SELECT id_servicio, nombre
+    FROM servicios_serenazgo
+    WHERE id_servicio = p_id_ss;
+END $$
+
+DELIMITER ;
+
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_insertar_servicio`(
+    IN p_nombre VARCHAR(50)
+)
+BEGIN
+    DECLARE tOcurrencia_existe INT;
+    
+	START TRANSACTION;
+    
+    SELECT COUNT(*) INTO tOcurrencia_existe FROM tipos_ocurrencia WHERE nombre = p_nombre;
+    
+    IF tOcurrencia_existe > 0 THEN
+		ROLLBACK;
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'El tipo de ocurrencia ya existe';
+    ELSE
+        INSERT INTO tipos_ocurrencia (nombre) VALUES (p_nombre);
+        COMMIT;
+    END IF;
+END $$
+
+DELIMITER ; 
+
+
+
+DELIMITER $$ 
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_listar_servicios`()
+BEGIN
+    -- Retornar una lista vacía si no hay delitos
+    IF (SELECT COUNT(*) FROM servicios_serenazgo) = 0 THEN
+        SELECT NULL AS id_servicio, NULL AS nombre
+        FROM DUAL WHERE FALSE; -- Retorna 0 filas sin lanzar error
+    ELSE
+        -- Retornar la lista de roles
+        SELECT id_servicio, nombre FROM servicios_serenazgo;
+    END IF;
+END $$
+
+DELIMITER ; 
+
+DELIMITER $$ 
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_actualizar_servicios`(
+    IN p_id_servicios INT,
+    IN p_nombre VARCHAR(50)
+)
+BEGIN
+    DECLARE nombre_duplicado INT;
+
+    START TRANSACTION;
+
+    -- Verificar si el nuevo nombre ya está en uso por otro rol
+    SELECT COUNT(*) INTO nombre_duplicado FROM servicios_serenazgo WHERE nombre = p_nombre;
+
+    -- Validaciones
+	IF nombre_duplicado > 0 THEN
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Error: El nombre del tipo ya está en uso';
+
+    ELSE
+        -- Actualizar rol
+        UPDATE servicios_serenazgo
+        SET nombre = p_nombre
+        WHERE id_servicio = p_id_servicios;
+
+        COMMIT;
+        -- Retornar los datos actualizados del rol
+        SELECT id_servicio, nombre FROM servicios_serenazgo WHERE id_servicio = p_id_servicios;
+    END IF;
+END $$
+
+DELIMITER ; 
+
+
+
+DELIMITER $$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_eliminar_servicio`(
+    IN p_id_servicio INT,
+    OUT p_resultado INT
+)
+BEGIN
+    DECLARE v_existe INT DEFAULT 0;
+
+    -- Manejar errores de SQL
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION 
+    BEGIN
+        ROLLBACK;
+        SET p_resultado = -1; -- Error al eliminar
+    END;
+
+    -- Iniciar la transacción
+    START TRANSACTION;
+
+    -- Verificar si el rol existe
+    SELECT COUNT(*) INTO v_existe FROM servicios_serenazgo WHERE id_servicio = p_id_servicio;
+
+    IF v_existe > 0 THEN
+        -- Eliminar el rol
+        DELETE FROM servicios_serenazgo WHERE id_servicio = p_id_servicio;
+        
+        -- Confirmar eliminación
+        COMMIT;
+        SET p_resultado = 1; -- Eliminado correctamente
+    ELSE
+        -- Si no existe, deshacer la transacción
+        ROLLBACK;
+        SET p_resultado = 0; -- No encontrado
+    END IF;
+
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `buscar_usuario_por_email`(
+    IN p_email VARCHAR(20)
+)
+BEGIN
+    SELECT u.id_usuario,u.usuario, u.nombre, u.apellido, u.dni, u.correo, u.id_rol,r.nombre,u.foto AS rol
+    FROM usuarios u
+    JOIN roles r ON u.id_rol = r.id_rol
+    WHERE u.email = p_email;
+END $$
+
+DELIMITER ;
+
+
+DELIMITER $$
+
+
+
+DELIMITER ;
+
+
+DELIMITER $$
+CREATE PROCEDURE sp_registrar_persona_inf(
+    IN p_nombre_inf VARCHAR(100),
+    IN p_apellidos_inf VARCHAR(100),
+    IN p_doc CHAR(15),
+    IN p_telefono_inf CHAR(9),
+    IN p_observacion_inf TEXT,
+    IN p_id_incidencia INT
+)
+BEGIN 
+	DECLARE persona_existe INT;
+    DECLARE id_person INT;
+    
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+    BEGIN
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'Error al registrar infractor.';
+    END;
+    
+    SELECT COUNT(*) 
+    INTO persona_existe 
+    FROM personas 
+    WHERE n_doc = p_doc;
+
+    START TRANSACTION;
+    IF persona_existe>0 THEN
+		SELECT id_persona
+        INTO id_person
+        FROM personas
+        WHERE n_doc = p_doc;
+	ELSE
+		INSERT INTO personas(nombres,apellidos,n_doc,telefono)
+		VALUES(p_nombre_inf,p_apellidos_inf,p_doc,p_telefono_inf);
+		SET id_person = LAST_INSERT_ID();
+    END IF;
+    
+    INSERT INTO infractores(id_persona,id_incidencia,observaciones)
+    VALUES (id_person,p_id_incidencia,p_observacion_inf);
+    COMMIT;
+END $$
+
+DELIMITER 
+
+
+DELIMITER $$
+
+CREATE PROCEDURE sp_registrar_persona_agr(
+    IN p_nombre_agr VARCHAR(100),
+    IN p_apellidos_agr VARCHAR(100),
+    IN p_doc CHAR(15),
+    IN p_telefono_agr CHAR(9),
+    IN p_observacion_agr TEXT,
+    IN p_id_incidencia INT
+)
+BEGIN 
+	DECLARE persona_existe INT;
+    DECLARE id_person INT;
+    
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+    BEGIN
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'Error al registrar agraviado.';
+    END;
+    
+    SELECT COUNT(*) 
+    INTO persona_existe 
+    FROM personas 
+    WHERE n_doc = p_doc;
+
+    START TRANSACTION;
+    IF persona_existe>0 THEN
+		SELECT id_persona
+        INTO id_person
+        FROM personas
+        WHERE n_doc = p_doc;
+	ELSE
+		INSERT INTO personas(nombres,apellidos,n_doc,telefono)
+		VALUES(p_nombre_agr,p_apellidos_agr,p_doc,p_telefono_agr);
+		SET id_person = LAST_INSERT_ID();
+    END IF;
+    
+    INSERT INTO agraviados(id_persona,id_incidencia,observaciones)
+    VALUES (id_person,p_id_incidencia,p_observacion_agr);
+    COMMIT;
 END $$
 
 DELIMITER ;

@@ -17,6 +17,7 @@
 
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.layout.Pane?>
 <StackPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="com.cd.incidenciasappfx.controllers.PrincipalController"
            stylesheets="@/com/cd/incidenciasappfx/styles/style.css">
@@ -44,7 +45,7 @@
                     </ImageView>
                 </graphic>
             </Label>
-            <Label fx:id="lblIncidencias" text="Incidencias" styleClass="sidebar-item">
+            <Label fx:id="lblIncidencias" text="Incidencias" styleClass="sidebar-item" onMouseClicked="#handleIncidencias">
                 <graphic>
                     <ImageView fx:id="iconIncidencia" styleClass="icon-style">
                         <Image url="@/com/cd/incidenciasappfx/images/advertencia.png" />
@@ -172,7 +173,7 @@
                         <Image url="@/com/cd/incidenciasappfx/images/password.png"/>
                     </ImageView>
                     <PasswordField fx:id="txtPassword" promptText="Ingrese su contraseña" styleClass="password-field"/>
-                </HBox>juan
+                </HBox>
 
                 <!-- Opciones extra -->
                 <HBox spacing="10" alignment="CENTER" maxWidth="350">

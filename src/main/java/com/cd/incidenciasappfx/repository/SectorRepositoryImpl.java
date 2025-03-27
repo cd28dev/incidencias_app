@@ -33,7 +33,7 @@ public class SectorRepositoryImpl implements ISectorRepository {
         } catch (jakarta.persistence.PersistenceException e) {
             handleSQLException(e);
         } finally {
-            em.close(); // 🔥 Cerramos el EntityManager después de cada operación
+            em.close();
         }
 
         return sectores;
@@ -52,7 +52,7 @@ public class SectorRepositoryImpl implements ISectorRepository {
             handleSQLException(e);
             return Optional.empty();
         } finally {
-            em.close(); // 🔥 Importante cerrar
+            em.close();
         }
     }
 

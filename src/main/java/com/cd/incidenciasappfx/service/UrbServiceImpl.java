@@ -67,4 +67,9 @@ public class UrbServiceImpl implements IUrbService {
         return urbRepository.delete(id);
     }
 
+    @Override
+    public List<Urbanizacion> findBySector(String nameSector){
+        return  urbRepository.findBySector(nameSector);
+    }
+
 }

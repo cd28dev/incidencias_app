@@ -158,7 +158,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
-                <version>3.8.1</version> <!-- O la más reciente -->
+                <version>3.1.3</version> <!-- O la más reciente -->
             </plugin>
 
             <!-- Plugin para ejecutar JavaFX -->
@@ -176,8 +176,6 @@
                 </executions>
                 <configuration>
                     <mainClass>com.cd.incidenciasappfx.App</mainClass>
-                    <modulePath>${java.home}/jmods</modulePath>
-                    <addModules>javafx.controls,javafx.fxml</addModules>
                 </configuration>
             </plugin>
 

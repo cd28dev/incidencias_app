@@ -23,4 +23,6 @@ public interface IUrbRepository {
     Optional<Urbanizacion> update(Urbanizacion u);
 
     boolean delete(int id);
+
+    List<Urbanizacion> findBySector(String nameSector);
 }
