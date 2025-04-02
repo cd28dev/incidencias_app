@@ -3,7 +3,10 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="modalPane" prefHeight="500" prefWidth="700" styleClass="modal" stylesheets="@/com/cd/incidenciasappfx/styles/nuevousuario.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cd.incidenciasappfx.controllers.NuevaIncidenciaController">
+<AnchorPane fx:id="modalPane" prefHeight="500" prefWidth="700"
+            styleClass="modal" stylesheets="@/com/cd/incidenciasappfx/styles/nuevousuario.css"
+            xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.cd.incidenciasappfx.controllers.NuevaIncidenciaController">
 
     <VBox alignment="CENTER" layoutX="20" layoutY="20" spacing="10" AnchorPane.topAnchor="0.0"
           AnchorPane.bottomAnchor="0.0"
@@ -32,6 +35,9 @@
                     <Label styleClass="form-label" text="Ocurrencia:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
                     <ComboBox fx:id="cbOcurrencia" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="4" />
 
+                    <Label styleClass="form-label" text="Servicio:" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+                    <ComboBox fx:id="cbServicio" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+
                     <Label styleClass="form-label" text="Intervención:" GridPane.columnIndex="2" GridPane.rowIndex="0" />
                     <ComboBox fx:id="cbIntervencion" styleClass="form-field" GridPane.columnIndex="3" GridPane.rowIndex="0" />
 
@@ -39,11 +45,11 @@
                     <ComboBox fx:id="cbDelito" styleClass="form-field" GridPane.columnIndex="3" GridPane.rowIndex="1" />
 
                     <Label styleClass="form-label" text="Descripcion:" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                    <TextArea fx:id="txtDescripcion" prefHeight="39.0" styleClass="form-field" GridPane.columnIndex="3" GridPane.rowIndex="2" GridPane.rowSpan="2" />
+                    <TextArea fx:id="txtDescripcion" wrapText="true" prefHeight="39.0" styleClass="form-field" GridPane.columnIndex="3" GridPane.rowIndex="2" GridPane.rowSpan="2" />
 
                     <Label styleClass="form-label" text="¿Apoyo policial?:" GridPane.columnIndex="2" GridPane.rowIndex="4" />
                     <HBox alignment="CENTER_LEFT" spacing="10" GridPane.columnIndex="3" GridPane.rowIndex="4">
-                        <RadioButton fx:id="rbSiApoyo" text="Sí"/>
+                        <RadioButton fx:id="rbSiApoyo" text="Si"/>
                         <RadioButton fx:id="rbNoApoyo" text="No"/>
                     </HBox>
 
@@ -63,11 +69,11 @@
                     <Label styleClass="form-label" text="Teléfono:" GridPane.rowIndex="3" />
                     <TextField fx:id="txtTelefonoInf" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                     <Label styleClass="form-label" text="Descargo:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
-                    <TextArea fx:id="txtDescargoInf" prefHeight="83.0" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="4" GridPane.rowSpan="2" />
+                    <TextArea fx:id="txtDescargoInf" wrapText="true" prefHeight="83.0" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="4" GridPane.rowSpan="2" />
 
                     <Label styleClass="form-label" text="¿Existe agraviado?:" GridPane.columnIndex="0" GridPane.rowIndex="6" />
                     <HBox alignment="CENTER_LEFT" spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="6">
-                        <RadioButton fx:id="rbSiAgraviado" text="Sí"/>
+                        <RadioButton fx:id="rbSiAgraviado" text="Si"/>
                         <RadioButton fx:id="rbNoAgraviado" text="No"/>
                     </HBox>
 
@@ -87,7 +93,7 @@
                     <Label styleClass="form-label" text="Teléfono:" GridPane.rowIndex="3" />
                     <TextField fx:id="txtTelefonoAgr" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                     <Label styleClass="form-label" text="Descargo:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
-                    <TextArea fx:id="txtDescargoAgr" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="4" GridPane.rowSpan="2" />
+                    <TextArea wrapText="true" fx:id="txtDescargoAgr" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="4" GridPane.rowSpan="2" />
 
                 </GridPane>
             </VBox>

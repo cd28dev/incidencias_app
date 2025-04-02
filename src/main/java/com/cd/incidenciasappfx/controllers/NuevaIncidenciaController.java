@@ -1,222 +1,90 @@
 package com.cd.incidenciasappfx.controllers;
 
+import com.cd.incidenciasappfx.helper.AlertHelper;
 import com.cd.incidenciasappfx.helper.ModalControllerHelper;
 import com.cd.incidenciasappfx.models.*;
 import com.cd.incidenciasappfx.service.*;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
-import java.util.List;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public class NuevaIncidenciaController extends ModalControllerHelper<Incidencia> {
 
-    @FXML private RadioButton rbSiApoyo;
-    @FXML private RadioButton rbNoApoyo;
     public ToggleGroup groupApoyo;
     public ToggleGroup groupAgraviado;
+
+    private RadioButton selectedRadioButton;
     @FXML private RadioButton rbSiAgraviado;
     @FXML private RadioButton rbNoAgraviado;
-    @FXML private ComboBox<String> cbSector;
-    @FXML private ComboBox<String> cbUrbanizacion;
+    @FXML private RadioButton rbSiApoyo;
+    @FXML private RadioButton rbNoApoyo;
+
+    @FXML private ComboBox<Sector> cbSector;
+    @FXML private ComboBox<ServicioSerenazgo> cbServicio;
+    @FXML private ComboBox<Urbanizacion> cbUrbanizacion;
+    @FXML private ComboBox<TipoOcurrencia> cbOcurrencia;
+    @FXML private ComboBox<TipoIntervencion> cbIntervencion;
+    @FXML private ComboBox<Delito> cbDelito;
+
     @FXML private TextArea txtDescripcion;
-    @FXML private TextField txtTelefonoInf;
-    @FXML private TextField txtTelefonoAgr;
-    @FXML private Button btnAnterior;
-    @FXML private Button btnSiguiente;
-    @FXML private TextField idAgraviado;
     @FXML private TextArea txtDescargoInf;
     @FXML private TextArea txtDescargoAgr;
-    @FXML private TextField idInfractor;
-    @FXML private TextField idIncidencia;
+
+    @FXML private Button btnAnterior;
+    @FXML private Button btnSiguiente;
+
     @FXML private VBox sectionIncidencia;
     @FXML private VBox sectionInfractor;
     @FXML private VBox sectionAgraviado;
     @FXML private AnchorPane modalPane;
     @FXML private StackPane stackPane;
-    @FXML private TextField txtDireccion;
+
     @FXML private DatePicker dpFecha;
-    @FXML private ComboBox<String> cbOcurrencia;
-    @FXML private ComboBox<String> cbIntervencion;
-    @FXML private ComboBox<String> cbDelito;
+
     @FXML private TextField txtDniInfractor;
     @FXML private TextField txtNombresInfractor;
     @FXML private TextField txtApellidosInfractor;
-    @FXML private CheckBox chkAgraviado;
     @FXML private TextField txtDniAgraviado;
     @FXML private TextField txtNombresAgraviado;
     @FXML private TextField txtApellidosAgraviado;
-    @FXML private Button btnGuardar;
+    @FXML private TextField txtTelefonoInf;
+    @FXML private TextField txtTelefonoAgr;
+    @FXML private TextField idInfractor;
+    @FXML private TextField idIncidencia;
+    @FXML private TextField txtDireccion;
+    @FXML private TextField idAgraviado;
 
     private IIncidenciaService incidenciaService;
     private IncidenciasController incidenciasController;
-    private ISectorService sectorService;
-    private ITipoOcurrenciaService ocurrenciaService;
-    private ITipoIntService intervencionService;
-    private IDelitoService delitoService;
-    private IUrbService urbService;
+    private final ISectorService sectorService;
+    private final ITipoOcurrenciaService ocurrenciaService;
+    private final ITipoIntService intervencionService;
+    private final IDelitoService delitoService;
+    private final IUrbService urbService;
+    private final IServiciosService serviciosService;
 
-    public NuevaIncidenciaController() {}
-
-    @FXML
-    public void initialize() {
+    public NuevaIncidenciaController() {
         incidenciaService = new IncidenciaServiceImpl();
         sectorService = new SectorServiceImpl();
         ocurrenciaService = new TipoOcurrenciaServiceImpl();
         intervencionService = new TipoIntServiceImpl();
         delitoService = new DelitoServiceImpl();
         urbService = new UrbServiceImpl();
-        sectionInicial();
-        btnInicial();
-        cargarSector();
-        cargarOcurrencias();
-        cargarIntervenciones();
-        cargarDelitos();
-        addListeners();
+        serviciosService = new ServicioServiceImpl();
     }
 
-    private void btnInicial() {
-        btnAnterior.setDisable(true);
-        btnGuardar.setDisable(true);
-        btnSiguiente.setDisable(true);
-        btnSiguiente.setDisable(true);
-        btnCancelar.setDisable(false);
-        groupApoyo = new ToggleGroup();
-        rbSiApoyo.setToggleGroup(groupApoyo);
-        rbNoApoyo.setToggleGroup(groupApoyo);
-        groupAgraviado = new ToggleGroup();
-        rbSiAgraviado.setToggleGroup(groupAgraviado);
-        rbNoAgraviado.setToggleGroup(groupAgraviado);
-        
-    }
-
-    private void sectionInicial(){
-        sectionIncidencia.setVisible(true);
-        sectionInfractor.setVisible(false);
-        sectionAgraviado.setVisible(false);
-    }
-
-    private void addListeners() {
-        if(sectionIncidencia.isVisible()) {
-            cbSector.valueProperty().addListener((obs, oldVal, newVal) -> validarCampos());
-            cbUrbanizacion.valueProperty().addListener((obs, oldVal, newVal) -> validarCampos());
-            cbDelito.valueProperty().addListener((obs, oldVal, newVal) -> validarCampos());
-            cbIntervencion.valueProperty().addListener((obs, oldVal, newVal) -> validarCampos());
-            cbOcurrencia.valueProperty().addListener((obs, oldVal, newVal) -> validarCampos());
-            txtDescripcion.textProperty().addListener((obs, oldVal, newVal) -> validarCampos());
-            txtDireccion.textProperty().addListener((obs, oldVal, newVal) -> validarCampos());
-            dpFecha.valueProperty().addListener((obs, oldVal, newVal) -> validarCampos());
-            groupApoyo.selectedToggleProperty().addListener((obs, oldVal, newVal) -> validarCampos());
-
-            cbSector.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-                if (newValue != null) {
-                    cargarUrbanizaciones(newValue);
-                }
-            });
-        }else if(sectionInfractor.isVisible()) {
-            txtDniInfractor.textProperty().addListener((obs, oldVal, newVal) -> validarCampos());
-            txtNombresInfractor.textProperty().addListener((obs, oldVal, newVal) -> validarCampos());
-            txtTelefonoInf.textProperty().addListener((obs, oldVal, newVal) -> validarCampos());
-            txtApellidosInfractor.textProperty().addListener((obs, oldVal, newVal) -> validarCampos());
-            txtDescargoInf.textProperty().addListener((obs, oldVal, newVal) -> validarCampos());
-            groupAgraviado.selectedToggleProperty().addListener((obs, oldVal, newVal) -> validarCampos());
-
-        }else if(sectionAgraviado.isVisible()) {
-            txtDniAgraviado.textProperty().addListener((obs, oldVal, newVal) -> validarCampos());
-            txtNombresAgraviado.textProperty().addListener((obs, oldVal, newVal) -> validarCampos());
-            txtTelefonoAgr.textProperty().addListener((obs, oldVal, newVal) -> validarCampos());
-            txtApellidosAgraviado.textProperty().addListener((obs, oldVal, newVal) -> validarCampos());
-            txtDescargoAgr.textProperty().addListener((obs, oldVal, newVal) -> validarCampos());
-        }
-    }
-
-    private void validarCampos() {
-        boolean camposLlenos = true;
-
-        if (sectionIncidencia.isVisible()) {
-            lblTitle.setText("Nueva Incidencia");
-            camposLlenos = cbSector.getValue() != null &&
-                    cbUrbanizacion.getValue() != null &&
-                    cbDelito.getValue() != null &&
-                    cbIntervencion.getValue() != null &&
-                    cbOcurrencia.getValue() != null &&
-                    !txtDescripcion.getText().trim().isEmpty() &&
-                    !txtDireccion.getText().trim().isEmpty() &&
-                    dpFecha.getValue() != null &&
-                    groupApoyo.getSelectedToggle() != null;
-            btnSiguiente.setDisable(!camposLlenos);
-            btnGuardar.setDisable(true);
-            btnAnterior.setDisable(true);
-        } else if (sectionInfractor.isVisible()) {
-            lblTitle.setText("Datos Infractor");
-            RadioButton selectedRadioButton = (RadioButton) groupAgraviado.getSelectedToggle();
-            btnAnterior.setDisable(false);
-            btnSiguiente.setDisable(true);
-
-            camposLlenos = !txtDniInfractor.getText().trim().isEmpty() &&
-                    !txtNombresInfractor.getText().trim().isEmpty() &&
-                    !txtTelefonoInf.getText().trim().isEmpty() &&
-                    !txtApellidosInfractor.getText().trim().isEmpty() &&
-                    !txtDescargoInf.getText().trim().isEmpty() &&
-                    selectedRadioButton != null;
-
-            String valorSeleccionado = (selectedRadioButton != null) ? selectedRadioButton.getText() : "";
-
-            if (camposLlenos) {
-                if ("Sí".equals(valorSeleccionado)) {
-                    btnSiguiente.setDisable(false);
-                    btnGuardar.setDisable(true);
-                } else if ("No".equals(valorSeleccionado)) {
-                    btnSiguiente.setDisable(true);
-                    btnGuardar.setDisable(false);
-                }
-            } else {
-                btnSiguiente.setDisable(true);
-                btnGuardar.setDisable(true);
-            }
-        }
-        else if (sectionAgraviado.isVisible()) {
-            lblTitle.setText("Datos Agraviado");
-            btnSiguiente.setDisable(true);
-            btnAnterior.setDisable(false);
-            camposLlenos = !txtDniAgraviado.getText().trim().isEmpty() &&
-                    !txtNombresAgraviado.getText().trim().isEmpty() &&
-                    !txtTelefonoAgr.getText().trim().isEmpty() &&
-                    !txtApellidosAgraviado.getText().trim().isEmpty() &&
-                    !txtDescargoAgr.getText().trim().isEmpty();
-            btnGuardar.setDisable(!camposLlenos);
-        }
-    }
-
-
-    public void cargarCamposIncidencia(Incidencia incidencia) {
-        idIncidencia.setText(String.valueOf(incidencia.getIdIncidencia()));
-        txtDireccion.setText(incidencia.getDireccion());
-        dpFecha.setValue(incidencia.getFecha_hora_incidencia().toLocalDate());
-        cbOcurrencia.setValue(incidencia.getOcurrencias().get(0).getNombre());
-        cbIntervencion.setValue(incidencia.getIntervenciones().get(0).getNombre());
-        cbDelito.setValue(incidencia.getDelitos().get(0).getNombre());
-    }
-
-    public void cargarCamposInfractor(Incidencia incidencia) {
-        idInfractor.setText(String.valueOf(incidencia.getInfractores().get(0).getIdInfractor()));
-        txtDniInfractor.setText(incidencia.getInfractores().get(0).getPersona().getDocumento());
-        txtNombresInfractor.setText(incidencia.getInfractores().get(0).getPersona().getNombres());
-        txtApellidosInfractor.setText(incidencia.getInfractores().get(0).getPersona().getApellidos());
-        txtDescargoInf.setText(incidencia.getInfractores().get(0).getObservaciones());
-    }
-
-    public void cargarCamposAgraviado(Incidencia incidencia) {
-        idAgraviado.setText(String.valueOf(incidencia.getAgraviados().get(0).getIdAgraviado()));
-        txtDniAgraviado.setText(incidencia.getAgraviados().get(0).getPersona().getDocumento());
-        txtNombresAgraviado.setText(incidencia.getAgraviados().get(0).getPersona().getNombres());
-        txtApellidosAgraviado.setText(incidencia.getAgraviados().get(0).getPersona().getApellidos());
-        txtDescargoAgr.setText(incidencia.getAgraviados().get(0).getObservaciones());
+    @FXML
+    public void initialize() {
+        inicializarUI();
+        agregarListeners();
+        cargarCombos();
     }
 
     @FXML
@@ -225,150 +93,455 @@ public class NuevaIncidenciaController extends ModalControllerHelper<Incidencia>
 
     @FXML
     public void volver() {
-        if(sectionInfractor.isVisible() && !sectionAgraviado.isVisible()) {
-            sectionIncidencia.setVisible(true);
-            sectionInfractor.setVisible(false);
-            sectionAgraviado.setVisible(false);
-        } else if (sectionAgraviado.isVisible() && !sectionInfractor.isVisible()) {
-            sectionInfractor.setVisible(true);
-            sectionAgraviado.setVisible(false);
+        if (sectionInfractor.isVisible()) {
+            cambiarSeccion(sectionIncidencia);
+            lblTitle.setText("Nueva Incidencia");
+        } else if (sectionAgraviado.isVisible()) {
+            cambiarSeccion(sectionInfractor);
+            lblTitle.setText("Datos del infractor");
         }
         btnSiguiente.setDisable(false);
-        addListeners();
     }
-
     @FXML
     public void siguiente() {
-        if(sectionIncidencia.isVisible() && !sectionInfractor.isVisible() && !sectionAgraviado.isVisible()) {
-            sectionIncidencia.setVisible(false);
-            sectionInfractor.setVisible(true);
-        } else if (sectionInfractor.isVisible() && !sectionIncidencia.isVisible() && !sectionAgraviado.isVisible()) {
-            sectionInfractor.setVisible(false);
-            sectionAgraviado.setVisible(true);
+        if (sectionIncidencia.isVisible()) {
+            cambiarSeccion(sectionInfractor);
+            lblTitle.setText("Datos del Infractor");
+        } else if (sectionInfractor.isVisible()) {
+            cambiarSeccion(sectionAgraviado);
+            lblTitle.setText("Datos del Agraviado");
         }
         btnAnterior.setDisable(false);
         btnSiguiente.setDisable(true);
-        addListeners();
     }
-
     @FXML
     public void save() {
+        if (numero == 0) {
+            registrarIncidencia();
+        } else if (numero == 1) {
+            actualizarIncidencia();
+        }
+
+    }
+
+    private void registrarIncidencia() {
+        Usuario usuarioLogueado = SesionUsuario.getUsuarioActual();
+        Sector sectorSeleccionado = cbSector.getValue();
+        ServicioSerenazgo servicioSerenazgo = cbServicio.getValue();
+        Urbanizacion urbanizacionSeleccionado = cbUrbanizacion.getValue();
+        TipoIntervencion intervencionSeleccionado = cbIntervencion.getValue();
+        Delito delitoSeleccionado = cbDelito.getValue();
+        TipoOcurrencia ocurrenciaSeleccionado = cbOcurrencia.getValue();
+        String descripcion = txtDescripcion.getText();
+        String direccion = txtDireccion.getText();
+        LocalDate fecha = dpFecha.getValue();
+        LocalDateTime fecha_hora = fecha.atTime(LocalTime.now());
+
+        Toggle selectedToggle = groupApoyo.getSelectedToggle();
+        RadioButton selectedRadio = (RadioButton) selectedToggle;
+        String apoyoSeleccionado = selectedRadio.getText().toUpperCase().replace(" ", "_"); // Transforma el texto
+
+        String dni_inf = txtDniInfractor.getText();
+        String nombre_inf = txtNombresInfractor.getText();
+        String apellido_inf = txtApellidosInfractor.getText();
+        String telefono_inf = txtTelefonoInf.getText();
+        String descargo_inf = txtDescargoInf.getText();
+        String dni_agr = txtDniAgraviado.getText();
+        String nombre_agr = txtNombresAgraviado.getText();
+        String apellido_agr = txtApellidosAgraviado.getText();
+        String telefono_agr = txtTelefonoAgr.getText();
+        String descargo_agr = txtDescargoInf.getText();
+
+        if (dni_inf.isEmpty()) {
+            AlertHelper.mostrarError("Campos obligatorios");
+            return;
+        }
+        urbanizacionSeleccionado.setSector(sectorSeleccionado);
+
+        Incidencia incidencia = new Incidencia();
+        incidencia.setDescripcion(descripcion);
+        incidencia.setDireccion(direccion);
+        incidencia.setApoyo_policial(apoyoSeleccionado);
+        incidencia.setFecha_hora_incidencia(fecha_hora);
+        incidencia.setServicios(servicioSerenazgo);
+
+
+        incidencia.setDelitos(delitoSeleccionado);
+        incidencia.setOcurrencias(ocurrenciaSeleccionado);
+        incidencia.setIntervenciones(intervencionSeleccionado);
+        incidencia.setUrbanizaciones(urbanizacionSeleccionado);
+
+        Persona persona_inf = new Persona();
+        persona_inf.setNombres(nombre_inf);
+        persona_inf.setApellidos(apellido_inf);
+        persona_inf.setTelefono(telefono_inf);
+        persona_inf.setDocumento(dni_inf);
+        Infractor infractor = new Infractor();
+        infractor.setPersona(persona_inf);
+        infractor.setObservaciones(descargo_inf);
+        incidencia.setInfractores(infractor);
+
+        Persona persona_agr = new Persona();
+        persona_agr.setNombres(nombre_agr);
+        persona_agr.setApellidos(apellido_agr);
+        persona_agr.setTelefono(telefono_agr);
+        persona_agr.setDocumento(dni_agr);
+        Agraviado agr = new Agraviado();
+        agr.setPersona(persona_agr);
+        agr.setObservaciones(descargo_agr);
+        incidencia.setAgraviados(agr);
+        incidencia.setUser(usuarioLogueado);
+
+        registrarEntidad(
+                incidencia,
+                incidenciaService::save,
+                incidenciasController::cargarIncidencias
+        );
+    }
+
+    private void actualizarIncidencia() {
+        Usuario usuarioLogueado = SesionUsuario.getUsuarioActual();
+        int id_incidencia = Integer.parseInt(idIncidencia.getText());
+        int id_infractor = Integer.parseInt(idInfractor.getText());
+        int id_agraviado = Integer.parseInt(idAgraviado.getText());
+
+        Sector sectorSeleccionado = cbSector.getValue();
+        ServicioSerenazgo servicioSerenazgo = cbServicio.getValue();
+        Urbanizacion urbanizacionSeleccionado = cbUrbanizacion.getValue();
+        TipoIntervencion intervencionSeleccionado = cbIntervencion.getValue();
+        Delito delitoSeleccionado = cbDelito.getValue();
+        TipoOcurrencia ocurrenciaSeleccionado = cbOcurrencia.getValue();
+        String descripcion = txtDescripcion.getText();
+        String direccion = txtDireccion.getText();
+        LocalDate fecha = dpFecha.getValue();
+        LocalDateTime fecha_hora = fecha.atTime(LocalTime.now());
+        Toggle selectedToggle = groupApoyo.getSelectedToggle();
+        RadioButton selectedRadio = (RadioButton) selectedToggle;
+        String apoyoSeleccionado = selectedRadio.getText().toUpperCase().replace(" ", "_"); // Transforma el texto
+
+        String dni_inf = txtDniInfractor.getText();
+        String nombre_inf = txtNombresInfractor.getText();
+        String apellido_inf = txtApellidosInfractor.getText();
+        String telefono_inf = txtTelefonoInf.getText();
+        String descargo_inf = txtDescargoInf.getText();
+        String dni_agr = txtDniAgraviado.getText();
+        String nombre_agr = txtNombresAgraviado.getText();
+        String apellido_agr = txtApellidosAgraviado.getText();
+        String telefono_agr = txtTelefonoInf.getText();
+        String descargo_agr = txtDescargoInf.getText();
+
+        if (dni_inf.isEmpty()) {
+            AlertHelper.mostrarError("Campos obligatorios");
+            return;
+        }
+
+        urbanizacionSeleccionado.setSector(sectorSeleccionado);
+
+        Incidencia incidencia = new Incidencia();
+        incidencia.setIdIncidencia(id_incidencia);
+        incidencia.setDescripcion(descripcion);
+        incidencia.setDireccion(direccion);
+        incidencia.setApoyo_policial(apoyoSeleccionado);
+        incidencia.setFecha_hora_incidencia(fecha_hora);
+        incidencia.setServicios(servicioSerenazgo);
+
+        incidencia.setDelitos(delitoSeleccionado);
+        incidencia.setOcurrencias(ocurrenciaSeleccionado);
+        incidencia.setIntervenciones(intervencionSeleccionado);
+        incidencia.setUrbanizaciones(urbanizacionSeleccionado);
+
+        Persona persona_inf = new Persona();
+        persona_inf.setNombres(nombre_inf);
+        persona_inf.setApellidos(apellido_inf);
+        persona_inf.setTelefono(telefono_inf);
+        persona_inf.setDocumento(dni_inf);
+        Infractor infractor = new Infractor();
+        infractor.setIdInfractor(id_infractor);
+        infractor.setPersona(persona_inf);
+        infractor.setObservaciones(descargo_inf);
+        incidencia.setInfractores(infractor);
+
+        Persona persona_agr = new Persona();
+        persona_agr.setNombres(nombre_agr);
+        persona_agr.setApellidos(apellido_agr);
+        persona_agr.setTelefono(telefono_agr);
+        persona_agr.setDocumento(dni_agr);
+        Agraviado agr = new Agraviado();
+        agr.setIdAgraviado(id_agraviado);
+        agr.setPersona(persona_agr);
+        agr.setObservaciones(descargo_agr);
+        incidencia.setAgraviados(agr);
+
+        incidencia.setUser(usuarioLogueado);
+
+        actualizarEntidad(incidencia,incidenciaService::update,incidenciasController::cargarIncidencias);
+    }
+
+    private void inicializarUI(){
+        btnAnterior.setDisable(true);
+        btnGuardar.setDisable(true);
+        btnSiguiente.setDisable(true);
+        btnCancelar.setDisable(false);
+
+        groupApoyo = new ToggleGroup();
+        rbSiApoyo.setToggleGroup(groupApoyo);
+        rbNoApoyo.setToggleGroup(groupApoyo);
+
+        groupAgraviado = new ToggleGroup();
+        rbSiAgraviado.setToggleGroup(groupAgraviado);
+        rbNoAgraviado.setToggleGroup(groupAgraviado);
+
+        sectionInicial();
+    }
+
+    private void sectionInicial(){
+        sectionIncidencia.setVisible(true);
+        sectionInfractor.setVisible(false);
+        sectionAgraviado.setVisible(false);
+    }
+
+    private void agregarListeners() {
+        agregarListenersIncidencia();
+        agregarListenersInfractor();
+        agregarListenersAgraviado();
+    }
+
+    private void agregarListenersIncidencia(){
+        agregarListenersGenerico(cbSector.valueProperty());
+        agregarListenersGenerico(cbUrbanizacion.valueProperty());
+        agregarListenersGenerico(cbDelito.valueProperty());
+        agregarListenersGenerico(cbIntervencion.valueProperty());
+        agregarListenersGenerico(cbOcurrencia.valueProperty());
+        agregarListenersGenerico(txtDescripcion.textProperty());
+        agregarListenersGenerico(txtDireccion.textProperty());
+        agregarListenersGenerico(dpFecha.valueProperty());
+        agregarListenersGenerico(groupApoyo.selectedToggleProperty());
+
+        cbSector.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null) {
+                cargarUrbanizaciones(newVal);
+            }
+        });
+    }
+
+    private void agregarListenersInfractor(){
+        agregarListenersGenerico(txtDniInfractor.textProperty());
+        agregarListenersGenerico(txtNombresInfractor.textProperty());
+        agregarListenersGenerico(txtTelefonoInf.textProperty());
+        agregarListenersGenerico(txtApellidosInfractor.textProperty());
+        agregarListenersGenerico(txtDescargoInf.textProperty());
+        agregarListenersGenerico(groupAgraviado.selectedToggleProperty());
+    }
+
+    private void agregarListenersAgraviado(){
+        agregarListenersGenerico(txtDniAgraviado.textProperty());
+        agregarListenersGenerico(txtNombresAgraviado.textProperty());
+        agregarListenersGenerico(txtTelefonoAgr.textProperty());
+        agregarListenersGenerico(txtApellidosAgraviado.textProperty());
+        agregarListenersGenerico(txtDescargoAgr.textProperty());
+    }
+
+    private void validarCampos() {
+        boolean camposLlenos = true;
+
+        if (sectionIncidencia.isVisible()) {
+            camposLlenos = validarSeccionIncidencia();
+            btnSiguiente.setDisable(!camposLlenos);
+            btnGuardar.setDisable(true);
+            btnAnterior.setDisable(true);
+        }
+        else if (sectionInfractor.isVisible()) {
+            btnAnterior.setDisable(false);
+            btnSiguiente.setDisable(true);
+            camposLlenos = validarSeccionInfractor();
+            String valorSeleccionado = (selectedRadioButton != null) ? selectedRadioButton.getText() : "";
+            if (camposLlenos) {
+                btnSiguiente.setDisable(!"Si".equals(valorSeleccionado));
+                btnGuardar.setDisable(!"No".equals(valorSeleccionado));
+            } else {
+                btnSiguiente.setDisable(true);
+                btnGuardar.setDisable(true);
+            }
+        }
+        else if (sectionAgraviado.isVisible()) {
+            btnSiguiente.setDisable(true);
+            btnAnterior.setDisable(false);
+            camposLlenos = validarSeccionAgraviado();
+            btnGuardar.setDisable(!camposLlenos);
+        }
+    }
+
+    private boolean esTextoValido(Control campo) {
+        if (campo instanceof TextField) {
+            return !((TextField) campo).getText().trim().isEmpty();
+        } else if (campo instanceof TextArea) {
+            return !((TextArea) campo).getText().trim().isEmpty();
+        }
+        return false;
+    }
+
+    private <T> boolean esComboBoxValido(ComboBox<T> combo) {
+        return combo.getValue() != null;
+    }
+
+    private boolean validarSeccionIncidencia(){
+        return esComboBoxValido(cbSector) &&
+                esComboBoxValido(cbUrbanizacion) &&
+                esComboBoxValido(cbDelito) &&
+                esComboBoxValido(cbIntervencion) &&
+                esComboBoxValido(cbOcurrencia) &&
+                esTextoValido(txtDescripcion) &&
+                esTextoValido(txtDireccion) &&
+                dpFecha.getValue() != null &&
+                groupApoyo.getSelectedToggle() != null;
+    }
+
+    private boolean validarSeccionInfractor(){
+        selectedRadioButton = (RadioButton) groupAgraviado.getSelectedToggle();
+        return esTextoValido(txtDniInfractor) &&
+                esTextoValido(txtNombresInfractor) &&
+                esTextoValido(txtTelefonoInf) &&
+                esTextoValido(txtApellidosInfractor) &&
+                esTextoValido(txtDescargoInf) &&
+                selectedRadioButton != null;
+    }
+
+    private boolean validarSeccionAgraviado(){
+        return esTextoValido(txtDniAgraviado) &&
+                esTextoValido(txtNombresAgraviado) &&
+                esTextoValido(txtTelefonoAgr) &&
+                esTextoValido(txtApellidosAgraviado) &&
+                esTextoValido(txtDescargoAgr);
+    }
+
+    private void cargarCampos(Incidencia incidencia) {
+        if (incidencia == null) return;
+
+        idIncidencia.setText(String.valueOf(incidencia.getIdIncidencia()));
+        txtDireccion.setText(incidencia.getDireccion());
+        dpFecha.setValue(incidencia.getFecha_hora_incidencia().toLocalDate());
+        cbOcurrencia.setValue(incidencia.getOcurrencias().get(0));
+        cbIntervencion.setValue(incidencia.getIntervenciones().get(0));
+        cbDelito.setValue(incidencia.getDelitos().get(0));
+        cbSector.setValue(incidencia.getUrbanizaciones().get(0).getSector());
+        cbUrbanizacion.setValue(incidencia.getUrbanizaciones().get(0));
+        cbServicio.setValue(incidencia.getServicios().get(0));
+        txtDescripcion.setText(incidencia.getDescripcion());
+        seleccionarRadio(incidencia.getApoyo_policial().name(),groupApoyo);
+
+        if (!incidencia.getInfractores().isEmpty()) {
+            idInfractor.setText(String.valueOf(incidencia.getInfractores().get(0).getIdInfractor()));
+            txtDniInfractor.setText(incidencia.getInfractores().get(0).getPersona().getDocumento());
+            txtNombresInfractor.setText(incidencia.getInfractores().get(0).getPersona().getNombres());
+            txtApellidosInfractor.setText(incidencia.getInfractores().get(0).getPersona().getApellidos());
+            txtDescargoInf.setText(incidencia.getInfractores().get(0).getObservaciones());
+            txtTelefonoInf.setText(incidencia.getInfractores().get(0).getPersona().getTelefono());
+            seleccionarRadio(incidencia.getAgraviados(),groupAgraviado);
+        }
+
+        if (!incidencia.getAgraviados().isEmpty()) {
+            idAgraviado.setText(String.valueOf(incidencia.getAgraviados().get(0).getIdAgraviado()));
+            txtDniAgraviado.setText(incidencia.getAgraviados().get(0).getPersona().getDocumento());
+            txtNombresAgraviado.setText(incidencia.getAgraviados().get(0).getPersona().getNombres());
+            txtApellidosAgraviado.setText(incidencia.getAgraviados().get(0).getPersona().getApellidos());
+            txtDescargoAgr.setText(incidencia.getAgraviados().get(0).getObservaciones());
+            txtTelefonoAgr.setText(incidencia.getAgraviados().get(0).getPersona().getTelefono());
+        }
+    }
+
+    private void cambiarSeccion(VBox mostrar) {
+        sectionIncidencia.setVisible(false);
+        sectionInfractor.setVisible(false);
+        sectionAgraviado.setVisible(false);
+
+        mostrar.setVisible(true);
     }
 
     public void cargarCamposIncidencias(Incidencia incidencia) {
-        cargarCamposIncidencia(incidencia);
-        cargarCamposInfractor(incidencia);
-        if(incidencia.getAgraviados() != null && !incidencia.getAgraviados().isEmpty()) {
-            cargarCamposAgraviado(incidencia);
+        if (incidencia != null) {
+            cargarCampos(incidencia);
         }
     }
+
+
+
+    private void cargarDetalle() {
+
+    }
+
 
     public void setIncidenciaViewController(IncidenciasController incidenciasController) {
         this.incidenciasController = incidenciasController;
     }
 
+
     private void cargarSector() {
-        Task<List<Sector>> task = new Task<>() {
-            @Override
-            protected List<Sector> call() throws Exception {
-                return sectorService.findAll();
-            }
-        };
-
-        task.setOnSucceeded(event -> {
-            List<Sector> sectores = task.getValue();
-            if (sectores != null) {
-                ObservableList<String> listSectores = FXCollections.observableArrayList(
-                        sectores.stream().map(Sector::getNombre).toList()
-                );
-                cbSector.setItems(listSectores);
-            }
-        });
-
-        new Thread(task).start();
+        cargarDatos(cbSector, sectorService::findAll, Sector::getNombre);
     }
 
-    private void cargarOcurrencias(){
-        Task<List<TipoOcurrencia>> task = new Task<List<TipoOcurrencia>>() {
-            @Override
-            protected List<TipoOcurrencia> call() throws Exception {
-                return ocurrenciaService.findAll();
-            }
-        };
-
-        task.setOnSucceeded(event -> {
-            List<TipoOcurrencia> ocurrencias = task.getValue();
-            if (ocurrencias != null) {
-                ObservableList<String> listOcurrencias = FXCollections.observableArrayList(
-                        ocurrencias.stream().map(TipoOcurrencia::getNombre).toList()
-                );
-                cbOcurrencia.setItems(listOcurrencias);
-            }
-        });
-
-        new Thread(task).start();
+    private void cargarOcurrencias() {
+        cargarDatos(cbOcurrencia, ocurrenciaService::findAll, TipoOcurrencia::getNombre);
     }
 
-    private void cargarIntervenciones(){
-        Task<List<TipoIntervencion>>task = new Task<List<TipoIntervencion>>() {
-            @Override
-            protected List<TipoIntervencion> call() throws Exception {
-                return intervencionService.findAll();
-            }
-        };
-
-        task.setOnSucceeded(event -> {
-            List<TipoIntervencion> intervenciones = task.getValue();
-            if (intervenciones != null) {
-                ObservableList<String> listIntervenciones = FXCollections.observableArrayList(
-                        intervenciones.stream().map(TipoIntervencion::getNombre).toList()
-                );
-                cbIntervencion.setItems(listIntervenciones);
-            }
-        });
-
-        new Thread(task).start();
+    private void cargarIntervenciones() {
+        cargarDatos(cbIntervencion, intervencionService::findAll, TipoIntervencion::getNombre);
     }
 
-    private void cargarDelitos(){
-        Task<List<Delito>>task = new Task<List<Delito>>() {
-            @Override
-            protected List<Delito> call() throws Exception {
-                return delitoService.findAll();
-            }
-        };
-
-        task.setOnSucceeded(event -> {
-            List<Delito> delitos = task.getValue();
-            if (delitos != null) {
-                ObservableList<String> listDelitos = FXCollections.observableArrayList(
-                        delitos.stream().map(Delito::getNombre).toList()
-                );
-                cbDelito.setItems(listDelitos);
-            }
-        });
-
-        new Thread(task).start();
+    private void cargarDelitos() {
+        cargarDatos(cbDelito, delitoService::findAll, Delito::getNombre);
     }
 
-    private void cargarUrbanizaciones(String nameSector){
-        Task<List<Urbanizacion>>task = new Task<List<Urbanizacion>>() {
-            @Override
-            protected List<Urbanizacion> call() throws Exception {
-                return urbService.findBySector(nameSector);
-            }
-        };
-
-        task.setOnSucceeded(event -> {
-            List<Urbanizacion> urbanizaciones = task.getValue();
-            if (urbanizaciones != null) {
-                ObservableList<String> listDelitos = FXCollections.observableArrayList(
-                        urbanizaciones.stream().map(Urbanizacion::getNombre).toList()
-                );
-                cbUrbanizacion.setItems(listDelitos);
-            }
-        });
-
-        new Thread(task).start();
+    private void cargarUrbanizaciones(Sector sector) {
+        cargarDatos(cbUrbanizacion, () -> urbService.findBySector(sector.getNombre()), Urbanizacion::getNombre);
     }
+
+    private void cargarServicios() {
+        cargarDatos(cbServicio,serviciosService::findAll, ServicioSerenazgo::getNombre);
+    }
+
+
+    private void agregarListenersGenerico(ObservableValue<?> propiedad) {
+        propiedad.addListener((obs, oldVal, newVal) -> validarCampos());
+    }
+
+    private void cargarCombos(){
+        cargarIntervenciones();
+        cargarSector();
+        cargarDelitos();
+        cargarOcurrencias();
+        cargarServicios();
+    }
+
+    private void seleccionarRadio(String valor, ToggleGroup grupo){
+        for (Toggle toggle: grupo.getToggles()){
+            RadioButton radioButton = (RadioButton) toggle;
+            if (radioButton.getText().trim().toLowerCase().equals(valor.trim().toLowerCase())) {
+                grupo.selectToggle(radioButton);
+                break;
+            }
+        }
+    }
+
+    private void seleccionarRadio(Object obj, ToggleGroup grupo) {
+        for (Toggle toggle : grupo.getToggles()) {
+            RadioButton radioButton = (RadioButton) toggle;
+
+            if (obj != null) {
+                grupo.selectToggle(radioButton);
+                break;
+            }
+        }
+
+        // Si el objeto es null, buscar el RadioButton con texto "No"
+        if (obj == null) {
+            for (Toggle toggle : grupo.getToggles()) {
+                RadioButton radioButton = (RadioButton) toggle;
+                if ("No".equals(radioButton.getText())) {
+                    grupo.selectToggle(radioButton);
+                    break;
+                }
+            }
+        }
+    }
+
 }

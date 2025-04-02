@@ -230,6 +230,29 @@ public abstract class ControllerHelper<T> {
         });
     }
 
+    protected void configurarColumnaVer(TableColumn<T, String> columna, Consumer<T> onVer) {
+        columna.setCellFactory(param -> new TableCell<>() {
+            private final Hyperlink linkVer = new Hyperlink("Ver");
+
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || getIndex() < 0 || getIndex() >= getTableView().getItems().size()) {
+                    setGraphic(null);
+                    linkVer.setOnAction(null);
+                } else {
+                    setGraphic(linkVer);
+                    T rowData = getTableView().getItems().get(getIndex());
+                    linkVer.setOnAction(event -> onVer.accept(rowData));
+                }
+            }
+        });
+    }
+
+
+
+
     private Button crearBoton(String iconPath, String estiloHover, Consumer<T> accion, TableCell<T, Void> cell) {
         Button btn = new Button();
 

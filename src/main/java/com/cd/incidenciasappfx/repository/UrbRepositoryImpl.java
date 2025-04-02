@@ -146,11 +146,12 @@ public class UrbRepositoryImpl implements IUrbRepository {
             query.registerStoredProcedureParameter(1, String.class, ParameterMode.IN);
             query.setParameter(1, nameSector);
 
-            List<String> resultados = query.getResultList();
+            List<Object[]> resultados = query.getResultList();
 
-            for (String nombreUrbanizacion : resultados) {
+            for (Object[] row : resultados) {
                 Urbanizacion u = new Urbanizacion();
-                u.setNombre(nombreUrbanizacion);
+                u.setId((Integer) row[0]);
+                u.setNombre((String)row[1]);
                 urbanizaciones.add(u);
             }
         } catch (jakarta.persistence.PersistenceException e) {

@@ -1,6 +1,7 @@
 package com.cd.incidenciasappfx.controllers;
 
 import com.cd.incidenciasappfx.App;
+import com.cd.incidenciasappfx.models.SesionUsuario;
 import com.cd.incidenciasappfx.models.Usuario;
 import java.io.IOException;
 import java.net.URL;
@@ -191,6 +192,7 @@ public class PrincipalController implements Initializable {
     }
 
     public void setUserAutenticado(Usuario user) {
+        SesionUsuario.setUsuarioActual(user);
         this.usuario = user;
 
         // Asegurar que la ejecución ocurra en el hilo principal de JavaFX

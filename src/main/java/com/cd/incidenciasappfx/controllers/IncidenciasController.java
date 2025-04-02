@@ -75,11 +75,9 @@ public class IncidenciasController extends ControllerHelper<Incidencia> implemen
         colTipoIntervencion.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getIntervenciones().get(0).getNombre()));
         colServicio.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getServicios().get(0).getNombre()));
         colInfraccion.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDelitos().get(0).getNombre()));
-        colDetalle.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDescripcion()));
 
-        configurarColumnaAccion(
-                this::abrirModalActualizar,
-                this::eliminarIncidencia);
+        configurarColumnaAccion(this::abrirModalActualizar,this::eliminarIncidencia);
+        configurarColumnaVer(colDetalle,this::abrilModalDetalle);
 
     }
 
@@ -91,6 +89,17 @@ public class IncidenciasController extends ControllerHelper<Incidencia> implemen
                     controller.setIncidenciaViewController(this);
                 },
                 "Actualizar Incidencia",
+                tabla.getScene().getWindow()
+        );
+    }
+
+    private void abrilModalDetalle(Incidencia incidencia) {
+        abrirModal("/com/cd/incidenciasappfx/views/DetalleIncidencia.fxml",
+                (DetalleIncidenciaController controller) -> {
+                    controller.cargarDetalleIncidencia(incidencia);
+                    controller.setIncidenciaViewController(this);
+                },
+                "Detalle",
                 tabla.getScene().getWindow()
         );
     }

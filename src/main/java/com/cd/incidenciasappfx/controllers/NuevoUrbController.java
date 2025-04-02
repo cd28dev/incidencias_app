@@ -29,7 +29,7 @@ public class NuevoUrbController extends ModalControllerHelper<Urbanizacion> {
     private UrbViewController urbViewController;
 
     @FXML
-    private ComboBox<String> cbUrb;
+    private ComboBox<Sector> cbSector;
 
     public NuevoUrbController() {
     }
@@ -77,17 +77,15 @@ public class NuevoUrbController extends ModalControllerHelper<Urbanizacion> {
 
     private void registrarUrb() {
         String nameUrb = name.getText().trim();
-        String sectorSeleccionado = cbUrb.getValue();
+        Sector sectorSeleccionado = cbSector.getValue();
 
         if (nameUrb.isEmpty()) {
             AlertHelper.mostrarError("El nombre de la Urb no puede estar vacío");
             return;
         }
-        Sector s = new Sector();
         Urbanizacion u = new Urbanizacion();
         u.setNombre(nameUrb);
-        s.setNombre(sectorSeleccionado);
-        u.setSector(s);
+        u.setSector(sectorSeleccionado);
 
         registrarEntidad(
                 u,
@@ -99,7 +97,7 @@ public class NuevoUrbController extends ModalControllerHelper<Urbanizacion> {
     private void actualizarUrb() {
         String idText = id.getText();
         String nameUrb = name.getText().trim();
-        String sectorSeleccionado = cbUrb.getValue();
+        Sector sectorSeleccionado = cbSector.getValue();
 
         if (nameUrb.isEmpty()) {
             AlertHelper.mostrarError("El nombre de la Urb no puede estar vacío");
@@ -107,38 +105,20 @@ public class NuevoUrbController extends ModalControllerHelper<Urbanizacion> {
         }
 
         Urbanizacion u = new Urbanizacion();
-        Sector s = new Sector();
-        s.setNombre(sectorSeleccionado);
-        
+
         u.setId(Integer.parseInt(idText));
         u.setNombre(nameUrb);
-        u.setSector(s);
-        
+        u.setSector(sectorSeleccionado);
+
         actualizarEntidad(
                 u,
                 urbService::update,
                 urbViewController::cargarUrb
         );
     }
-    
+
     private void cargarSector() {
-        Task<List<Sector>> task = new Task<>() {
-            @Override
-            protected List<Sector> call() throws Exception {
-                return sectorService.findAll();
-            }
-        };
+        cargarDatos(cbSector, sectorService::findAll, Sector::getNombre);
 
-        task.setOnSucceeded(event -> {
-            List<Sector> sectores = task.getValue();
-            if (sectores != null) {
-                ObservableList<String> listSectores = FXCollections.observableArrayList(
-                        sectores.stream().map(Sector::getNombre).toList()
-                );
-                cbUrb.setItems(listSectores);
-            }
-        });
-
-        new Thread(task).start();
     }
 }

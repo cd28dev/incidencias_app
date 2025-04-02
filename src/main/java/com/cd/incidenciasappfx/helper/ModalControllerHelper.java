@@ -1,14 +1,20 @@
 package com.cd.incidenciasappfx.helper;
 
 import java.lang.reflect.ParameterizedType;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Supplier;
+
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 
 /**
  * ModalControllerHelper.java
@@ -98,7 +104,12 @@ public abstract class ModalControllerHelper<T> {
         Task<Optional<T>> task = new Task<>() {
             @Override
             protected Optional<T> call() {
-                return updateFunction.apply(entidad);
+                try {
+                    return updateFunction.apply(entidad);
+                } catch (Exception e) {
+                    e.printStackTrace(); // 📌 Imprime el error en la consola
+                    throw new RuntimeException("Error al ejecutar updateFunction", e);
+                }
             }
         };
 
@@ -113,6 +124,8 @@ public abstract class ModalControllerHelper<T> {
         });
 
         task.setOnFailed(event -> {
+            Throwable error = task.getException(); // 📌 Obtiene la excepción
+            error.printStackTrace(); // 📌 Imprime el error en la consola
             AlertHelper.mostrarError("Error inesperado al actualizar");
         });
 
@@ -123,5 +136,41 @@ public abstract class ModalControllerHelper<T> {
     private void closeWindow() {
         Stage stage = (Stage) btnCancelar.getScene().getWindow();
         stage.close();
+    }
+
+    protected  <E> void cargarDatos(ComboBox<E> comboBox, Supplier<List<E>> servicio, Function<E, String> mapeo) {
+        Task<List<E>> task = new Task<>() {
+            @Override
+            protected List<E> call() {
+                return servicio.get();
+            }
+        };
+
+        task.setOnSucceeded(event -> {
+            Platform.runLater(() -> {
+                List<E> elementos = task.getValue();
+                if (elementos != null) {
+                    comboBox.getItems().setAll(elementos);
+                }
+            });
+        });
+
+        new Thread(task).start();
+
+        // Configurar el StringConverter para mostrar solo el nombre en el ComboBox
+        comboBox.setConverter(new StringConverter<E>() {
+            @Override
+            public String toString(E objeto) {
+                return objeto != null ? mapeo.apply(objeto) : "";
+            }
+
+            @Override
+            public E fromString(String string) {
+                return comboBox.getItems().stream()
+                        .filter(objeto -> mapeo.apply(objeto).equals(string))
+                        .findFirst()
+                        .orElse(null);
+            }
+        });
     }
 }

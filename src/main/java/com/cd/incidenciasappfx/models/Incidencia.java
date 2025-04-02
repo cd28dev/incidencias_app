@@ -87,7 +87,8 @@ public class Incidencia implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "id_urbanizacion")
     )
     private List<Urbanizacion> urbanizaciones;
-    
+
+    public enum ApoyoPolicial {SI, NO};
 
     public Incidencia() {
         urbanizaciones = new ArrayList<>();
@@ -119,8 +120,8 @@ public class Incidencia implements Serializable {
         return delitos;
     }
 
-    public void setDelitos(List<Delito> delitos) {
-        this.delitos = delitos;
+    public void setDelitos(Delito delito) {
+        this.delitos.add(delito);
     }
 
     public String getDescripcion() {
@@ -167,60 +168,53 @@ public class Incidencia implements Serializable {
         return intervenciones;
     }
 
-    public void setIntervenciones(List<TipoIntervencion> intervenciones) {
-        this.intervenciones = intervenciones;
+    public void setIntervenciones(TipoIntervencion intervencion) {
+        this.intervenciones.add(intervencion);
     }
 
     public List<TipoOcurrencia> getOcurrencias() {
         return ocurrencias;
     }
 
-    public void setOcurrencias(List<TipoOcurrencia> ocurrencias) {
-        this.ocurrencias = ocurrencias;
+    public void setOcurrencias(TipoOcurrencia ocurrencia) {
+        this.ocurrencias.add(ocurrencia);
     }
 
     public List<ServicioSerenazgo> getServicios() {
         return servicios;
     }
 
-    public void setServicios(List<ServicioSerenazgo> servicios) {
-        this.servicios = servicios;
+    public void setServicios(ServicioSerenazgo servicio) {
+        this.servicios.add(servicio);
     }
 
     public List<Urbanizacion> getUrbanizaciones() {
         return urbanizaciones;
     }
 
-    public void setUrbanizaciones(List<Urbanizacion> urbanizaciones) {
-        this.urbanizaciones = urbanizaciones;
+    public void setUrbanizaciones(Urbanizacion urbanizacion) {
+
+        this.urbanizaciones.add(urbanizacion);
     }
 
     public Usuario getUser() {
         return user;
     }
 
-    public void setUsuario(Usuario usuario) {
-        this.user = usuario;
-    }
-
-    public enum ApoyoPolicial {
-        Sí, No
-    }
-
     public List<Agraviado> getAgraviados() {
         return agraviados;
     }
 
-    public void setAgraviados(List<Agraviado> agraviados) {
-        this.agraviados = agraviados;
+    public void setAgraviados(Agraviado agraviado) {
+        this.agraviados.add(agraviado);
     }
 
     public List<Infractor> getInfractores() {
         return infractores;
     }
 
-    public void setInfractores(List<Infractor> infractores) {
-        this.infractores = infractores;
+    public void setInfractores(Infractor infractor) {
+        this.infractores.add(infractor);
     }
 
     public void setUser(Usuario user) {

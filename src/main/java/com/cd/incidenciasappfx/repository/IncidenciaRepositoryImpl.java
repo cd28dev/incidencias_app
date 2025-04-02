@@ -52,7 +52,7 @@ public class IncidenciaRepositoryImpl implements IIncidenciaRepository {
             query.setParameter("p_fecha_hora_incidencia", java.sql.Timestamp.valueOf(incidencia.getFecha_hora_incidencia()));
             query.setParameter("p_descripcion", incidencia.getDescripcion());
             query.setParameter("p_id_user", incidencia.getUser().getIdUsuario());
-            query.setParameter("p_apoyo", incidencia.getApoyo_policial() != null ? incidencia.getApoyo_policial() : "No");
+            query.setParameter("p_apoyo", incidencia.getApoyo_policial().name());
 
             query.setParameter("p_id_intervencion", !incidencia.getIntervenciones().isEmpty() ? incidencia.getIntervenciones().get(0).getIdIntervencion() : null);
             query.setParameter("p_id_delito", !incidencia.getDelitos().isEmpty() ? incidencia.getDelitos().get(0).getIdDelito() : null);
@@ -60,6 +60,13 @@ public class IncidenciaRepositoryImpl implements IIncidenciaRepository {
             query.setParameter("p_id_servicio", !incidencia.getServicios().isEmpty() ? incidencia.getServicios().get(0).getIdServicio() : null);
             query.setParameter("p_id_urbanizacion", !incidencia.getUrbanizaciones().isEmpty() ? incidencia.getUrbanizaciones().get(0).getId() : null);
             query.setParameter("p_id_sector", (!incidencia.getUrbanizaciones().isEmpty() && incidencia.getUrbanizaciones().get(0).getSector() != null) ? incidencia.getUrbanizaciones().get(0).getSector().getId() : null);
+
+
+            query.setParameter("p_nombre_inf", incidencia.getInfractores().get(0).getPersona().getNombres());
+            query.setParameter("p_apellidos_inf", incidencia.getInfractores().get(0).getPersona().getApellidos());
+            query.setParameter("p_telefono_inf", incidencia.getInfractores().get(0).getPersona().getTelefono());
+            query.setParameter("p_doc_inf", incidencia.getInfractores().get(0).getPersona().getDocumento());
+            query.setParameter("p_observacion_inf", incidencia.getInfractores().get(0).getObservaciones());
 
             // Datos del Agraviado (si existen)
             if (incidencia.getAgraviados() != null) {
@@ -76,20 +83,6 @@ public class IncidenciaRepositoryImpl implements IIncidenciaRepository {
                 query.setParameter("p_observacion_agr", null);
             }
 
-            // Datos del Infractor (si existen)
-            if (incidencia.getInfractores() != null) {
-                query.setParameter("p_nombre_inf", incidencia.getInfractores().get(0).getPersona().getNombres());
-                query.setParameter("p_apellidos_inf", incidencia.getInfractores().get(0).getPersona().getApellidos());
-                query.setParameter("p_telefono_inf", incidencia.getInfractores().get(0).getPersona().getTelefono());
-                query.setParameter("p_doc_inf", incidencia.getInfractores().get(0).getPersona().getDocumento());
-                query.setParameter("p_observacion_inf", incidencia.getInfractores().get(0).getObservaciones());
-            } else {
-                query.setParameter("p_nombre_inf", null);
-                query.setParameter("p_apellidos_inf", null);
-                query.setParameter("p_telefono_inf", null);
-                query.setParameter("p_doc_inf", null);
-                query.setParameter("p_observacion_inf", null);
-            }
 
             query.execute();
             return Optional.of(incidencia);
@@ -141,26 +134,26 @@ public class IncidenciaRepositoryImpl implements IIncidenciaRepository {
             TipoIntervencion tipoIntervencion = new TipoIntervencion();
             tipoIntervencion.setIdIntervencion((Integer) row[8]);
             tipoIntervencion.setNombre((String) row[9]);
-            incidencia.setIntervenciones(List.of(tipoIntervencion));
+            incidencia.setIntervenciones(tipoIntervencion);
 
             //Delito
             Delito delito = new Delito();
             delito.setIdDelito((Integer) row[10]);
             delito.setNombre((String) row[11]);
-            incidencia.setDelitos(List.of(delito));
+            incidencia.setDelitos(delito);
 
 
             // Ocurrencia
             TipoOcurrencia tipoOcurrencia = new TipoOcurrencia();
             tipoOcurrencia.setIdOcurrencia((Integer) row[12]);
             tipoOcurrencia.setNombre((String) row[13]);
-            incidencia.setOcurrencias(List.of(tipoOcurrencia));
+            incidencia.setOcurrencias(tipoOcurrencia);
 
             // Servicio
             ServicioSerenazgo servicioSerenazgo = new ServicioSerenazgo();
             servicioSerenazgo.setIdServicio((Integer) row[14]);
             servicioSerenazgo.setNombre((String) row[15]);
-            incidencia.setServicios(List.of(servicioSerenazgo));
+            incidencia.setServicios(servicioSerenazgo);
 
             // Urbanización y sector
             Urbanizacion urbanizacion = new Urbanizacion();
@@ -172,7 +165,7 @@ public class IncidenciaRepositoryImpl implements IIncidenciaRepository {
             sector.setNombre((String) row[19]);
 
             urbanizacion.setSector(sector);
-            incidencia.setUrbanizaciones(List.of(urbanizacion));
+            incidencia.setUrbanizaciones(urbanizacion);
 
 
             // Agraviado
@@ -184,7 +177,7 @@ public class IncidenciaRepositoryImpl implements IIncidenciaRepository {
             agraviado.getPersona().setDocumento((String) row[24]);
             agraviado.setIdAgraviado((Integer) row[25]);
             agraviado.setObservaciones((String) row[26]);
-            incidencia.setAgraviados(List.of(agraviado));
+            incidencia.setAgraviados(agraviado);
 
 
 
@@ -196,7 +189,7 @@ public class IncidenciaRepositoryImpl implements IIncidenciaRepository {
             infractor.getPersona().setDocumento((String) row[31]);
             infractor.setIdInfractor((Integer) row[32]);
             infractor.setObservaciones((String) row[33]);
-            incidencia.setInfractores(List.of(infractor));
+            incidencia.setInfractores(infractor);
 
 
             return Optional.of(incidencia);
@@ -241,25 +234,25 @@ public class IncidenciaRepositoryImpl implements IIncidenciaRepository {
                 TipoIntervencion tipoIntervencion = new TipoIntervencion();
                 tipoIntervencion.setIdIntervencion((Integer) row[8]);
                 tipoIntervencion.setNombre((String) row[9]);
-                incidencia.setIntervenciones(List.of(tipoIntervencion));
+                incidencia.setIntervenciones(tipoIntervencion);
 
                 // Delito
                 Delito delito = new Delito();
                 delito.setIdDelito((Integer) row[10]);
                 delito.setNombre((String) row[11]);
-                incidencia.setDelitos(List.of(delito));
+                incidencia.setDelitos(delito);
 
                 // Ocurrencia
                 TipoOcurrencia tipoOcurrencia = new TipoOcurrencia();
                 tipoOcurrencia.setIdOcurrencia((Integer) row[12]);
                 tipoOcurrencia.setNombre((String) row[13]);
-                incidencia.setOcurrencias(List.of(tipoOcurrencia));
+                incidencia.setOcurrencias(tipoOcurrencia);
 
                 // Servicio
                 ServicioSerenazgo servicioSerenazgo = new ServicioSerenazgo();
                 servicioSerenazgo.setIdServicio((Integer) row[14]);
                 servicioSerenazgo.setNombre((String) row[15]);
-                incidencia.setServicios(List.of(servicioSerenazgo));
+                incidencia.setServicios(servicioSerenazgo);
 
                 // Urbanización y sector
                 Urbanizacion urbanizacion = new Urbanizacion();
@@ -271,7 +264,7 @@ public class IncidenciaRepositoryImpl implements IIncidenciaRepository {
                 sector.setNombre((String) row[19]);
 
                 urbanizacion.setSector(sector);
-                incidencia.setUrbanizaciones(List.of(urbanizacion));
+                incidencia.setUrbanizaciones(urbanizacion);
 
                 // Agraviado
                 Agraviado agraviado = new Agraviado();
@@ -282,7 +275,7 @@ public class IncidenciaRepositoryImpl implements IIncidenciaRepository {
                 agraviado.getPersona().setDocumento((String) row[24]);
                 agraviado.setIdAgraviado((Integer) row[25]);
                 agraviado.setObservaciones((String) row[26]);
-                incidencia.setAgraviados(List.of(agraviado));
+                incidencia.setAgraviados(agraviado);
 
                 // Infractor
                 Infractor infractor = new Infractor();
@@ -293,7 +286,7 @@ public class IncidenciaRepositoryImpl implements IIncidenciaRepository {
                 infractor.getPersona().setDocumento((String) row[31]);
                 infractor.setIdInfractor((Integer) row[32]);
                 infractor.setObservaciones((String) row[33]);
-                incidencia.setInfractores(List.of(infractor));
+                incidencia.setInfractores(infractor);
 
                 incidencias.add(incidencia);
             }
@@ -347,7 +340,7 @@ public class IncidenciaRepositoryImpl implements IIncidenciaRepository {
             query.setParameter("p_fecha_hora_incidencia", java.sql.Timestamp.valueOf(incidencia.getFecha_hora_incidencia()));
             query.setParameter("p_descripcion", incidencia.getDescripcion());
             query.setParameter("p_id_user", incidencia.getUser().getIdUsuario());
-            query.setParameter("p_apoyo", incidencia.getApoyo_policial() != null ? incidencia.getApoyo_policial() : "No");
+            query.setParameter("p_apoyo", incidencia.getApoyo_policial().name());
 
             query.setParameter("p_id_intervencion", !incidencia.getIntervenciones().isEmpty() ? incidencia.getIntervenciones().get(0).getIdIntervencion() : null);
             query.setParameter("p_id_delito", !incidencia.getDelitos().isEmpty() ? incidencia.getDelitos().get(0).getIdDelito() : null);

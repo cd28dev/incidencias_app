@@ -55,8 +55,8 @@ public class TipoOcurrencia implements Serializable {
         return incidencias;
     }
 
-    public void setIncidencias(List<Incidencia> incidencias) {
-        this.incidencias = incidencias;
+    public void setIncidencias(Incidencia incidencia) {
+        this.incidencias.add(incidencia);
     }
     
     

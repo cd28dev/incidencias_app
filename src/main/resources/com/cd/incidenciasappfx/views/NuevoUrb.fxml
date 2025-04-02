@@ -30,7 +30,7 @@
             <TextField fx:id="id" visible="false" managed="false"/>
             
             <Label text="Sector:" GridPane.rowIndex="5" styleClass="form-label"/>
-            <ComboBox fx:id="cbUrb" GridPane.columnIndex="1" GridPane.rowIndex="5" styleClass="form-field">
+            <ComboBox fx:id="cbSector" GridPane.columnIndex="1" GridPane.rowIndex="5" styleClass="form-field">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
                     </FXCollections>

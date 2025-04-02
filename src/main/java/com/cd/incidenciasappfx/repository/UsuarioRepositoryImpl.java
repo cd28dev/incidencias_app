@@ -218,6 +218,7 @@ public class UsuarioRepositoryImpl implements IUsuarioRepository {
             query.registerStoredProcedureParameter("p_password", String.class, ParameterMode.IN);
             query.registerStoredProcedureParameter("p_existe", Boolean.class, ParameterMode.OUT);
             query.registerStoredProcedureParameter("p_rol", String.class, ParameterMode.OUT);
+            query.registerStoredProcedureParameter("p_id_user", Integer.class, ParameterMode.OUT);  // Agregado el parámetro de salida para el id
 
             // Asignar valores a los parámetros de entrada
             query.setParameter("p_username", username);
@@ -229,10 +230,13 @@ public class UsuarioRepositoryImpl implements IUsuarioRepository {
             // Obtener valores de salida
             Boolean existe = (Boolean) query.getOutputParameterValue("p_existe");
             String rolNombre = (String) query.getOutputParameterValue("p_rol");
+            Integer idUser = (Integer) query.getOutputParameterValue("p_id_user");
+
 
             if (Boolean.TRUE.equals(existe)) {
                 usuario = new Usuario();
                 usuario.setUsuario(username);
+                usuario.setIdUsuario(idUser);
 
                 // Crear y asignar el rol
                 Rol rol = new Rol();

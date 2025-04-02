@@ -64,8 +64,8 @@ public class Sector implements Serializable {
         return urbanizaciones;
     }
 
-    public void setUrbanizaciones(List<Urbanizacion> urbanizaciones) {
-        this.urbanizaciones = urbanizaciones;
+    public void setUrbanizaciones(Urbanizacion urbanizacion) {
+        this.urbanizaciones.add(urbanizacion);
     }
 
 }

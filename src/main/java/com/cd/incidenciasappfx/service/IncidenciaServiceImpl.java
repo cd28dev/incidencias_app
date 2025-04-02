@@ -31,7 +31,7 @@ public class IncidenciaServiceImpl implements IIncidenciaService {
 
     @Override
     public Optional<Incidencia> update(Incidencia incidencia) {
-        return incidenciaRepository.save(incidencia);
+        return incidenciaRepository.update(incidencia);
     }
 
     @Override

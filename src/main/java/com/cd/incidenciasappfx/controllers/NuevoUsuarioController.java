@@ -4,6 +4,7 @@ import com.cd.incidenciasappfx.helper.AlertHelper;
 import com.cd.incidenciasappfx.helper.ImageHelper;
 import com.cd.incidenciasappfx.helper.ModalControllerHelper;
 import com.cd.incidenciasappfx.models.Rol;
+import javafx.css.converter.StringConverter;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -41,7 +42,7 @@ public class NuevoUsuarioController extends ModalControllerHelper<Usuario> {
     private TextField idUser;
 
     @FXML
-    private ComboBox<String> cbRol;
+    private ComboBox<Rol> cbRol;
     @FXML
     private Button btnSubirFoto;
 
@@ -95,7 +96,7 @@ public class NuevoUsuarioController extends ModalControllerHelper<Usuario> {
         txtApellidos.setText(u.getApellido());
         txtEmail.setText(u.getCorreo());
         txtUsername.setText(u.getUsuario());
-        cbRol.setValue(u.getRol().getNombre());
+        cbRol.setValue(u.getRol());
 
         if (u.getFoto() != null && !u.getFoto().isEmpty()) {
             fotoPath = u.getFoto();
@@ -107,25 +108,9 @@ public class NuevoUsuarioController extends ModalControllerHelper<Usuario> {
     }
 
     private void cargarRoles() {
-        Task<List<Rol>> task = new Task<>() {
-            @Override
-            protected List<Rol> call() throws Exception {
-                return rolService.findAll();
-            }
-        };
-
-        task.setOnSucceeded(event -> {
-            List<Rol> roles = task.getValue();
-            if (roles != null) {
-                ObservableList<String> listaRoles = FXCollections.observableArrayList(
-                        roles.stream().map(Rol::getNombre).toList()
-                );
-                cbRol.setItems(listaRoles);
-            }
-        });
-
-        new Thread(task).start();
+        cargarDatos(cbRol,rolService::findAll,Rol::getNombre);
     }
+
 
     @FXML
     private String subirFoto() {
@@ -135,8 +120,6 @@ public class NuevoUsuarioController extends ModalControllerHelper<Usuario> {
         if (fotoPath != null) {
             imgPreview.setImage(ImageHelper.cargarImagen(fotoPath));
         }
-
-        //vamooooooooo perú csm
         return fotoPath;
     }
 
@@ -159,7 +142,7 @@ public class NuevoUsuarioController extends ModalControllerHelper<Usuario> {
         String apellidos = txtApellidos.getText();
         String email = txtEmail.getText();
         String username = txtUsername.getText();
-        String rolSeleccionado = cbRol.getValue();
+        Rol rolSeleccionado = cbRol.getValue();
         String foto = fotoPath;
 
         if (!email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
@@ -168,14 +151,12 @@ public class NuevoUsuarioController extends ModalControllerHelper<Usuario> {
         }
 
         Usuario usuario = new Usuario();
-        Rol rol = new Rol();
-        rol.setNombre(rolSeleccionado);
         usuario.setDni(documento);
         usuario.setNombre(nombres);
         usuario.setApellido(apellidos);
         usuario.setCorreo(email);
         usuario.setUsuario(username);
-        usuario.setRol(rol);
+        usuario.setRol(rolSeleccionado);
         usuario.setFoto(foto);
 
         registrarEntidad(usuario, userService::save, usuariosViewController::cargarUsuarios);
@@ -188,7 +169,7 @@ public class NuevoUsuarioController extends ModalControllerHelper<Usuario> {
         String apellidos = txtApellidos.getText();
         String email = txtEmail.getText();
         String username = txtUsername.getText();
-        String rolSeleccionado = cbRol.getValue();
+        Rol rolSeleccionado = cbRol.getValue();
         String foto = fotoPath;
 
         if (documento.isEmpty() || nombres.isEmpty() || apellidos.isEmpty()
@@ -203,15 +184,13 @@ public class NuevoUsuarioController extends ModalControllerHelper<Usuario> {
         }
 
         Usuario usuario = new Usuario();
-        Rol rol = new Rol();
-        rol.setNombre(rolSeleccionado);
         usuario.setIdUsuario(Integer.parseInt(id));
         usuario.setDni(documento);
         usuario.setNombre(nombres);
         usuario.setApellido(apellidos);
         usuario.setCorreo(email);
         usuario.setUsuario(username);
-        usuario.setRol(rol);
+        usuario.setRol(rolSeleccionado);
         usuario.setFoto(foto);
 
        

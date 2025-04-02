@@ -122,4 +122,15 @@
 
 }
 
+.label-titulo {
+    -fx-font-weight: bold;
+    -fx-text-fill: #333;
+    -fx-font-size: 14px;
+    -fx-wrap-text: true;
+}
+
+.label-dato {
+    -fx-font-size: 14px;
+    -fx-text-fill: #666;
+}
 
