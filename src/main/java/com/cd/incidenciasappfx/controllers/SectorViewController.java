@@ -6,14 +6,15 @@ import com.cd.incidenciasappfx.helper.PdfReportExporter;
 import com.cd.incidenciasappfx.models.Sector;
 import com.cd.incidenciasappfx.service.ISectorService;
 import com.cd.incidenciasappfx.service.SectorServiceImpl;
-import java.net.URL;
-import java.util.ResourceBundle;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+
+import java.net.URL;
+import java.util.ResourceBundle;
 
 /**
  * SectorViewController.java
@@ -70,12 +71,12 @@ public class SectorViewController extends ControllerHelper<Sector> implements In
                 tabla.getScene().getWindow());
     }
 
-    public void cargarSectores(){
-        cargarTabla(tabla,sectorService::findAll);
+    public void cargarSectores() {
+        cargarTabla(tabla, sectorService::findAll);
     }
-    
+
     private void eliminarSector(Sector sector) {
-        eliminarRegistro(sector, s -> sectorService.delete(s), () -> cargarTabla(tabla,sectorService::findAll),tabla);
+        eliminarRegistro(sector, s -> sectorService.delete(s), () -> cargarTabla(tabla, sectorService::findAll), tabla);
 
     }
 

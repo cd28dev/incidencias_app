@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.image.*?>
 
-<VBox spacing="10.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<VBox spacing="10.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.cd.incidenciasappfx.controllers.RolesViewController"
       stylesheets="@/com/cd/incidenciasappfx/styles/page.css">
-    
+
     <!-- Encabezado -->
     <HBox spacing="10" styleClass="header">
-        <Label text="Lista de Roles" styleClass="header-title" />
+        <Label text="Lista de Roles" styleClass="header-title"/>
         <Region HBox.hgrow="ALWAYS"/>
 
         <!-- Botones de Exportación -->
@@ -31,9 +31,9 @@
 
     <!-- Botón Nuevo y Campo de Búsqueda -->
     <HBox spacing="10" styleClass="toolbar">
-        <Button text="Nuevo" fx:id="btnNuevo" styleClass="btn-nuevo" onAction="#abrirModal0" />
+        <Button text="Nuevo" fx:id="btnNuevo" styleClass="btn-nuevo" onAction="#abrirModal0"/>
         <Region HBox.hgrow="ALWAYS"/>
-        
+
         <!-- Campo de Búsqueda con Icono de Lupa -->
         <HBox spacing="5" styleClass="search-box">
             <TextField fx:id="txtBuscar" promptText="Buscar por Rol" styleClass="search-field"/>
@@ -46,18 +46,18 @@
             </Button>
         </HBox>
     </HBox>
-    
+
     <!-- Tabla de Roles -->
-    <TableView fx:id="tabla" styleClass="table-view"  VBox.vgrow="ALWAYS">
+    <TableView fx:id="tabla" styleClass="table-view" VBox.vgrow="ALWAYS">
         <columns>
-            <TableColumn text="Id Rol" fx:id="id" />
-            <TableColumn text="Rol" fx:id="colRol" />
-            <TableColumn text="Acción" fx:id="colAccion" />
+            <TableColumn text="Id Rol" fx:id="id"/>
+            <TableColumn text="Rol" fx:id="colRol"/>
+            <TableColumn text="Acción" fx:id="colAccion"/>
         </columns>
     </TableView>
-    
+
     <HBox spacing="10" alignment="CENTER" styleClass="footer">
-        <Label text="© 2025 CD - Todos los derechos reservados" />
+        <Label text="© 2025 CD - Todos los derechos reservados"/>
     </HBox>
 </VBox>
 

@@ -86,7 +86,7 @@ public class NuevoSectorController extends ModalControllerHelper<Sector> {
             return;
         }
 
-        Sector s= new Sector();
+        Sector s = new Sector();
         s.setId(Integer.parseInt(idText));
         s.setNombre(nameSector);
 

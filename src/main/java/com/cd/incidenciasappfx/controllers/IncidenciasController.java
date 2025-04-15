@@ -1,14 +1,11 @@
-
 package com.cd.incidenciasappfx.controllers;
 
 import com.cd.incidenciasappfx.helper.ControllerHelper;
 import com.cd.incidenciasappfx.helper.ExcelReportExporter;
 import com.cd.incidenciasappfx.helper.PdfReportExporter;
 import com.cd.incidenciasappfx.models.Incidencia;
-import com.cd.incidenciasappfx.models.Usuario;
 import com.cd.incidenciasappfx.service.IIncidenciaService;
 import com.cd.incidenciasappfx.service.IncidenciaServiceImpl;
-import com.cd.incidenciasappfx.service.UsuarioServiceImpl;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
@@ -18,11 +15,9 @@ import javafx.scene.control.TableView;
 
 import java.net.URL;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ResourceBundle;
 
 /**
- *
  * @author CDAA
  */
 public class IncidenciasController extends ControllerHelper<Incidencia> implements Initializable {
@@ -32,17 +27,17 @@ public class IncidenciasController extends ControllerHelper<Incidencia> implemen
     @FXML
     public TableColumn<Incidencia, LocalDateTime> colFecha;
     @FXML
-    public TableColumn<Incidencia,String> colUbicacion;
+    public TableColumn<Incidencia, String> colUbicacion;
     @FXML
-    public TableColumn<Incidencia,String> colTipoReporte;
+    public TableColumn<Incidencia, String> colTipoReporte;
     @FXML
-    public TableColumn<Incidencia,String> colTipoIntervencion;
+    public TableColumn<Incidencia, String> colTipoIntervencion;
     @FXML
-    public TableColumn<Incidencia,String> colServicio;
+    public TableColumn<Incidencia, String> colServicio;
     @FXML
-    public TableColumn<Incidencia,String> colInfraccion;
+    public TableColumn<Incidencia, String> colInfraccion;
     @FXML
-    public TableColumn<Incidencia,String> colDetalle;
+    public TableColumn<Incidencia, String> colDetalle;
 
     private IIncidenciaService incidenciaService;
 
@@ -76,8 +71,8 @@ public class IncidenciasController extends ControllerHelper<Incidencia> implemen
         colServicio.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getServicios().get(0).getNombre()));
         colInfraccion.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDelitos().get(0).getNombre()));
 
-        configurarColumnaAccion(this::abrirModalActualizar,this::eliminarIncidencia);
-        configurarColumnaVer(colDetalle,this::abrilModalDetalle);
+        configurarColumnaAccion(this::abrirModalActualizar, this::eliminarIncidencia);
+        configurarColumnaVer(colDetalle, this::abrilModalDetalle);
 
     }
 
@@ -105,11 +100,11 @@ public class IncidenciasController extends ControllerHelper<Incidencia> implemen
     }
 
     public void cargarIncidencias() {
-        cargarTabla(tabla,incidenciaService::findAll);
+        cargarTabla(tabla, incidenciaService::findAll);
     }
 
     private void eliminarIncidencia(Incidencia incidencia) {
-        eliminarRegistro(incidencia, incidenciaService::delete, () -> cargarTabla(tabla,incidenciaService::findAll),tabla);
+        eliminarRegistro(incidencia, incidenciaService::delete, () -> cargarTabla(tabla, incidenciaService::findAll), tabla);
 
     }
 

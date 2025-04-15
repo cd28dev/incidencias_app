@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
-
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.image.Image?>
 <VBox spacing="10.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.cd.incidenciasappfx.controllers.TipoIntViewController"
       stylesheets="@/com/cd/incidenciasappfx/styles/page.css">
 
     <!-- Encabezado -->
     <HBox spacing="10" styleClass="header">
-        <Label text="Tipos de Intervencion" styleClass="header-title" />
+        <Label text="Tipos de Intervencion" styleClass="header-title"/>
         <Region HBox.hgrow="ALWAYS"/>
 
         <!-- Botones de Exportación -->
@@ -33,7 +31,7 @@
 
     <!-- Botón Nuevo y Campo de Búsqueda -->
     <HBox spacing="10" styleClass="toolbar">
-        <Button text="Nuevo" fx:id="btnNuevo" styleClass="btn-nuevo" onAction="#abrirModal0" />
+        <Button text="Nuevo" fx:id="btnNuevo" styleClass="btn-nuevo" onAction="#abrirModal0"/>
         <Region HBox.hgrow="ALWAYS"/>
 
         <!-- Campo de Búsqueda con Icono de Lupa -->
@@ -50,16 +48,16 @@
     </HBox>
 
     <!-- Tabla de Roles -->
-    <TableView fx:id="tabla" styleClass="table-view"  VBox.vgrow="ALWAYS">
+    <TableView fx:id="tabla" styleClass="table-view" VBox.vgrow="ALWAYS">
         <columns>
-            <TableColumn text="Id Sector" fx:id="id" />
-            <TableColumn text="Tipo Intervencion" fx:id="colInt" />
-            <TableColumn text="Acción" fx:id="colAccion" />
+            <TableColumn text="Id Sector" fx:id="id"/>
+            <TableColumn text="Tipo Intervencion" fx:id="colInt"/>
+            <TableColumn text="Acción" fx:id="colAccion"/>
         </columns>
     </TableView>
 
     <HBox spacing="10" alignment="CENTER" styleClass="footer">
-        <Label text="© 2025 CD - Todos los derechos reservados" />
+        <Label text="© 2025 CD - Todos los derechos reservados"/>
     </HBox>
 </VBox>
 

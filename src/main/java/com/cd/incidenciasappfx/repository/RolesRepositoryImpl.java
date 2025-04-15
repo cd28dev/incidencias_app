@@ -4,6 +4,7 @@ import com.cd.incidenciasappfx.models.Rol;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.ParameterMode;
 import jakarta.persistence.StoredProcedureQuery;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -57,7 +58,7 @@ public class RolesRepositoryImpl implements IRolesRepository {
         } catch (jakarta.persistence.PersistenceException e) {
             handleSQLException(e);
             return Optional.empty();
-        }finally {
+        } finally {
             em.close();
         }
     }
@@ -107,7 +108,7 @@ public class RolesRepositoryImpl implements IRolesRepository {
             return Optional.of(r);
 
         } catch (jakarta.persistence.PersistenceException e) {
-           handleSQLException(e);
+            handleSQLException(e);
             return Optional.empty();
         } finally {
             em.close();
@@ -139,11 +140,11 @@ public class RolesRepositoryImpl implements IRolesRepository {
         } catch (jakarta.persistence.PersistenceException e) {
             handleSQLException(e);
             return false;
-        }finally {
+        } finally {
             em.close();
         }
     }
-    
+
     private void handleSQLException(jakarta.persistence.PersistenceException e) {
         Throwable cause = e.getCause();
         if (cause instanceof java.sql.SQLException sqlEx) {

@@ -6,14 +6,15 @@ import com.cd.incidenciasappfx.helper.PdfReportExporter;
 import com.cd.incidenciasappfx.models.Urbanizacion;
 import com.cd.incidenciasappfx.service.IUrbService;
 import com.cd.incidenciasappfx.service.UrbServiceImpl;
-import java.net.URL;
-import java.util.ResourceBundle;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+
+import java.net.URL;
+import java.util.ResourceBundle;
 
 /**
  * UrbViewController.java
@@ -52,7 +53,7 @@ public class UrbViewController extends ControllerHelper<Urbanizacion> implements
 
     private void configColumns() {
         tabla.getColumns().clear();
-        tabla.getColumns().addAll(colUrb,colSector, colAccion);
+        tabla.getColumns().addAll(colUrb, colSector, colAccion);
 
         id.setCellValueFactory(data
                 -> new ReadOnlyObjectWrapper<>(data.getValue().getId())
@@ -81,7 +82,7 @@ public class UrbViewController extends ControllerHelper<Urbanizacion> implements
     }
 
     private void eliminarUrb(Urbanizacion urb) {
-        eliminarRegistro(urb, u -> urbService.delete(u), () -> cargarTabla(tabla,urbService::findAll),tabla);
+        eliminarRegistro(urb, u -> urbService.delete(u), () -> cargarTabla(tabla, urbService::findAll), tabla);
 
     }
 

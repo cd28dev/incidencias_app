@@ -7,8 +7,12 @@ import java.util.Optional;
 
 public interface ITipoIntService {
     Optional<TipoIntervencion> save(TipoIntervencion d);
+
     Optional<TipoIntervencion> findById(Integer idDelito);
+
     List<TipoIntervencion> findAll();
+
     Optional<TipoIntervencion> update(TipoIntervencion d);
+
     boolean delete(TipoIntervencion d);
 }

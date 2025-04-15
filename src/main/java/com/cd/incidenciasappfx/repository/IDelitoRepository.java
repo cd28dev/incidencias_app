@@ -7,8 +7,12 @@ import java.util.Optional;
 
 public interface IDelitoRepository {
     Optional<Delito> save(Delito d);
+
     Optional<Delito> findById(Integer idDelito);
+
     List<Delito> findAll();
+
     Optional<Delito> update(Delito d);
+
     boolean delete(int id);
 }

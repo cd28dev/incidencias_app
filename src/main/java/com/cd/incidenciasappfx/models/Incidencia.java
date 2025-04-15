@@ -1,4 +1,3 @@
-
 package com.cd.incidenciasappfx.models;
 
 import jakarta.persistence.*;
@@ -9,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * @author CDAA
  */
 
@@ -18,19 +16,19 @@ import java.util.List;
 public class Incidencia implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id_incidencia")
+    @Column(name = "id_incidencia")
     private int idIncidencia;
 
-    @Column(name="direccion",nullable = false)
+    @Column(name = "direccion", nullable = false)
     private String direccion;
 
-    @Column(name="fecha_hora_incidencia",nullable = false)
+    @Column(name = "fecha_hora_incidencia", nullable = false)
     private LocalDateTime fecha_hora_incidencia;
 
-    @Column(name="fecha_hora_registro",nullable = false)
+    @Column(name = "fecha_hora_registro", nullable = false)
     private LocalDateTime fecha_hora_registro;
 
-    @Column(name="descripcion",columnDefinition = "TEXT")
+    @Column(name = "descripcion", columnDefinition = "TEXT")
     private String descripcion;
 
     @Enumerated(EnumType.STRING)
@@ -49,46 +47,48 @@ public class Incidencia implements Serializable {
 
     @ManyToMany
     @JoinTable(
-        name = "incidencias_ocurrencias",
-        joinColumns = @JoinColumn(name = "id_incidencia"),
-        inverseJoinColumns = @JoinColumn(name = "id_ocurrencia")
+            name = "incidencias_ocurrencias",
+            joinColumns = @JoinColumn(name = "id_incidencia"),
+            inverseJoinColumns = @JoinColumn(name = "id_ocurrencia")
     )
     private List<TipoOcurrencia> ocurrencias;
 
     @ManyToMany
     @JoinTable(
-        name = "incidencias_intervenciones",
-        joinColumns = @JoinColumn(name = "id_incidencia"),
-        inverseJoinColumns = @JoinColumn(name = "id_intervencion")
+            name = "incidencias_intervenciones",
+            joinColumns = @JoinColumn(name = "id_incidencia"),
+            inverseJoinColumns = @JoinColumn(name = "id_intervencion")
     )
     private List<TipoIntervencion> intervenciones;
 
     @ManyToMany
     @JoinTable(
-        name = "incidencias_delitos",
-        joinColumns = @JoinColumn(name = "id_incidencia"),
-        inverseJoinColumns = @JoinColumn(name = "id_delito")
+            name = "incidencias_delitos",
+            joinColumns = @JoinColumn(name = "id_incidencia"),
+            inverseJoinColumns = @JoinColumn(name = "id_delito")
     )
     private List<Delito> delitos;
 
     @ManyToMany
     @JoinTable(
-        name = "incidencias_servicios",
-        joinColumns = @JoinColumn(name = "id_incidencia"),
-        inverseJoinColumns = @JoinColumn(name = "id_servicio")
+            name = "incidencias_servicios",
+            joinColumns = @JoinColumn(name = "id_incidencia"),
+            inverseJoinColumns = @JoinColumn(name = "id_servicio")
     )
     private List<ServicioSerenazgo> servicios;
-    
-    
+
+
     @ManyToMany
     @JoinTable(
-        name = "incidencias_urbanizaciones",
-        joinColumns = @JoinColumn(name = "id_incidencia"),
-        inverseJoinColumns = @JoinColumn(name = "id_urbanizacion")
+            name = "incidencias_urbanizaciones",
+            joinColumns = @JoinColumn(name = "id_incidencia"),
+            inverseJoinColumns = @JoinColumn(name = "id_urbanizacion")
     )
     private List<Urbanizacion> urbanizaciones;
 
-    public enum ApoyoPolicial {SI, NO};
+    public enum ApoyoPolicial {SI, NO}
+
+    ;
 
     public Incidencia() {
         urbanizaciones = new ArrayList<>();

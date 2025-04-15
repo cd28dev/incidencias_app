@@ -7,7 +7,7 @@ import com.cd.incidenciasappfx.repository.TipoIntRepositoryImpl;
 import java.util.List;
 import java.util.Optional;
 
-public class TipoIntServiceImpl implements ITipoIntService{
+public class TipoIntServiceImpl implements ITipoIntService {
     private final ITipoIntRepository tipoIntRepository;
 
     public TipoIntServiceImpl() {

@@ -1,6 +1,5 @@
 package com.cd.incidenciasappfx.repository;
 
-import com.cd.incidenciasappfx.models.Delito;
 import com.cd.incidenciasappfx.models.ServicioSerenazgo;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.ParameterMode;
@@ -10,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class ServiciosSerenazgoRepositoryImpl implements IServiciosSerenazgoRepository{
+public class ServiciosSerenazgoRepositoryImpl implements IServiciosSerenazgoRepository {
 
     @Override
     public Optional<ServicioSerenazgo> save(ServicioSerenazgo servicioSerenazgo) {
@@ -27,7 +26,7 @@ public class ServiciosSerenazgoRepositoryImpl implements IServiciosSerenazgoRepo
         } catch (jakarta.persistence.PersistenceException e) {
             handleSQLException(e);
             return Optional.empty();
-        }finally {
+        } finally {
             em.close();
         }
     }
@@ -131,7 +130,7 @@ public class ServiciosSerenazgoRepositoryImpl implements IServiciosSerenazgoRepo
         } catch (jakarta.persistence.PersistenceException e) {
             handleSQLException(e);
             return false;
-        }finally {
+        } finally {
             em.close();
         }
     }

@@ -7,8 +7,12 @@ import java.util.Optional;
 
 public interface IIncidenciaService {
     Optional<Incidencia> save(Incidencia incidencia);
+
     Optional<Incidencia> findById(Integer id);
+
     List<Incidencia> findAll();
+
     Optional<Incidencia> update(Incidencia incidencia);
+
     boolean delete(Incidencia incidencia);
 }

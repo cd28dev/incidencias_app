@@ -1,7 +1,6 @@
 package com.cd.incidenciasappfx.repository;
 
 import com.cd.incidenciasappfx.models.Delito;
-import com.cd.incidenciasappfx.models.Rol;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.ParameterMode;
 import jakarta.persistence.StoredProcedureQuery;
@@ -10,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class DelitosRepositoryImpl implements IDelitoRepository{
+public class DelitosRepositoryImpl implements IDelitoRepository {
 
     @Override
     public Optional<Delito> save(Delito d) {
@@ -28,7 +27,7 @@ public class DelitosRepositoryImpl implements IDelitoRepository{
         } catch (jakarta.persistence.PersistenceException e) {
             handleSQLException(e);
             return Optional.empty();
-        }finally {
+        } finally {
             em.close();
         }
     }
@@ -132,7 +131,7 @@ public class DelitosRepositoryImpl implements IDelitoRepository{
         } catch (jakarta.persistence.PersistenceException e) {
             handleSQLException(e);
             return false;
-        }finally {
+        } finally {
             em.close();
         }
     }

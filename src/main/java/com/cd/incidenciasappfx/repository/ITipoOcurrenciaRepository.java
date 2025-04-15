@@ -7,8 +7,12 @@ import java.util.Optional;
 
 public interface ITipoOcurrenciaRepository {
     Optional<TipoOcurrencia> save(TipoOcurrencia d);
+
     Optional<TipoOcurrencia> findById(Integer idDelito);
+
     List<TipoOcurrencia> findAll();
+
     Optional<TipoOcurrencia> update(TipoOcurrencia d);
+
     boolean delete(int id);
 }

@@ -3,11 +3,6 @@ package com.cd.incidenciasappfx.controllers;
 import com.cd.incidenciasappfx.App;
 import com.cd.incidenciasappfx.models.SesionUsuario;
 import com.cd.incidenciasappfx.models.Usuario;
-import java.io.IOException;
-import java.net.URL;
-import java.util.Optional;
-import java.util.ResourceBundle;
-
 import com.cd.incidenciasappfx.service.IUsuarioService;
 import com.cd.incidenciasappfx.service.UsuarioServiceImpl;
 import javafx.application.Platform;
@@ -22,7 +17,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -30,6 +24,11 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.Optional;
+import java.util.ResourceBundle;
 
 public class PrincipalController implements Initializable {
 
@@ -75,6 +74,7 @@ public class PrincipalController implements Initializable {
         Platform.runLater(System::gc); // Forzar recolección de basura
         mostrarLogin();
     }
+
     private void mostrarLogin() {
         loginPane.setVisible(true);
         loginPane.setManaged(true);
@@ -83,6 +83,7 @@ public class PrincipalController implements Initializable {
         contentArea.setVisible(false);
         contentArea.setManaged(false);
     }
+
     private void mostrarSistema() {
         loginPane.setVisible(false);
         loginPane.setManaged(false);
@@ -178,15 +179,15 @@ public class PrincipalController implements Initializable {
         Platform.runLater(System::gc); // Forzar recolección de basura
         loadView("RolesView");
     }
-    
+
     @FXML
-    private void handleSectores(){
+    private void handleSectores() {
         Platform.runLater(System::gc); // Forzar recolección de basura
         loadView("SectorView");
     }
-    
-    @FXML   
-    private void handleUrb(){
+
+    @FXML
+    private void handleUrb() {
         Platform.runLater(System::gc); // Forzar recolección de basura
         loadView("UrbanizacionView");
     }
@@ -207,8 +208,9 @@ public class PrincipalController implements Initializable {
                 }
             }
         });
-        userActivo.setText("Bienvenido, "+usuario.getRol().getNombre());
+        userActivo.setText("Bienvenido, " + usuario.getRol().getNombre());
     }
+
     @FXML
     public void handleDelitos() {
         Platform.runLater(System::gc); // Forzar recolección de basura
@@ -220,11 +222,13 @@ public class PrincipalController implements Initializable {
         Platform.runLater(System::gc); // Forzar recolección de basura
         loadView("TipoIntervencionView");
     }
+
     @FXML
     public void handleTipoOcurrencia() {
         Platform.runLater(System::gc); // Forzar recolección de basura
         loadView("TipoOcurrenciaView");
     }
+
     @FXML
     public void handleServicios() {
         Platform.runLater(System::gc); // Forzar recolección de basura

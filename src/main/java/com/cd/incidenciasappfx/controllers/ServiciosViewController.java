@@ -66,12 +66,12 @@ public class ServiciosViewController extends ControllerHelper<ServicioSerenazgo>
                 tabla.getScene().getWindow());
     }
 
-    public void cargarServicios(){
-        cargarTabla(tabla,serviciosService::findAll);
+    public void cargarServicios() {
+        cargarTabla(tabla, serviciosService::findAll);
     }
 
     private void eliminarServicios(ServicioSerenazgo servicioSerenazgo) {
-        eliminarRegistro(servicioSerenazgo, s -> serviciosService.delete(s), () -> cargarTabla(tabla,serviciosService::findAll),tabla);
+        eliminarRegistro(servicioSerenazgo, s -> serviciosService.delete(s), () -> cargarTabla(tabla, serviciosService::findAll), tabla);
 
     }
 

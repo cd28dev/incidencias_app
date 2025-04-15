@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * @author CDAA
  */
 @Entity
@@ -15,7 +14,7 @@ import java.util.List;
 public class Rol implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id_rol")
+    @Column(name = "id_rol")
     private int idRol;
 
     @Column(unique = true, nullable = false)
@@ -57,5 +56,5 @@ public class Rol implements Serializable {
         this.usuarios.add(usuario);
     }
 
-    
+
 }

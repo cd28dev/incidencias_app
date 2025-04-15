@@ -27,7 +27,7 @@ public class TipoIntRepositoryImpl implements ITipoIntRepository {
         } catch (jakarta.persistence.PersistenceException e) {
             handleSQLException(e);
             return Optional.empty();
-        }finally {
+        } finally {
             em.close();
         }
     }
@@ -131,7 +131,7 @@ public class TipoIntRepositoryImpl implements ITipoIntRepository {
         } catch (jakarta.persistence.PersistenceException e) {
             handleSQLException(e);
             return false;
-        }finally {
+        } finally {
             em.close();
         }
     }

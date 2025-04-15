@@ -2,18 +2,12 @@ package com.cd.incidenciasappfx.controllers;
 
 import com.cd.incidenciasappfx.helper.AlertHelper;
 import com.cd.incidenciasappfx.helper.ModalControllerHelper;
-
 import com.cd.incidenciasappfx.models.Sector;
 import com.cd.incidenciasappfx.models.Urbanizacion;
 import com.cd.incidenciasappfx.service.ISectorService;
 import com.cd.incidenciasappfx.service.IUrbService;
 import com.cd.incidenciasappfx.service.SectorServiceImpl;
 import com.cd.incidenciasappfx.service.UrbServiceImpl;
-import java.util.List;
-
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 

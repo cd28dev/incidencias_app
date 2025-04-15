@@ -14,6 +14,7 @@ public class IncidenciaServiceImpl implements IIncidenciaService {
     public IncidenciaServiceImpl() {
         this.incidenciaRepository = new IncidenciaRepositoryImpl();
     }
+
     @Override
     public Optional<Incidencia> save(Incidencia incidencia) {
         return incidenciaRepository.save(incidencia);

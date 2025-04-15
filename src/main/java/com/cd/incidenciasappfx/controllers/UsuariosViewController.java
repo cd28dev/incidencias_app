@@ -7,16 +7,17 @@ package com.cd.incidenciasappfx.controllers;
 import com.cd.incidenciasappfx.helper.ControllerHelper;
 import com.cd.incidenciasappfx.helper.ExcelReportExporter;
 import com.cd.incidenciasappfx.helper.PdfReportExporter;
-import java.net.URL;
-import java.util.ResourceBundle;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import com.cd.incidenciasappfx.models.Usuario;
 import com.cd.incidenciasappfx.service.IUsuarioService;
 import com.cd.incidenciasappfx.service.UsuarioServiceImpl;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+
+import java.net.URL;
+import java.util.ResourceBundle;
 
 /**
  * FXML Controller class
@@ -87,15 +88,15 @@ public class UsuariosViewController extends ControllerHelper<Usuario> implements
                 },
                 "Actualizar Usuario",
                 tabla.getScene().getWindow()
-                );
+        );
     }
 
     public void cargarUsuarios() {
-        cargarTabla(tabla,userService::findAll);
+        cargarTabla(tabla, userService::findAll);
     }
 
     private void eliminarUsuario(Usuario u) {
-        eliminarRegistro(u, userService::delete, () -> cargarTabla(tabla,userService::findAll),tabla);
+        eliminarRegistro(u, userService::delete, () -> cargarTabla(tabla, userService::findAll), tabla);
 
     }
 

@@ -8,7 +8,6 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperPrint;
 
 /**
- *
  * @author CDAA
  */
 public interface ReportExporter {

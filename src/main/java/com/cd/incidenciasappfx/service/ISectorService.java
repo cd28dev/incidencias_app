@@ -5,17 +5,21 @@
 package com.cd.incidenciasappfx.service;
 
 import com.cd.incidenciasappfx.models.Sector;
+
 import java.util.List;
 import java.util.Optional;
 
 /**
- *
  * @author CDAA
  */
 public interface ISectorService {
     Optional<Sector> save(Sector r);
+
     Optional<Sector> findById(Integer idSector);
+
     List<Sector> findAll();
+
     Optional<Sector> update(Sector s);
+
     boolean delete(Sector s);
 }

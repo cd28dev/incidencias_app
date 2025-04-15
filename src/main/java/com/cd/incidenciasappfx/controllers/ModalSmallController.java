@@ -1,4 +1,3 @@
-
 package com.cd.incidenciasappfx.controllers;
 
 import javafx.fxml.FXML;
@@ -11,7 +10,7 @@ import javafx.stage.Stage;
 
 /**
  * ModalSmallController.java
- * 
+ *
  * @author CDAA
  */
 public class ModalSmallController {

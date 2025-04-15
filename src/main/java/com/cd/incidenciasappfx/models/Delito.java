@@ -1,13 +1,6 @@
-
 package com.cd.incidenciasappfx.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -15,7 +8,7 @@ import java.util.List;
 
 /**
  * ${name}.java
- * 
+ *
  * @author ${user}
  */
 @Entity
@@ -26,7 +19,7 @@ public class Delito implements Serializable {
     @Column(name = "id_delito")
     private int idDelito;
 
-    @Column(name="nombre",unique = true, nullable = false)
+    @Column(name = "nombre", unique = true, nullable = false)
     private String nombre;
 
     @ManyToMany(mappedBy = "delitos")
@@ -59,6 +52,6 @@ public class Delito implements Serializable {
     public void setIncidencias(Incidencia incidencia) {
         this.incidencias.add(incidencia);
     }
-    
-    
+
+
 }

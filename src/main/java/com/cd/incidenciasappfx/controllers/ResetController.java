@@ -1,6 +1,5 @@
 package com.cd.incidenciasappfx.controllers;
 
-import com.cd.incidenciasappfx.models.Rol;
 import com.cd.incidenciasappfx.models.Usuario;
 import com.cd.incidenciasappfx.service.IUsuarioService;
 import com.cd.incidenciasappfx.service.UsuarioServiceImpl;

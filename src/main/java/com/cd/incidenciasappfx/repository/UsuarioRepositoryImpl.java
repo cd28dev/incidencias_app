@@ -6,12 +6,12 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.ParameterMode;
 import jakarta.persistence.StoredProcedureQuery;
 import jakarta.transaction.Transactional;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 /**
- *
  * @author CDAA
  */
 public class UsuarioRepositoryImpl implements IUsuarioRepository {
@@ -46,7 +46,7 @@ public class UsuarioRepositoryImpl implements IUsuarioRepository {
         } catch (jakarta.persistence.PersistenceException e) {
             handleSQLException(e);
             return Optional.empty();
-        }finally {
+        } finally {
             em.close();
         }
     }
@@ -158,7 +158,7 @@ public class UsuarioRepositoryImpl implements IUsuarioRepository {
         } catch (jakarta.persistence.PersistenceException e) {
             handleSQLException(e);
             return Optional.empty();
-        }finally{
+        } finally {
             em.close();
         }
     }
@@ -183,7 +183,7 @@ public class UsuarioRepositoryImpl implements IUsuarioRepository {
         } catch (jakarta.persistence.PersistenceException e) {
             handleSQLException(e);
             return false;
-        }finally{
+        } finally {
             em.close();
         }
     }

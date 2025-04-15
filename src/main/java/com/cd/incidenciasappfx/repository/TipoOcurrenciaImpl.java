@@ -1,6 +1,5 @@
 package com.cd.incidenciasappfx.repository;
 
-import com.cd.incidenciasappfx.models.TipoIntervencion;
 import com.cd.incidenciasappfx.models.TipoOcurrencia;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.ParameterMode;
@@ -10,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class TipoOcurrenciaImpl implements ITipoOcurrenciaRepository{
+public class TipoOcurrenciaImpl implements ITipoOcurrenciaRepository {
 
     @Override
     public Optional<TipoOcurrencia> save(TipoOcurrencia d) {
@@ -27,7 +26,7 @@ public class TipoOcurrenciaImpl implements ITipoOcurrenciaRepository{
         } catch (jakarta.persistence.PersistenceException e) {
             handleSQLException(e);
             return Optional.empty();
-        }finally {
+        } finally {
             em.close();
         }
     }
@@ -131,7 +130,7 @@ public class TipoOcurrenciaImpl implements ITipoOcurrenciaRepository{
         } catch (jakarta.persistence.PersistenceException e) {
             handleSQLException(e);
             return false;
-        }finally {
+        } finally {
             em.close();
         }
     }

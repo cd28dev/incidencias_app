@@ -1,20 +1,12 @@
-
 package com.cd.incidenciasappfx.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * @author CDAA
  */
 
@@ -23,7 +15,7 @@ import java.util.List;
 public class TipoIntervencion implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id_intervencion")
+    @Column(name = "id_intervencion")
     private int idIntervencion;
 
     @Column(unique = true, nullable = false)

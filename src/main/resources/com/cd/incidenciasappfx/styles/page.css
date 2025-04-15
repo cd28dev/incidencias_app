@@ -51,7 +51,7 @@
     -fx-border-color: #B0BEC5; /* Gris claro */
     -fx-border-radius: 4px;
     -fx-background-radius: 4px;
-    -fx-background-color:#F9FAFB;
+    -fx-background-color: #F9FAFB;
     -fx-font-size: 13px;
     -fx-min-width: 100px;
 }
@@ -89,6 +89,7 @@
 .table-row-cell:odd {
     -fx-background-color: #F5F5F5;
 }
+
 .table-row-cell:even {
     -fx-background-color: #FFFFFF;
 }

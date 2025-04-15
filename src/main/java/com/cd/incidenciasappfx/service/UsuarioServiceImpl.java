@@ -5,6 +5,7 @@ import com.cd.incidenciasappfx.models.Usuario;
 import com.cd.incidenciasappfx.repository.IUsuarioRepository;
 import com.cd.incidenciasappfx.repository.UsuarioRepositoryImpl;
 import jakarta.transaction.Transactional;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -93,12 +94,12 @@ public class UsuarioServiceImpl implements IUsuarioService {
     @Override
     public Optional<Usuario> findByEmail(String email) {
         Optional<Usuario> user;
-        user=  usuarioRepository.findByEmail(email);
+        user = usuarioRepository.findByEmail(email);
         if (user.isPresent()) {
             Usuario usuario = user.get();
             String pass = EmailHelper.genPassword();
             String asunto = "Reset Contraseña IncidenciasAPP";
-            String mensaje = "User: "+ usuario.getUsuario() +", Su contraseña temporal es: " + pass;
+            String mensaje = "User: " + usuario.getUsuario() + ", Su contraseña temporal es: " + pass;
 
 
             try {

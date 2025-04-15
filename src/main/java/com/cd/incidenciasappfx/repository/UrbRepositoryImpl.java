@@ -5,6 +5,7 @@ import com.cd.incidenciasappfx.models.Urbanizacion;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.ParameterMode;
 import jakarta.persistence.StoredProcedureQuery;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -151,7 +152,7 @@ public class UrbRepositoryImpl implements IUrbRepository {
             for (Object[] row : resultados) {
                 Urbanizacion u = new Urbanizacion();
                 u.setId((Integer) row[0]);
-                u.setNombre((String)row[1]);
+                u.setNombre((String) row[1]);
                 urbanizaciones.add(u);
             }
         } catch (jakarta.persistence.PersistenceException e) {

@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+
 <?import javafx.collections.FXCollections?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-
-
-<AnchorPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
+<?import javafx.scene.layout.*?>
+<AnchorPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
             fx:id="modalPane" prefWidth="400" prefHeight="350"
             stylesheets="@/com/cd/incidenciasappfx/styles/nuevousuario.css"
             styleClass="modal"
@@ -22,28 +21,28 @@
         <Label fx:id="lblTitle" text="Nuevo Usuario" styleClass="modal-title">
             <graphic>
                 <ImageView fx:id="iconIndex" styleClass="icon-style">
-                    <Image url="@/com/cd/incidenciasappfx/images/newUser.png" />
+                    <Image url="@/com/cd/incidenciasappfx/images/newUser.png"/>
                 </ImageView>
             </graphic>
         </Label>
-        <Separator />
+        <Separator/>
         <GridPane hgap="10" vgap="10" alignment="CENTER">
             <TextField fx:id="idUser" visible="false" managed="false"/>
             <Label text="N° Documento:" styleClass="form-label"/>
             <TextField fx:id="txtDocumento" GridPane.columnIndex="1" styleClass="form-field"/>
-            
+
             <Label text="Nombres:" GridPane.rowIndex="1" styleClass="form-label"/>
             <TextField fx:id="name" GridPane.columnIndex="1" GridPane.rowIndex="1" styleClass="form-field"/>
-            
+
             <Label text="Apellidos:" GridPane.rowIndex="2" styleClass="form-label"/>
             <TextField fx:id="txtApellidos" GridPane.columnIndex="1" GridPane.rowIndex="2" styleClass="form-field"/>
-            
+
             <Label text="Email:" GridPane.rowIndex="3" styleClass="form-label"/>
             <TextField fx:id="txtEmail" GridPane.columnIndex="1" GridPane.rowIndex="3" styleClass="form-field"/>
-            
+
             <Label text="Username:" GridPane.rowIndex="4" styleClass="form-label"/>
             <TextField fx:id="txtUsername" GridPane.columnIndex="1" GridPane.rowIndex="4" styleClass="form-field"/>
-            
+
             <Label text="Rol:" GridPane.rowIndex="5" styleClass="form-label"/>
             <ComboBox fx:id="cbRol" GridPane.columnIndex="1" GridPane.rowIndex="5" styleClass="form-field">
                 <items>
@@ -58,10 +57,11 @@
             <Button text="Subir Foto" fx:id="btnSubirFoto" styleClass="btn-azul" onAction="#subirFoto"/>
         </VBox>
         <Region prefHeight="10"/>
-        <Separator />
+        <Separator/>
         <HBox spacing="15" alignment="CENTER">
             <Button text="Guardar" fx:id="btnGuardar" styleClass="btn-primary" prefWidth="100" onAction="#save"/>
-            <Button text="Cancelar" fx:id="btnCancelar" styleClass="btn-danger" prefWidth="100" onAction="#closeWindow"/>
+            <Button text="Cancelar" fx:id="btnCancelar" styleClass="btn-danger" prefWidth="100"
+                    onAction="#closeWindow"/>
         </HBox>
         <Region prefHeight="30"/>
     </VBox>

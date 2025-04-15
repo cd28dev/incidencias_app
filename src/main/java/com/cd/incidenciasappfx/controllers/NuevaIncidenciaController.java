@@ -21,45 +21,78 @@ public class NuevaIncidenciaController extends ModalControllerHelper<Incidencia>
     public ToggleGroup groupAgraviado;
 
     private RadioButton selectedRadioButton;
-    @FXML private RadioButton rbSiAgraviado;
-    @FXML private RadioButton rbNoAgraviado;
-    @FXML private RadioButton rbSiApoyo;
-    @FXML private RadioButton rbNoApoyo;
+    @FXML
+    private RadioButton rbSiAgraviado;
+    @FXML
+    private RadioButton rbNoAgraviado;
+    @FXML
+    private RadioButton rbSiApoyo;
+    @FXML
+    private RadioButton rbNoApoyo;
 
-    @FXML private ComboBox<Sector> cbSector;
-    @FXML private ComboBox<ServicioSerenazgo> cbServicio;
-    @FXML private ComboBox<Urbanizacion> cbUrbanizacion;
-    @FXML private ComboBox<TipoOcurrencia> cbOcurrencia;
-    @FXML private ComboBox<TipoIntervencion> cbIntervencion;
-    @FXML private ComboBox<Delito> cbDelito;
+    @FXML
+    private ComboBox<Sector> cbSector;
+    @FXML
+    private ComboBox<ServicioSerenazgo> cbServicio;
+    @FXML
+    private ComboBox<Urbanizacion> cbUrbanizacion;
+    @FXML
+    private ComboBox<TipoOcurrencia> cbOcurrencia;
+    @FXML
+    private ComboBox<TipoIntervencion> cbIntervencion;
+    @FXML
+    private ComboBox<Delito> cbDelito;
 
-    @FXML private TextArea txtDescripcion;
-    @FXML private TextArea txtDescargoInf;
-    @FXML private TextArea txtDescargoAgr;
+    @FXML
+    private TextArea txtDescripcion;
+    @FXML
+    private TextArea txtDescargoInf;
+    @FXML
+    private TextArea txtDescargoAgr;
 
-    @FXML private Button btnAnterior;
-    @FXML private Button btnSiguiente;
+    @FXML
+    private Button btnAnterior;
+    @FXML
+    private Button btnSiguiente;
 
-    @FXML private VBox sectionIncidencia;
-    @FXML private VBox sectionInfractor;
-    @FXML private VBox sectionAgraviado;
-    @FXML private AnchorPane modalPane;
-    @FXML private StackPane stackPane;
+    @FXML
+    private VBox sectionIncidencia;
+    @FXML
+    private VBox sectionInfractor;
+    @FXML
+    private VBox sectionAgraviado;
+    @FXML
+    private AnchorPane modalPane;
+    @FXML
+    private StackPane stackPane;
 
-    @FXML private DatePicker dpFecha;
+    @FXML
+    private DatePicker dpFecha;
 
-    @FXML private TextField txtDniInfractor;
-    @FXML private TextField txtNombresInfractor;
-    @FXML private TextField txtApellidosInfractor;
-    @FXML private TextField txtDniAgraviado;
-    @FXML private TextField txtNombresAgraviado;
-    @FXML private TextField txtApellidosAgraviado;
-    @FXML private TextField txtTelefonoInf;
-    @FXML private TextField txtTelefonoAgr;
-    @FXML private TextField idInfractor;
-    @FXML private TextField idIncidencia;
-    @FXML private TextField txtDireccion;
-    @FXML private TextField idAgraviado;
+    @FXML
+    private TextField txtDniInfractor;
+    @FXML
+    private TextField txtNombresInfractor;
+    @FXML
+    private TextField txtApellidosInfractor;
+    @FXML
+    private TextField txtDniAgraviado;
+    @FXML
+    private TextField txtNombresAgraviado;
+    @FXML
+    private TextField txtApellidosAgraviado;
+    @FXML
+    private TextField txtTelefonoInf;
+    @FXML
+    private TextField txtTelefonoAgr;
+    @FXML
+    private TextField idInfractor;
+    @FXML
+    private TextField idIncidencia;
+    @FXML
+    private TextField txtDireccion;
+    @FXML
+    private TextField idAgraviado;
 
     private IIncidenciaService incidenciaService;
     private IncidenciasController incidenciasController;
@@ -102,6 +135,7 @@ public class NuevaIncidenciaController extends ModalControllerHelper<Incidencia>
         }
         btnSiguiente.setDisable(false);
     }
+
     @FXML
     public void siguiente() {
         if (sectionIncidencia.isVisible()) {
@@ -114,6 +148,7 @@ public class NuevaIncidenciaController extends ModalControllerHelper<Incidencia>
         btnAnterior.setDisable(false);
         btnSiguiente.setDisable(true);
     }
+
     @FXML
     public void save() {
         if (numero == 0) {
@@ -274,10 +309,10 @@ public class NuevaIncidenciaController extends ModalControllerHelper<Incidencia>
 
         incidencia.setUser(usuarioLogueado);
 
-        actualizarEntidad(incidencia,incidenciaService::update,incidenciasController::cargarIncidencias);
+        actualizarEntidad(incidencia, incidenciaService::update, incidenciasController::cargarIncidencias);
     }
 
-    private void inicializarUI(){
+    private void inicializarUI() {
         btnAnterior.setDisable(true);
         btnGuardar.setDisable(true);
         btnSiguiente.setDisable(true);
@@ -294,7 +329,7 @@ public class NuevaIncidenciaController extends ModalControllerHelper<Incidencia>
         sectionInicial();
     }
 
-    private void sectionInicial(){
+    private void sectionInicial() {
         sectionIncidencia.setVisible(true);
         sectionInfractor.setVisible(false);
         sectionAgraviado.setVisible(false);
@@ -306,7 +341,7 @@ public class NuevaIncidenciaController extends ModalControllerHelper<Incidencia>
         agregarListenersAgraviado();
     }
 
-    private void agregarListenersIncidencia(){
+    private void agregarListenersIncidencia() {
         agregarListenersGenerico(cbSector.valueProperty());
         agregarListenersGenerico(cbUrbanizacion.valueProperty());
         agregarListenersGenerico(cbDelito.valueProperty());
@@ -324,7 +359,7 @@ public class NuevaIncidenciaController extends ModalControllerHelper<Incidencia>
         });
     }
 
-    private void agregarListenersInfractor(){
+    private void agregarListenersInfractor() {
         agregarListenersGenerico(txtDniInfractor.textProperty());
         agregarListenersGenerico(txtNombresInfractor.textProperty());
         agregarListenersGenerico(txtTelefonoInf.textProperty());
@@ -333,7 +368,7 @@ public class NuevaIncidenciaController extends ModalControllerHelper<Incidencia>
         agregarListenersGenerico(groupAgraviado.selectedToggleProperty());
     }
 
-    private void agregarListenersAgraviado(){
+    private void agregarListenersAgraviado() {
         agregarListenersGenerico(txtDniAgraviado.textProperty());
         agregarListenersGenerico(txtNombresAgraviado.textProperty());
         agregarListenersGenerico(txtTelefonoAgr.textProperty());
@@ -349,8 +384,7 @@ public class NuevaIncidenciaController extends ModalControllerHelper<Incidencia>
             btnSiguiente.setDisable(!camposLlenos);
             btnGuardar.setDisable(true);
             btnAnterior.setDisable(true);
-        }
-        else if (sectionInfractor.isVisible()) {
+        } else if (sectionInfractor.isVisible()) {
             btnAnterior.setDisable(false);
             btnSiguiente.setDisable(true);
             camposLlenos = validarSeccionInfractor();
@@ -362,8 +396,7 @@ public class NuevaIncidenciaController extends ModalControllerHelper<Incidencia>
                 btnSiguiente.setDisable(true);
                 btnGuardar.setDisable(true);
             }
-        }
-        else if (sectionAgraviado.isVisible()) {
+        } else if (sectionAgraviado.isVisible()) {
             btnSiguiente.setDisable(true);
             btnAnterior.setDisable(false);
             camposLlenos = validarSeccionAgraviado();
@@ -384,7 +417,7 @@ public class NuevaIncidenciaController extends ModalControllerHelper<Incidencia>
         return combo.getValue() != null;
     }
 
-    private boolean validarSeccionIncidencia(){
+    private boolean validarSeccionIncidencia() {
         return esComboBoxValido(cbSector) &&
                 esComboBoxValido(cbUrbanizacion) &&
                 esComboBoxValido(cbDelito) &&
@@ -396,7 +429,7 @@ public class NuevaIncidenciaController extends ModalControllerHelper<Incidencia>
                 groupApoyo.getSelectedToggle() != null;
     }
 
-    private boolean validarSeccionInfractor(){
+    private boolean validarSeccionInfractor() {
         selectedRadioButton = (RadioButton) groupAgraviado.getSelectedToggle();
         return esTextoValido(txtDniInfractor) &&
                 esTextoValido(txtNombresInfractor) &&
@@ -406,7 +439,7 @@ public class NuevaIncidenciaController extends ModalControllerHelper<Incidencia>
                 selectedRadioButton != null;
     }
 
-    private boolean validarSeccionAgraviado(){
+    private boolean validarSeccionAgraviado() {
         return esTextoValido(txtDniAgraviado) &&
                 esTextoValido(txtNombresAgraviado) &&
                 esTextoValido(txtTelefonoAgr) &&
@@ -427,7 +460,7 @@ public class NuevaIncidenciaController extends ModalControllerHelper<Incidencia>
         cbUrbanizacion.setValue(incidencia.getUrbanizaciones().get(0));
         cbServicio.setValue(incidencia.getServicios().get(0));
         txtDescripcion.setText(incidencia.getDescripcion());
-        seleccionarRadio(incidencia.getApoyo_policial().name(),groupApoyo);
+        seleccionarRadio(incidencia.getApoyo_policial().name(), groupApoyo);
 
         if (!incidencia.getInfractores().isEmpty()) {
             idInfractor.setText(String.valueOf(incidencia.getInfractores().get(0).getIdInfractor()));
@@ -436,7 +469,7 @@ public class NuevaIncidenciaController extends ModalControllerHelper<Incidencia>
             txtApellidosInfractor.setText(incidencia.getInfractores().get(0).getPersona().getApellidos());
             txtDescargoInf.setText(incidencia.getInfractores().get(0).getObservaciones());
             txtTelefonoInf.setText(incidencia.getInfractores().get(0).getPersona().getTelefono());
-            seleccionarRadio(incidencia.getAgraviados(),groupAgraviado);
+            seleccionarRadio(incidencia.getAgraviados(), groupAgraviado);
         }
 
         if (!incidencia.getAgraviados().isEmpty()) {
@@ -462,7 +495,6 @@ public class NuevaIncidenciaController extends ModalControllerHelper<Incidencia>
             cargarCampos(incidencia);
         }
     }
-
 
 
     private void cargarDetalle() {
@@ -496,7 +528,7 @@ public class NuevaIncidenciaController extends ModalControllerHelper<Incidencia>
     }
 
     private void cargarServicios() {
-        cargarDatos(cbServicio,serviciosService::findAll, ServicioSerenazgo::getNombre);
+        cargarDatos(cbServicio, serviciosService::findAll, ServicioSerenazgo::getNombre);
     }
 
 
@@ -504,7 +536,7 @@ public class NuevaIncidenciaController extends ModalControllerHelper<Incidencia>
         propiedad.addListener((obs, oldVal, newVal) -> validarCampos());
     }
 
-    private void cargarCombos(){
+    private void cargarCombos() {
         cargarIntervenciones();
         cargarSector();
         cargarDelitos();
@@ -512,8 +544,8 @@ public class NuevaIncidenciaController extends ModalControllerHelper<Incidencia>
         cargarServicios();
     }
 
-    private void seleccionarRadio(String valor, ToggleGroup grupo){
-        for (Toggle toggle: grupo.getToggles()){
+    private void seleccionarRadio(String valor, ToggleGroup grupo) {
+        for (Toggle toggle : grupo.getToggles()) {
             RadioButton radioButton = (RadioButton) toggle;
             if (radioButton.getText().trim().toLowerCase().equals(valor.trim().toLowerCase())) {
                 grupo.selectToggle(radioButton);

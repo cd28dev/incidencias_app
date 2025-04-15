@@ -7,11 +7,11 @@ import com.cd.incidenciasappfx.repository.ServiciosSerenazgoRepositoryImpl;
 import java.util.List;
 import java.util.Optional;
 
-public class ServicioServiceImpl implements IServiciosService{
+public class ServicioServiceImpl implements IServiciosService {
 
     private IServiciosSerenazgoRepository repository;
 
-    public ServicioServiceImpl(){
+    public ServicioServiceImpl() {
         repository = new ServiciosSerenazgoRepositoryImpl();
     }
 
@@ -39,6 +39,6 @@ public class ServicioServiceImpl implements IServiciosService{
     public boolean delete(ServicioSerenazgo servicioSerenazgo) {
         int idServicioSerenazgo = servicioSerenazgo.getIdServicio();
 
-        return repository.delete(idServicioSerenazgo)   ;
+        return repository.delete(idServicioSerenazgo);
     }
 }

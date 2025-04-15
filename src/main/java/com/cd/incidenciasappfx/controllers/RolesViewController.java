@@ -6,14 +6,15 @@ import com.cd.incidenciasappfx.helper.PdfReportExporter;
 import com.cd.incidenciasappfx.models.Rol;
 import com.cd.incidenciasappfx.service.IRolesService;
 import com.cd.incidenciasappfx.service.RolesServiceImpl;
-import java.net.URL;
-import java.util.ResourceBundle;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+
+import java.net.URL;
+import java.util.ResourceBundle;
 
 /**
  * RolesViewController.java
@@ -69,11 +70,11 @@ public class RolesViewController extends ControllerHelper<Rol> implements Initia
     }
 
     public void cargarRoles() {
-        cargarTabla(tabla,rolService::findAll);
+        cargarTabla(tabla, rolService::findAll);
     }
 
     private void eliminarRol(Rol rol) {
-        eliminarRegistro(rol, r -> rolService.delete(r), () -> cargarTabla(tabla,rolService::findAll),tabla);
+        eliminarRegistro(rol, r -> rolService.delete(r), () -> cargarTabla(tabla, rolService::findAll), tabla);
     }
 
     @FXML

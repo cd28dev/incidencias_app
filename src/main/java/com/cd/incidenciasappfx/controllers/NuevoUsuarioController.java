@@ -4,22 +4,15 @@ import com.cd.incidenciasappfx.helper.AlertHelper;
 import com.cd.incidenciasappfx.helper.ImageHelper;
 import com.cd.incidenciasappfx.helper.ModalControllerHelper;
 import com.cd.incidenciasappfx.models.Rol;
-import javafx.css.converter.StringConverter;
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
 import com.cd.incidenciasappfx.models.Usuario;
 import com.cd.incidenciasappfx.service.IRolesService;
 import com.cd.incidenciasappfx.service.IUsuarioService;
 import com.cd.incidenciasappfx.service.RolesServiceImpl;
 import com.cd.incidenciasappfx.service.UsuarioServiceImpl;
-import java.util.List;
-
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
-
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -108,7 +101,7 @@ public class NuevoUsuarioController extends ModalControllerHelper<Usuario> {
     }
 
     private void cargarRoles() {
-        cargarDatos(cbRol,rolService::findAll,Rol::getNombre);
+        cargarDatos(cbRol, rolService::findAll, Rol::getNombre);
     }
 
 
@@ -193,8 +186,8 @@ public class NuevoUsuarioController extends ModalControllerHelper<Usuario> {
         usuario.setRol(rolSeleccionado);
         usuario.setFoto(foto);
 
-       
-        actualizarEntidad(usuario,userService::update,usuariosViewController::cargarUsuarios);
+
+        actualizarEntidad(usuario, userService::update, usuariosViewController::cargarUsuarios);
     }
 
 }

@@ -1,6 +1,6 @@
 /* Estilo del modal */
 /* Estilos generales del modal */
-.modal{
+.modal {
     -fx-background-color: #F9FAFB;
     -fx-border-radius: 12px;
     -fx-background-radius: 12px;
@@ -53,6 +53,7 @@
 .btn-azul {
     -fx-background-color: #0d6efd;
 }
+
 /* Botón gris */
 .btn-secondary {
     -fx-background-color: #a4a1a1 !important;
@@ -76,17 +77,27 @@
 }
 
 
-
 /* Efectos hover en botones */
-.btn-primary:hover, .btn-azul:hover, .btn-danger:hover,.btn-secondary:hover {
+.btn-primary:hover, .btn-azul:hover, .btn-danger:hover, .btn-secondary:hover {
     -fx-effect: dropshadow(three-pass-box, rgba(56, 142, 60, 0.3), 8, 0, 0, 3);
 }
 
 /* Efecto hover específico para cada color */
-.btn-primary:hover { -fx-background-color: #388E3C; }
-.btn-azul:hover { -fx-background-color: #0b5ed7; }
-.btn-danger:hover { -fx-background-color: #C62828; }
-.btn-secondary:hover { -fx-background-color: #6c757d; }
+.btn-primary:hover {
+    -fx-background-color: #388E3C;
+}
+
+.btn-azul:hover {
+    -fx-background-color: #0b5ed7;
+}
+
+.btn-danger:hover {
+    -fx-background-color: #C62828;
+}
+
+.btn-secondary:hover {
+    -fx-background-color: #6c757d;
+}
 
 /* Efecto en los botones al hacer clic */
 .btn-primary:pressed, .btn-danger:pressed, .btn-azul:pressed, .btn-secondary:pressed {

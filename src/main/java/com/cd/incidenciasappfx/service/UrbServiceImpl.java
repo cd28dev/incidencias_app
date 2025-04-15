@@ -3,6 +3,7 @@ package com.cd.incidenciasappfx.service;
 import com.cd.incidenciasappfx.models.Urbanizacion;
 import com.cd.incidenciasappfx.repository.IUrbRepository;
 import com.cd.incidenciasappfx.repository.UrbRepositoryImpl;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -68,8 +69,8 @@ public class UrbServiceImpl implements IUrbService {
     }
 
     @Override
-    public List<Urbanizacion> findBySector(String nameSector){
-        return  urbRepository.findBySector(nameSector);
+    public List<Urbanizacion> findBySector(String nameSector) {
+        return urbRepository.findBySector(nameSector);
     }
 
 }

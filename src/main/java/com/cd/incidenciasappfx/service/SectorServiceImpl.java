@@ -1,23 +1,23 @@
-
 package com.cd.incidenciasappfx.service;
 
 import com.cd.incidenciasappfx.models.Sector;
 import com.cd.incidenciasappfx.repository.ISectorRepository;
 import com.cd.incidenciasappfx.repository.SectorRepositoryImpl;
+
 import java.util.List;
 import java.util.Optional;
 
 
 /**
  * SectorServiceImpl.java
- * 
+ *
  * @author CDAA
  */
-public class SectorServiceImpl implements ISectorService{
-    
+public class SectorServiceImpl implements ISectorService {
+
     private ISectorRepository sectorRepository;
-    
-    public SectorServiceImpl(){
+
+    public SectorServiceImpl() {
         sectorRepository = new SectorRepositoryImpl();
     }
 

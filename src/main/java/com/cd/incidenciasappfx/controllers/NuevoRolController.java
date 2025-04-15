@@ -93,7 +93,7 @@ public class NuevoRolController extends ModalControllerHelper<Rol> {
                 rol,
                 rolService::update,
                 rolViewController::cargarRoles
-       );
+        );
     }
 
 }

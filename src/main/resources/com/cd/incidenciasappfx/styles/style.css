@@ -8,23 +8,27 @@
     -fx-background-color: #162A45; /* Igual que el sidebar */
     -fx-padding: 10;
 }
+
 .logo-style {
-    -fx-fit-width: 40px;  /* Establece el ancho de la imagen */
+    -fx-fit-width: 40px; /* Establece el ancho de la imagen */
     -fx-fit-height: 40px; /* Establece la altura de la imagen */
-    -fx-preserve-ratio: true;  /* Mantiene las proporciones de la imagen */
+    -fx-preserve-ratio: true; /* Mantiene las proporciones de la imagen */
     -fx-padding: 7 0 0 100; /* Espaciado superior */
 
 }
+
 .navbar-label {
     -fx-text-fill: #ff9966;
     -fx-font-size: 17px;
     -fx-font-weight: bold;
     -fx-padding: 7 0 0 0; /* Espaciado superior */
 }
+
 .navbar-button {
     -fx-background-color: transparent;
     -fx-text-fill: white;
 }
+
 .navbar-button:hover {
     -fx-background-color: #2a3545;
 }
@@ -35,12 +39,14 @@
     -fx-padding: 15;
     -fx-pref-width: 220px;
 }
+
 .sidebar-item {
     -fx-text-fill: white;
     -fx-font-size: 15px;
     -fx-padding: 5 0 5 20;
     -fx-pref-width: 190px;
 }
+
 .sidebar-item:hover {
     -fx-background-color: #000000;
 }
@@ -51,6 +57,7 @@
     -fx-padding: 2 0 2 20;
     -fx-pref-width: 190px;
 }
+
 .sidebar-subitem:hover {
     -fx-background-color: #000000;
 }
@@ -59,7 +66,7 @@
     -fx-background-color: #4a5a6a;
     -fx-text-fill: white;
     -fx-font-weight: bold;
-    
+
 }
 
 /* Estilos de las etiquetas de sección */
@@ -70,16 +77,17 @@
     -fx-pref-width: 190px;
     -fx-font-weight: bold;
     -fx-underline: true; /* Subrayado */
-    
+
 }
+
 .section-label:hover {
     -fx-background-color: #000000;
 }
 
 .icon-style {
-    -fx-fit-width: 28px;  /* Establece el ancho de la imagen */
+    -fx-fit-width: 28px; /* Establece el ancho de la imagen */
     -fx-fit-height: 28px; /* Establece la altura de la imagen */
-    -fx-preserve-ratio: true;  /* Mantiene las proporciones de la imagen */
+    -fx-preserve-ratio: true; /* Mantiene las proporciones de la imagen */
 }
 
 

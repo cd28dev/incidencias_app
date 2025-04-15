@@ -7,7 +7,7 @@ import com.cd.incidenciasappfx.service.IServiciosService;
 import com.cd.incidenciasappfx.service.ServicioServiceImpl;
 import javafx.fxml.FXML;
 
-public class NuevoServicioController  extends ModalControllerHelper<ServicioSerenazgo> {
+public class NuevoServicioController extends ModalControllerHelper<ServicioSerenazgo> {
 
     private IServiciosService serviciosService;
     private ServiciosViewController serviciosViewController;
@@ -81,7 +81,7 @@ public class NuevoServicioController  extends ModalControllerHelper<ServicioSere
             return;
         }
 
-        ServicioSerenazgo s= new ServicioSerenazgo();
+        ServicioSerenazgo s = new ServicioSerenazgo();
         s.setIdServicio(Integer.parseInt(idText));
         s.setNombre(nameServicio);
 

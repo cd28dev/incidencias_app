@@ -12,7 +12,8 @@ public class NuevoDelitoController extends ModalControllerHelper<Delito> {
     private IDelitoService delitoService;
     private DelitosViewController delitoViewController;
 
-    public NuevoDelitoController() {}
+    public NuevoDelitoController() {
+    }
 
     @FXML
     public void initialize() {

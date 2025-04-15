@@ -1,17 +1,5 @@
 package com.cd.incidenciasappfx.helper;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.concurrent.Task;
@@ -24,17 +12,29 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
+
 /**
  * ControllerHelper.java
  *
- * @author CDAA
  * @param <T>
+ * @author CDAA
  */
 public abstract class ControllerHelper<T> {
     @FXML
@@ -48,7 +48,7 @@ public abstract class ControllerHelper<T> {
     @FXML
     protected Button btnExportExcel;
     @FXML
-    protected TableColumn<T,Integer> id;
+    protected TableColumn<T, Integer> id;
     @FXML
     protected TableColumn<T, Void> colAccion;
 
@@ -249,8 +249,6 @@ public abstract class ControllerHelper<T> {
             }
         });
     }
-
-
 
 
     private Button crearBoton(String iconPath, String estiloHover, Consumer<T> accion, TableCell<T, Void> cell) {

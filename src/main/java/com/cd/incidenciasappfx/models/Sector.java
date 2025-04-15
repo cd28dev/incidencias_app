@@ -1,15 +1,6 @@
-
 package com.cd.incidenciasappfx.models;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -18,7 +9,7 @@ import java.util.List;
 
 /**
  * Sector.java
- * 
+ *
  * @author CDAA
  */
 @Entity

@@ -1,5 +1,6 @@
 package com.cd.incidenciasappfx;
 
+import com.cd.incidenciasappfx.repository.JpaUtil;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
@@ -46,5 +47,12 @@ public class App extends Application {
 
     public static void main(String[] args) {
         launch();
+    }
+
+    @Override
+    public void stop() throws Exception {
+        super.stop();
+        JpaUtil.shutdown(); // Cierra todas las conexiones de JPA
+        System.exit(0);
     }
 }

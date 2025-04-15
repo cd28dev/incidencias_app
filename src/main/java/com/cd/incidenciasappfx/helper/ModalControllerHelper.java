@@ -1,11 +1,5 @@
 package com.cd.incidenciasappfx.helper;
 
-import java.lang.reflect.ParameterizedType;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Function;
-import java.util.function.Supplier;
-
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -16,11 +10,17 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
+import java.lang.reflect.ParameterizedType;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Supplier;
+
 /**
  * ModalControllerHelper.java
  *
- * @author CDAA
  * @param <T>
+ * @author CDAA
  */
 public abstract class ModalControllerHelper<T> {
     @FXML
@@ -138,7 +138,7 @@ public abstract class ModalControllerHelper<T> {
         stage.close();
     }
 
-    protected  <E> void cargarDatos(ComboBox<E> comboBox, Supplier<List<E>> servicio, Function<E, String> mapeo) {
+    protected <E> void cargarDatos(ComboBox<E> comboBox, Supplier<List<E>> servicio, Function<E, String> mapeo) {
         Task<List<E>> task = new Task<>() {
             @Override
             protected List<E> call() {

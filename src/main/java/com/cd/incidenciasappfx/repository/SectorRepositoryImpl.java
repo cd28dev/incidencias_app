@@ -4,6 +4,7 @@ import com.cd.incidenciasappfx.models.Sector;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.ParameterMode;
 import jakarta.persistence.StoredProcedureQuery;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

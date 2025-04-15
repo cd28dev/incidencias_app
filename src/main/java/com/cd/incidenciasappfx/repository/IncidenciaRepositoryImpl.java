@@ -170,7 +170,7 @@ public class IncidenciaRepositoryImpl implements IIncidenciaRepository {
 
             // Agraviado
             Agraviado agraviado = new Agraviado();
-            agraviado.getPersona().setIdPersona( (Integer) row[20]);
+            agraviado.getPersona().setIdPersona((Integer) row[20]);
             agraviado.getPersona().setNombres((String) row[21]);
             agraviado.getPersona().setApellidos((String) row[22]);
             agraviado.getPersona().setTelefono((String) row[23]);
@@ -178,7 +178,6 @@ public class IncidenciaRepositoryImpl implements IIncidenciaRepository {
             agraviado.setIdAgraviado((Integer) row[25]);
             agraviado.setObservaciones((String) row[26]);
             incidencia.setAgraviados(agraviado);
-
 
 
             Infractor infractor = new Infractor();
@@ -424,7 +423,6 @@ public class IncidenciaRepositoryImpl implements IIncidenciaRepository {
         }
         e.printStackTrace();
     }
-
 
 
 }

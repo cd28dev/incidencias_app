@@ -58,5 +58,7 @@ public class Infractor implements Serializable {
         return this.persona;
     }
 
-    public void setPersona(Persona persona) { this.persona = persona; }
+    public void setPersona(Persona persona) {
+        this.persona = persona;
+    }
 }

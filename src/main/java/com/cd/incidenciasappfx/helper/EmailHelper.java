@@ -1,18 +1,16 @@
-
 package com.cd.incidenciasappfx.helper;
+
 import jakarta.mail.*;
-import jakarta.mail.internet.*;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
+
 import java.security.SecureRandom;
 import java.util.Properties;
-import jakarta.mail.Message;
-import jakarta.mail.MessagingException;
-import jakarta.mail.Session;
-import jakarta.mail.Transport;
 
 
 /**
  * EmailHelper.java
- * 
+ *
  * @author CDAA
  */
 
