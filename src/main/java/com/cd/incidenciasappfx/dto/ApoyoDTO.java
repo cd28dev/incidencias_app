@@ -2,10 +2,10 @@ package com.cd.incidenciasappfx.dto;
 
 public class ApoyoDTO {
     private String tipoApoyo;
-    private long total;
+    private int total;
 
     // Constructor
-    public ApoyoDTO(String tipoApoyo, long total) {
+    public ApoyoDTO(String tipoApoyo, int total) {
         this.tipoApoyo = tipoApoyo;
         this.total = total;
     }
@@ -19,11 +19,11 @@ public class ApoyoDTO {
         this.tipoApoyo = tipoApoyo;
     }
 
-    public long getTotal() {
+    public int getTotal() {
         return total;
     }
 
-    public void setTotal(long total) {
+    public void setTotal(int total) {
         this.total = total;
     }
 

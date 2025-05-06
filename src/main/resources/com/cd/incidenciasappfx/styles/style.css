@@ -3,103 +3,110 @@
     -fx-font-family: "Poppins", Roboto;
 }
 
-/* Estilos del Navbar */
 .navbar {
-    -fx-background-color: #162A45; /* Igual que el sidebar */
-    -fx-padding: 10;
+    -fx-background-color: #ffffff;
+    -fx-padding: 15px;
+    -fx-background-radius: 15px;
+    -fx-border-radius: 15px;
+    -fx-effect: dropshadow(gaussian, #F9FAFB, 15, 0.3, 0, 3);
 }
 
-.logo-style {
-    -fx-fit-width: 40px; /* Establece el ancho de la imagen */
-    -fx-fit-height: 40px; /* Establece la altura de la imagen */
-    -fx-preserve-ratio: true; /* Mantiene las proporciones de la imagen */
-    -fx-padding: 7 0 0 100; /* Espaciado superior */
 
+.logo-style {
+    -fx-fit-width: 40px;
+    -fx-fit-height: 40px;
+    -fx-preserve-ratio: true;
+    -fx-padding: 7 0 0 100;
 }
 
 .navbar-label {
-    -fx-text-fill: #ff9966;
+    -fx-text-fill: #333333;
     -fx-font-size: 17px;
     -fx-font-weight: bold;
-    -fx-padding: 7 0 0 0; /* Espaciado superior */
+    -fx-padding: 7 0 0 0;
 }
 
 .navbar-button {
     -fx-background-color: transparent;
-    -fx-text-fill: white;
+    -fx-text-fill: #333333;
+    -fx-transition: all 0.3s ease;
 }
 
 .navbar-button:hover {
-    -fx-background-color: #2a3545;
+    -fx-background-color: #f2f2f2;
 }
 
 /* Estilos del Sidebar */
 .sidebar {
-    -fx-background-color: #162A45;
-    -fx-padding: 15;
+    -fx-background-color: #ffffff;
+    -fx-padding: 20px;
     -fx-pref-width: 220px;
+    -fx-background-radius: 15px; /* Más redondeado */
+    -fx-border-radius: 15px;
+    -fx-effect: dropshadow(gaussian, #F9FAFB, 15, 0.3, 0, 3); /* Sombra más profunda */
+    -fx-border-color: transparent; /* Opcional, sin borde visible */
 }
 
+
+
 .sidebar-item {
-    -fx-text-fill: white;
+    -fx-text-fill: #4f4f4f;
     -fx-font-size: 15px;
     -fx-padding: 5 0 5 20;
     -fx-pref-width: 190px;
+    -fx-transition: all 0.3s ease;
 }
 
 .sidebar-item:hover {
-    -fx-background-color: #000000;
+    -fx-background-color: #f2f2f2;
+    -fx-text-fill: #000000;
 }
 
 .sidebar-subitem {
-    -fx-text-fill: white;
+    -fx-text-fill: #4f4f4f;
     -fx-font-size: 15px;
     -fx-padding: 2 0 2 20;
     -fx-pref-width: 190px;
 }
 
 .sidebar-subitem:hover {
-    -fx-background-color: #000000;
+    -fx-background-color: #f2f2f2;
+    -fx-text-fill: #000000;
 }
 
 .selected {
-    -fx-background-color: #4a5a6a;
-    -fx-text-fill: white;
+    -fx-background-color: #e0e0e0;
+    -fx-text-fill: #000000;
     -fx-font-weight: bold;
-
 }
 
 /* Estilos de las etiquetas de sección */
 .section-label {
-    -fx-text-fill: #66ff99;
+    -fx-text-fill: #1f3b57;
     -fx-font-size: 15px;
     -fx-padding: 5 10 5 5;
     -fx-pref-width: 190px;
     -fx-font-weight: bold;
-    -fx-underline: true; /* Subrayado */
-
+    -fx-underline: true;
 }
 
 .section-label:hover {
-    -fx-background-color: #000000;
+    -fx-background-color: #f2f2f2;
 }
 
 .icon-style {
-    -fx-fit-width: 28px; /* Establece el ancho de la imagen */
-    -fx-fit-height: 28px; /* Establece la altura de la imagen */
-    -fx-preserve-ratio: true; /* Mantiene las proporciones de la imagen */
+    -fx-fit-width: 28px;
+    -fx-fit-height: 28px;
+    -fx-preserve-ratio: true;
 }
-
 
 /* Área de Contenido */
 #contentArea {
-    -fx-background-color: #F5F5F5;
-    -fx-padding: 20;
+    -fx-background-color: #F9FAFB;
+    -fx-padding: 20px;
 }
 
-.content-area {
-}
-
+/* Estilos Login y Formularios */
 .login-overlay {
     -fx-background-color: #E3F2FD;
     -fx-pref-width: 100%;
@@ -108,53 +115,52 @@
 }
 
 .login-container {
-    -fx-background-color: #F9FAFB;
+    -fx-background-color: #ffffff;
     -fx-padding: 30px;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 20, 0, 0, 10);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 20, 0, 0, 10);
     -fx-max-width: 400px;
     -fx-border-radius: 10px;
     -fx-background-radius: 10px;
 }
 
-/* Estilo para el título */
+/* Título Login */
 .title-label {
     -fx-font-size: 24px;
     -fx-font-weight: bold;
     -fx-text-fill: #1f3b57;
 }
 
+/* Inputs */
 .input-container {
-    -fx-background-color: #E3F2FD;
+    -fx-background-color: #F5F5F5;
     -fx-padding: 8px;
     -fx-border-radius: 10px;
     -fx-background-radius: 10px;
-    -fx-border-color: #ccc;
+    -fx-border-color: #dddddd;
     -fx-border-width: 1px;
-    -fx-pref-width: 350px; /* Ajusta el ancho fijo */
+    -fx-pref-width: 350px;
 }
 
 .text-field, .password-field {
     -fx-font-size: 16px;
     -fx-pref-height: 40px;
-    -fx-pref-width: 280px; /* Ajuste del ancho de los inputs */
+    -fx-pref-width: 280px;
     -fx-background-color: transparent;
     -fx-border: none;
 }
 
 HBox.input-container > .text-field,
 HBox.input-container > .password-field {
-    -fx-hgrow: ALWAYS; /* Asegura que el campo de texto crezca y ocupe todo el espacio */
+    -fx-hgrow: ALWAYS;
 }
 
-
-/* Efecto cuando el campo está seleccionado */
 .text-field:focused, .password-field:focused {
     -fx-border-color: transparent;
 }
 
-/* Botón */
+/* Botones */
 .login-button {
-    -fx-background-color: #28a745;
+    -fx-background-color: #1D4ED8;
     -fx-text-fill: white;
     -fx-font-size: 18px;
     -fx-font-weight: bold;
@@ -165,38 +171,39 @@ HBox.input-container > .password-field {
 }
 
 .login-button:hover {
-    -fx-background-color: #218838;
+    -fx-background-color: #2563EB;
 }
 
-/* Estilos para etiquetas de entrada */
+/* Estilo etiquetas de entrada */
 .input-label {
     -fx-font-size: 14px;
-    -fx-text-fill: #333;
+    -fx-text-fill: #555555;
     -fx-font-weight: bold;
 }
 
-/* Estilos para el mensaje de error */
+/* Mensaje de error */
 .error-label {
-    -fx-text-fill: red;
+    -fx-text-fill: #DC2626;
     -fx-font-size: 14px;
     -fx-font-weight: bold;
 }
 
-/* Estilos para el checkbox */
+/* Checkbox */
 .check-box {
     -fx-font-size: 14px;
 }
 
-/* Estilos para el enlace "Olvidé mi contraseña" */
+/* Enlace olvidé contraseña */
 .hyperlink {
     -fx-font-size: 14px;
-    -fx-text-fill: #007bff;
+    -fx-text-fill: #2563EB;
 }
 
 .hyperlink:hover {
     -fx-underline: true;
 }
 
+/* Fondo oscuro para overlays */
 .overlay {
     -fx-background-color: rgba(0, 0, 0, 0.4);
 }

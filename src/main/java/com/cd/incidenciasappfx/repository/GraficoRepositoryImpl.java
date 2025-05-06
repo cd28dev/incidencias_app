@@ -83,13 +83,14 @@ public class GraficoRepositoryImpl implements IGraficoRepository {
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 lista.add(new ApoyoDTO(
-                        rs.getString("tipo_apoyo"),
-                        rs.getInt("total")
+                        rs.getString("tipo_apoyo"), // ahora lee el alias 'tipo_apoyo'
+                        rs.getInt("total")          // y el alias 'total'
                 ));
             }
         }
         return lista;
     }
+
 
     @Override
     public List<DelitoDTO> obtenerIncidenciasPorDelito() throws SQLException {

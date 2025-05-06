@@ -17,6 +17,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -260,5 +261,10 @@ public class PrincipalController implements Initializable {
     public void handleIncidencias() {
         Platform.runLater(System::gc); // Forzar recolección de basura
         loadView("IncidenciasView");
+    }
+
+    public void handleEstadisticas() {
+        Platform.runLater(System::gc); // Forzar recolección de basura
+        loadView("GraphicsView");
     }
 }

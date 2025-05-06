@@ -34,11 +34,14 @@
     -fx-font-size: 13px;
     -fx-min-width: 100px;
     -fx-font-weight: bold;
+    -fx-cursor: hand; /* Nuevo: cursor tipo mano */
+    -fx-transition: background-color 0.3s; /* Nuevo: transición suave */
 }
 
 .btn-nuevo:hover {
-    -fx-background-color: #1B5E20;
+    -fx-background-color: #1B5E20; /* Verde más oscuro al pasar el mouse */
 }
+
 
 /* Campo de búsqueda */
 .search-box {
@@ -64,6 +67,8 @@
     -fx-background-color: #FFFFFF;
     -fx-padding: 4px;
     -fx-font-size: 13px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0.2, 0, 4); /* 7. Le aplica una sombra suave debajo (efecto de elevación) */
+    -fx-alignment: center;         /* 8. Centra el contenido (el gráfico) dentro del contenedor */
 }
 
 /* Cabecera de la tabla */
@@ -124,3 +129,50 @@
 .search-button {
 }
 
+/* Estilos de etiquetas */
+.form-label {
+    -fx-text-fill: #444;
+    -fx-font-size: 14px;
+    -fx-font-weight: 500;
+}
+
+/* Campos de entrada */
+.form-field, .text-area {
+    -fx-pref-width: 220px;
+    -fx-padding: 8px;
+    -fx-border-color: #d1d5db;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-background-color: #f8f9fa;
+    -fx-font-size: 14px;
+    -fx-transition: 0.3s;
+}
+
+/* Efecto al hacer clic en el campo */
+.form-field:focused, .text-area:focused {
+    -fx-border-color: #4A90E2;
+    -fx-background-color: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(74, 144, 226, 0.2), 8, 0, 0, 3);
+}
+
+.chart-container {
+    -fx-background-color: #ffffff; /* Fondo blanco (cámbialo según tu tema) */
+    -fx-padding: 20px;             /* Espaciado interno */
+    -fx-border-color: #cccccc;     /* Borde gris claro */
+    -fx-border-width: 1px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0.2, 0, 4);
+    -fx-alignment: center;         /* Centra el gráfico */
+}
+
+.combo-field {
+    -fx-pref-width: 180px;
+    -fx-padding: 6px 12px;
+    -fx-border-color: #B0BEC5; /* Gris claro */
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-background-color: #F9FAFB;
+    -fx-font-size: 13px;
+    -fx-min-width: 100px;
+}

@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
@@ -39,7 +37,7 @@
                         </ImageView>
                     </graphic>
                 </Label>
-                <Label fx:id="lblEstadisticas" text="Estadisticas" styleClass="sidebar-item">
+                <Label fx:id="lblEstadisticas" text="Estadisticas" styleClass="sidebar-item" onMouseClicked="#handleEstadisticas">
                     <graphic>
                         <ImageView fx:id="iconEstadistica" styleClass="icon-style">
                             <Image url="@/com/cd/incidenciasappfx/images/beneficios.png"/>
@@ -103,7 +101,7 @@
                         </graphic>
                     </Label>
 
-                    <Label fx:id="lblServiciosSerenazgo" text="Servicios Serenazgo" styleClass="sidebar-subitem"
+                    <Label fx:id="lblServiciosSerenazgo" text="Servicios" styleClass="sidebar-subitem"
                            onMouseClicked="#handleServicios">
                         <graphic>
                             <ImageView fx:id="iconSerenazgo" styleClass="icon-style">
